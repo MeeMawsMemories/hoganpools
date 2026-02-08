@@ -16,9 +16,14 @@ export function getRouteFromLocation() {
 export async function loadRoute(route, mountEl) {
   const url = `/pages/${route}.html`;
   const res = await fetch(url, { cache: "no-cache" });
+  const targetEl = mountEl || document.getElementById("app");
   if (!res.ok) {
-    mountEl.innerHTML = `<div class="container"><h1>Not found</h1><p>Missing: ${url}</p></div>`;
+    if (targetEl) {
+      targetEl.innerHTML = `<div class="container"><h1>Not found</h1><p>Missing: ${url}</p></div>`;
+    }
     return;
   }
-  mountEl.innerHTML = await res.text();
+  if (targetEl) {
+    targetEl.innerHTML = await res.text();
+  }
 }

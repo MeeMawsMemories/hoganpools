@@ -3,8 +3,8 @@ import { getRouteFromLocation, loadRoute } from "./router.js";
 
 const app = document.getElementById("app");
 const siteHeader = document.getElementById("site-header");
-const overlay = document.getElementById("transition-overlay");
 const stage = document.querySelector(".stage");
+const stageCard = document.querySelector(".stage__card");
 const stageVideo = document.querySelector(".stage__bg-video");
 const prevButton = document.querySelector(".stage__control--left");
 const nextButton = document.querySelector(".stage__control--right");
@@ -37,30 +37,6 @@ async function injectPartials() {
   }
 }
 
-function setOverlay(active, direction = "forward") {
-  if (!overlay) return;
-  if (prefersReducedMotion()) {
-    overlay.classList.remove("active");
-    return;
-  }
-
-  if (active) {
-    // Remove and re-add the class to force animation restart
-    overlay.classList.remove("active", "dir-forward", "dir-backward");
-    // Force reflow
-    void overlay.offsetWidth;
-    overlay.classList.add("active", direction === "backward" ? "dir-backward" : "dir-forward");
-    // Restart video
-    const video = overlay.querySelector(".wash-video");
-    if (video) {
-      video.pause();
-      video.currentTime = 0;
-      video.play().catch(e => console.log("Video play prevented:", e));
-    }
-  } else {
-    overlay.classList.remove("active", "dir-forward", "dir-backward");
-  }
-}
 
 function setIntroState() {
   if (!stage) return;
@@ -112,22 +88,78 @@ function getDirection(fromRoute, toRoute) {
 }
 
 let currentRoute = getRouteFromLocation();
+let isTransitioning = false;
+let ignoreNextHashChange = false;
 
-async function navigate(route, direction = "forward") {
+async function renderRouteIntoCurrent(route) {
   document.body.classList.toggle("is-home", route === "home");
-  // transition on
-  setOverlay(true, direction);
-  // let the overlay become visible
-  await new Promise(r => setTimeout(r, 80));
+  await loadRoute(route, app);
+  currentRoute = route;
+  syncHeaderHeight();
+}
+
+function waitForCardTransformEnd() {
+  if (!stageCard) return Promise.resolve();
+  return new Promise(resolve => {
+    const onEnd = (e) => {
+      if (e.propertyName !== "transform") return;
+      stageCard.removeEventListener("transitionend", onEnd);
+      resolve();
+    };
+    stageCard.addEventListener("transitionend", onEnd);
+  });
+}
+
+async function slideCardNavigate(route, dir) {
+  if (isTransitioning) return;
+  if (!stage || !stageCard) return;
+
+  if (prefersReducedMotion()) {
+    await renderRouteIntoCurrent(route);
+    ignoreNextHashChange = true;
+    location.hash = `#${route}`;
+    return;
+  }
+
+  isTransitioning = true;
+
+  const slideOutClass = dir === "right" ? "slide-out-left" : "slide-out-right";
+  const slideInClass = dir === "right" ? "slide-in-from-right" : "slide-in-from-left";
+
+  stage.classList.add("is-sliding", "stage-prep");
+  stage.classList.remove("slide-out-left", "slide-out-right", "slide-in-from-left", "slide-in-from-right");
+  stageCard.getBoundingClientRect();
+  stage.classList.remove("stage-prep");
+  stage.classList.add(slideOutClass);
+
+  await waitForCardTransformEnd();
 
   await loadRoute(route, app);
-
+  currentRoute = route;
+  ignoreNextHashChange = true;
+  location.hash = `#${route}`;
   syncHeaderHeight();
 
-  // wait for full animation (3500ms desktop / 2200ms mobile, use 3600ms to be safe)
-  await new Promise(r => setTimeout(r, 3600));
-  setOverlay(false);
-  currentRoute = route;
+  stage.classList.add("stage-prep");
+  stage.classList.remove(slideOutClass);
+  stage.classList.add(slideInClass);
+  stageCard.getBoundingClientRect();
+  stage.classList.remove("stage-prep");
+  stageCard.getBoundingClientRect();
+  stage.classList.remove(slideInClass);
+
+  await waitForCardTransformEnd();
+
+  stage.classList.remove("is-sliding", "stage-prep", slideOutClass, slideInClass);
+  isTransitioning = false;
+}
+
+async function navigate(route) {
+  if (ignoreNextHashChange) {
+    ignoreNextHashChange = false;
+    return;
+  }
+  await renderRouteIntoCurrent(route);
 }
 
 function onNavClick(e) {
@@ -142,8 +174,8 @@ function onNavClick(e) {
 
 function onStageControl(direction) {
   const next = getNextRoute(direction);
-  if (location.hash.replace("#", "") === next) return;
-  location.hash = `#${next}`;
+  if (next === currentRoute) return;
+  slideCardNavigate(next, direction > 0 ? "right" : "left");
 }
 
 async function boot() {
@@ -169,13 +201,12 @@ async function boot() {
   });
 
   // initial load
-  await navigate(getRouteFromLocation(), "forward");
+  await renderRouteIntoCurrent(getRouteFromLocation());
 
   // hash changes
   window.addEventListener("hashchange", async () => {
     const nextRoute = getRouteFromLocation();
-    const direction = getDirection(currentRoute, nextRoute);
-    await navigate(nextRoute, direction);
+    await navigate(nextRoute);
   });
 }
 

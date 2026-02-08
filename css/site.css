@@ -26,6 +26,7 @@
   inset: 0;
   z-index: 20;
   pointer-events: none;
+  display: none;
   background: #0a223b;
   overflow: hidden;
   opacity: 1;
@@ -218,6 +219,76 @@
 .stage.is-ready .stage__content{
   background: transparent;
   box-shadow: none;
+}
+
+/* Stage card slide transitions (arrow navigation) */
+.stage.is-sliding .stage__card{
+  transition: transform 560ms var(--stage-ease);
+}
+
+.stage.stage-prep .stage__card{
+  transition: none !important;
+}
+
+.stage.slide-out-left .stage__card{
+  transform: translate3d(-150vw, 0, 0);
+}
+
+.stage.slide-out-right .stage__card{
+  transform: translate3d(150vw, 0, 0);
+}
+
+.stage.slide-in-from-right .stage__card{
+  transform: translate3d(150vw, 0, 0);
+}
+
+.stage.slide-in-from-left .stage__card{
+  transform: translate3d(-150vw, 0, 0);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .stage.is-sliding .stage__card{
+    transition: none !important;
+  }
+}
+
+/* Slide transition panels */
+.slide-viewport{
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Base panel */
+.slide-panel{
+  width: 100%;
+  will-change: transform;
+  transition: transform 560ms var(--stage-ease);
+}
+
+/* IMPORTANT: current stays in flow so height works */
+.slide-panel.is-current{
+  position: relative;
+  transform: translateX(0);
+}
+
+/* Incoming overlays */
+.slide-panel.is-incoming{
+  position: absolute;
+  inset: 0;
+  transform: translateX(100%);
+  pointer-events: none;
+}
+
+/* During slide */
+.slide-viewport.sliding-from-right .is-current{ transform: translateX(-100%); }
+.slide-viewport.sliding-from-right .is-incoming{ transform: translateX(0); }
+
+.slide-viewport.sliding-from-left .is-current{ transform: translateX(100%); }
+.slide-viewport.sliding-from-left .is-incoming{ transform: translateX(0); }
+
+@media (prefers-reduced-motion: reduce){
+  .slide-panel{ transition: none !important; }
 }
 
 *{ box-sizing:border-box; }
