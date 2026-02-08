@@ -82,9 +82,7 @@ function getDirection(fromRoute, toRoute) {
   const toIndex = ROUTE_ORDER.indexOf(toRoute);
   if (fromIndex === -1 || toIndex === -1) return "forward";
   if (fromIndex === toIndex) return "forward";
-  const forwardSteps = (toIndex - fromIndex + ROUTE_ORDER.length) % ROUTE_ORDER.length;
-  const backwardSteps = (fromIndex - toIndex + ROUTE_ORDER.length) % ROUTE_ORDER.length;
-  return forwardSteps <= backwardSteps ? "forward" : "backward";
+  return toIndex > fromIndex ? "forward" : "backward";
 }
 
 let currentRoute = getRouteFromLocation();
@@ -169,7 +167,8 @@ function onNavClick(e) {
   const route = a.getAttribute("data-nav");
   if (!route) return;
   if (location.hash.replace("#", "") === route) return;
-  location.hash = `#${route}`;
+  const direction = getDirection(currentRoute, route);
+  slideCardNavigate(route, direction === "forward" ? "right" : "left");
 }
 
 function onStageControl(direction) {
