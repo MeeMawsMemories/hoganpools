@@ -1,6 +1,5 @@
 /* ~/hoganpools-site/css/site.css */
 
-/* Tokens */
 :root{
   --max: 1100px;
   --pad: 20px;
@@ -14,9 +13,213 @@
   --line: #e6e6e6;
 
   --on-dark: #ffffff;
+
+  --intro-delay: 1800ms;
+  --intro-card: 900ms;
+  --intro-controls: 700ms;
+  --stage-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-/* Base */
+/* Water wash transition overlay */
+.transition-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  background: #0a223b;
+  overflow: hidden;
+  opacity: 1;
+  transition: none;
+  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+}
+
+.transition-overlay .wash-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  opacity: 0.9;
+  filter: saturate(1.1) contrast(1.1) brightness(1.05);
+}
+
+.transition-overlay.active {
+  animation: wash-horizontal-forward 2200ms var(--stage-ease) forwards;
+}
+
+.transition-overlay.active.dir-backward {
+  animation: wash-horizontal-backward 2200ms var(--stage-ease) forwards;
+}
+
+@media (max-width: 767px) {
+  .transition-overlay.active,
+  .transition-overlay.active.dir-backward {
+    animation-duration: 1800ms;
+  }
+}
+
+@keyframes wash-horizontal-forward {
+  0% {
+    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  }
+  30% {
+    clip-path: polygon(0 0, 90% 0, 90% 100%, 0 100%);
+  }
+  45% {
+    clip-path: polygon(0 0, 86% 0, 86% 100%, 0 100%);
+  }
+  60% {
+    clip-path: polygon(0 0, 90% 0, 90% 100%, 0 100%);
+  }
+  100% {
+    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  }
+}
+
+@keyframes wash-horizontal-backward {
+  0% {
+    clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+  }
+  30% {
+    clip-path: polygon(10% 0, 100% 0, 100% 100%, 10% 100%);
+  }
+  45% {
+    clip-path: polygon(14% 0, 100% 0, 100% 100%, 14% 100%);
+  }
+  60% {
+    clip-path: polygon(10% 0, 100% 0, 100% 100%, 10% 100%);
+  }
+  100% {
+    clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+  }
+}
+
+/* Prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .transition-overlay.active {
+    animation: none;
+    opacity: 1;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+
+  .stage__bg-video{
+    display: none;
+  }
+
+  .transition-overlay .wash-video{
+    display: none;
+  }
+}
+
+.reduced-motion .stage__bg-video{
+  display: none;
+}
+
+/* Stage frame for premium "documentary" feel */
+.stage {
+  position: relative;
+  min-height: calc(100vh - var(--header-height, 0px));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #081d30;
+  padding: 26px 0 34px;
+  overflow: hidden;
+}
+
+.stage__bg{
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.stage__bg-video{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  opacity: 0.55;
+  filter: saturate(0.85) contrast(1.05) brightness(0.9);
+}
+
+.stage__frame{
+  position: relative;
+  z-index: 2;
+}
+
+.stage__card{
+  background: rgba(8, 24, 40, 0.72);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 18px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+  backdrop-filter: blur(10px);
+  transform: translateY(18px);
+  opacity: 0;
+  transition: opacity var(--intro-card) var(--stage-ease), transform var(--intro-card) var(--stage-ease);
+}
+
+.stage.is-ready .stage__card{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stage__content{
+  position: relative;
+  z-index: 1;
+}
+
+.stage__control{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: rgba(6, 20, 34, 0.6);
+  color: #fff;
+  font-size: 28px;
+  line-height: 40px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--intro-controls) var(--stage-ease), transform var(--intro-controls) var(--stage-ease);
+  z-index: 3;
+}
+
+.stage__control--left{ left: 24px; }
+.stage__control--right{ right: 24px; }
+
+.stage.is-controls .stage__control{
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+.stage.is-intro .stage__control{
+  transform: translateY(-50%) scale(0.96);
+}
+
+.stage__frame {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--pad);
+}
+
+.stage__content {
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.12);
+  min-height: calc(100vh - 400px);
+}
+
+.stage.is-ready .stage__content{
+  background: transparent;
+  box-shadow: none;
+}
+
 *{ box-sizing:border-box; }
 html,body{
   margin:0;
@@ -87,16 +290,246 @@ a:hover{ text-decoration:underline; }
 }
 .nav a:hover{ text-decoration:underline; }
 
-/* Hero */
-.hero--img{
-  min-height: 520px;
-  background: url("/assets/img/home-hero.png") center/cover no-repeat;
+/* Hero with water ripple effect */
+.hero{
+  position: relative;
+  overflow: hidden;
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #1a4d7a 0%, #0d2d47 50%, #061b2f 100%);
+  cursor: pointer;
+  perspective: 1200px;
+  transform-style: preserve-3d;
 }
+
+.home-hero {
+  min-height: calc(100vh - var(--header-height, 0px));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #1a4d7a 0%, #0d2d47 50%, #061b2f 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.is-home .stage{
+  padding: 0;
+}
+
+.is-home .stage__frame{
+  max-width: none;
+  padding: 0;
+}
+
+.is-home .stage__content{
+  border-radius: 0;
+  box-shadow: none;
+  min-height: 0;
+}
+
+.is-home .stage__card{
+  border-radius: 0;
+}
+
+/* WebGL canvas that renders the shader-based ripples */
+#hero-canvas{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 1; /* behind the overlay (overlay is z-index:2) */
+  pointer-events: auto; /* capture clicks */
+}
+
+/* Ripple animation class (added via JS) */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  /* Even lighter, translucent blue so DOM ripple never appears dark */
+  background: radial-gradient(circle at 30% 30%, rgba(10,40,64,0.6) 0%, rgba(10,40,64,0.36) 20%, rgba(8,30,50,0.2) 40%, transparent 85%);
+  transform: scale(0) translateZ(0);
+  animation: ripple-expand-3d 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  pointer-events: none;
+  /* minimal shadow */
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.06));
+  box-shadow: inset -1px -1px 4px rgba(0,0,0,0.12);
+  z-index: 6; /* keep below overlay highlights */
+  opacity: 0.45; /* default opacity scaled down */
+}
+
+/* Add inner ring effect for depth (very muted) */
+.ripple::before {
+  content: '';
+  position: absolute;
+  inset: 25%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+  animation: inner-ring 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Distortion effect that warps the background */
+.ripple-distort {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  z-index: 8;
+}
+
+@keyframes ripple-expand-3d {
+  0% {
+    transform: scale(0) translateZ(0);
+    opacity: 1;
+    filter: drop-shadow(0 0px 0px rgba(0,0,0,0.1));
+  }
+  15% {
+    filter: drop-shadow(0 12px 20px rgba(0,0,0,0.25));
+  }
+  50% {
+    filter: drop-shadow(0 10px 24px rgba(0,0,0,0.2));
+    opacity: 0.9;
+  }
+  85% {
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1) translateZ(0);
+    opacity: 0;
+    filter: drop-shadow(0 0px 0px rgba(0,0,0,0));
+  }
+}
+
+@keyframes inner-ring {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  30% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+@keyframes distort-wave {
+  0% {
+    transform: scale(0);
+    background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+  }
+  50% {
+    background: radial-gradient(circle, rgba(100,150,255,0.2) 0%, transparent 60%);
+  }
+  100% {
+    transform: scale(1);
+    background: radial-gradient(circle, transparent 0%, transparent 70%);
+  }
+}
+
 .hero__overlay{
-  min-height: 520px;
-  display:flex;
-  align-items:center;
-  background: linear-gradient(180deg, rgba(12,40,69,.75), rgba(12,40,69,.45));
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--on-dark);
+  animation: fade-in-up 1.2s ease-out 0.4s both;
+}
+
+.hero-content {
+  z-index: 2;
+  color: #fff;
+  text-align: center;
+}
+
+.hero .container {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes fade-in-up {
+  /* Keep a full-width, rectangular bottom band for the early portion to avoid any corner gap */
+  0% {
+    clip-path: polygon(0 150%, 100% 150%, 100% 100%, 0 100%);
+    opacity: 0;
+  }
+  35% {
+    /* still fully covers bottom — prevents any diagonal/uncovered corner during interpolation */
+    clip-path: polygon(0 150%, 100% 150%, 100% 100%, 0 100%);
+    opacity: 0.75;
+  }
+  /* Gradually raise a flat top edge (both sides matched) so no slanted gap appears */
+  60% {
+    clip-path: polygon(0 10%, 100% 10%, 100% 100%, 0 100%);
+    opacity: 0.95;
+  }
+  85% {
+    clip-path: polygon(0 5%, 100% 5%, 100% 100%, 0 100%);
+    opacity: 0.45;
+  }
+  100% {
+    clip-path: polygon(0 0%, 100% 0%, 100% 100%, 0 100%);
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.hero__tagline {
+  font-size: clamp(1.2rem, 4vw, 2rem);
+  font-weight: 300;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin: 20px 0 0 0;
+  color: rgba(255, 255, 255, 0.95);
+  animation: fade-in-up 1.2s ease-out 1s both;
+  position: relative;
+  display: inline-block;
+}
+
+/* Subtle underline animation for tagline */
+.hero__tagline::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateX(-50%);
+  animation: expand-width 1s ease-out 1.2s forwards;
+}
+
+@keyframes expand-width {
+  to {
+    width: 80%;
+  }
+}
+
+/* Additional water effect patterns */
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: 
+    linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) 100%);
+  pointer-events: none;
+  z-index: 1;
 }
 .hero h1{
   margin:0;
@@ -106,60 +539,178 @@ a:hover{ text-decoration:underline; }
 }
 
 /* Sections */
-.section{ padding: 50px 0; }
+.section{ padding: 60px 0; }
 .section h2{
-  margin:0 0 18px 0;
-  font-size: clamp(22px, 2.2vw, 30px);
+  margin:0 0 28px 0;
+  font-size: clamp(22px, 2.2vw, 32px);
+  text-align:center;
 }
 
-/* Testimonials (water strip) */
-.section--water{
-  background: var(--navy2) url("/assets/img/home-water-strip.jpg") center/cover no-repeat;
+/* Divider strips (Wix-like thin lines) */
+.section--dividers{ position: relative; }
+.section--dividers::before,
+.section--dividers::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right: 0;
+  height:1px;
+  background: rgba(255,255,255,.25);
+}
+.section--dividers::before{ top: 0; }
+.section--dividers::after { bottom: 0; }
+
+/* Testimonials section: solid navy, with contained moving water strip */
+.section--testimonials{
+  background: var(--navy2);
   color: var(--on-dark);
+  position: relative;
+  overflow: hidden;
 }
-.section--water h2{ color: var(--on-dark); }
 
+/* Ensure testimonials section doesn't push hero below the fold */
+.proof {
+  margin-top: 0;
+}
+
+/* Subtle water waves background in testimonials */
+.section--testimonials::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(ellipse at 10% 20%, rgba(255,255,255,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 60%, rgba(255,255,255,0.02) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.section--testimonials > .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* The contained "water strip" band */
+.waterband{
+  position: relative;
+  height: 70px;
+  margin: 24px 0 32px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+
+  border-top: 1px solid rgba(255,255,255,.25);
+  border-bottom: 1px solid rgba(255,255,255,.25);
+}
+
+/* Moving water image layer */
+.waterband::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: url("/assets/img/home-water-strip.jpg") center/cover no-repeat;
+  transform: scale(1.05);
+  opacity: 0.95;
+  animation: water-drift 10s linear infinite;
+}
+
+/* Darken slightly so the title reads like Wix */
+.waterband::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: rgba(10,34,59,.35);
+}
+
+/* Title sits above the moving layer */
+.waterband h2{
+  position: relative;
+  margin: 0;
+  color: #fff;
+  font-size: 16px;
+  letter-spacing: .2px;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(0,0,0,.35);
+}
+
+/* Motion */
+@keyframes water-drift{
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+@media (prefers-reduced-motion: reduce){
+  .waterband::before{ animation: none; }
+}
+
+/* Quotes layout */
 .quotes{
   display:grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
+  gap: 32px;
 }
-.quote{
+
+/* Quotes should sit on plain navy (no glass cards) */
+.section--testimonials .quote{
   margin:0;
-  padding: 18px;
-  border: 1px solid rgba(255,255,255,.18);
-  border-radius: 14px;
-  background: rgba(0,0,0,.10);
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
 }
-.quote blockquote{
-  margin:0 0 12px 0;
-  color: rgba(255,255,255,.92);
+.section--testimonials .quote blockquote{
+  margin:0 0 16px 0;
+  color: rgba(255,255,255,.85);
+  font-size: 14px;
+  line-height: 1.6;
 }
-.quote figcaption{ font-weight:600; }
+.section--testimonials .quote figcaption{
+  font-weight:600;
+  color: rgba(255,255,255,.95);
+  margin-top: 12px;
+  font-size: 14px;
+}
 
 /* CTA */
 .section--cta{
   background: var(--navy);
   color: var(--on-dark);
 }
+.section--cta .container{
+  text-align:center;
+}
+.section--cta h2{
+  text-align:center;
+}
 .cta{
   display:flex;
   flex-wrap:wrap;
-  gap:12px;
+  gap:24px;
+  justify-content:center;
 }
 .btn{
   display:inline-block;
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 1px solid #ffffff;
-  background: #ffffff;
-  color: var(--navy);
-  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 2px;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,.9);
+  font-weight: 500;
+  font-size: 13px;
+  cursor:pointer;
+  text-decoration:underline;
+  transition:color .2s ease;
+}
+.btn:hover{
+  color: rgba(255,255,255,1);
+  text-decoration:underline;
 }
 .btn--ghost{
   background: transparent;
-  color: var(--on-dark);
-  border-color: rgba(255,255,255,.35);
+  color: rgba(255,255,255,.9);
+  border: none;
 }
 
 /* Footer (rendered via /partials/footer.html) */
@@ -170,10 +721,29 @@ a:hover{ text-decoration:underline; }
 }
 .footer__grid{
   display:flex;
-  gap:18px;
+  gap:28px;
   justify-content:space-between;
   flex-wrap:wrap;
   padding: 0 var(--pad);
+  align-items:center;
+}
+.footer__tagline{
+  flex: 1;
+  min-width:200px;
+}
+.footer__contact{
+  display:flex;
+  gap:20px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.footer__contact a{
+  color: rgba(255,255,255,.9);
+  font-size: 13px;
+  white-space:nowrap;
+}
+.footer__contact a:hover{
+  text-decoration:underline;
 }
 .footer__copyright{
   color: rgba(255,255,255,.75);
@@ -183,6 +753,29 @@ a:hover{ text-decoration:underline; }
 
 /* Responsive */
 @media (max-width: 820px){
+  :root{
+    --intro-delay: 600ms;
+    --intro-card: 500ms;
+    --intro-controls: 500ms;
+  }
+
+  .stage__frame{
+    padding: 0 12px;
+  }
+
+  .stage__card{
+    border-radius: 14px;
+  }
+
+  .stage__control{
+    width: 36px;
+    height: 36px;
+    font-size: 22px;
+    top: 70%;
+  }
+
+  .stage__control--left{ left: 12px; }
+  .stage__control--right{ right: 12px; }
   .navtoggle{ display:inline-block; }
   .nav{
     display:none;
@@ -197,6 +790,38 @@ a:hover{ text-decoration:underline; }
     gap:10px;
   }
 
+  /* Hero responsive */
+  .hero {
+    min-height: 500px;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.8rem, 6vw, 3rem);
+  }
+
+  .hero__tagline {
+    font-size: clamp(1rem, 3vw, 1.5rem);
+  }
+
+  .hero__wave {
+    height: 80px;
+  }
+
   .quotes{ grid-template-columns: 1fr; }
-  .hero--img, .hero__overlay{ min-height: 420px; }
+  .waterband{ height: 60px; }
+  
+  .footer__grid{
+    flex-direction:column;
+    gap:14px;
+  }
+  
+  .footer__contact{
+    justify-content:center;
+  }
+  
+  .cta{
+    gap:16px;
+  }
+  
+  .section{ padding: 40px 0; }
 }

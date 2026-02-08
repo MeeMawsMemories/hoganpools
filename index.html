@@ -1,59 +1,46 @@
-<!-- ~/hoganpools-site/index.html -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Hogan Pools | Custom Pool Construction Missouri | Ballwin, MO, USA</title>
-  <link rel="stylesheet" href="/css/site.css" />
-  <script defer src="/js/site.js"></script>
+  <link rel="stylesheet" href="/css/site.css?v=21" />
 </head>
 <body>
+  <!-- Persistent header -->
   <div id="site-header"></div>
 
-  <main>
-    <section class="hero hero--img">
-      <div class="hero__overlay">
-        <div class="container">
-          <h1>Elevating Gunite Craftsmanship</h1>
-        </div>
+  <!-- Main content area (swapped by router) -->
+  <main class="stage" aria-live="polite">
+    <div class="stage__bg" aria-hidden="true">
+      <video class="stage__bg-video" autoplay muted loop playsinline preload="auto" poster="/assets/img/home-water-strip.jpg">
+        <source src="/assets/video/water-wipe.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <button class="stage__control stage__control--left" type="button" aria-label="Previous section">
+      ‹
+    </button>
+
+    <div class="stage__frame">
+      <div class="stage__card">
+        <div id="app" class="stage__content"></div>
       </div>
-    </section>
+    </div>
 
-    <section class="section section--water">
-      <div class="container">
-        <h2>What Our Valued Clients Say</h2>
-
-        <div class="quotes">
-          <figure class="quote">
-            <blockquote>“Hogan Pools transformed our backyard with a breathtaking gunite pool. Their attention to detail and commitment to excellence is truly impressive.”</blockquote>
-            <figcaption>Sophia Reynolds</figcaption>
-          </figure>
-
-          <figure class="quote">
-            <blockquote>“We are thrilled with the stunning gunite pool built by Hogan Pools. Their professionalism and creativity made the entire process seamless.”</blockquote>
-            <figcaption>Ethan Parker</figcaption>
-          </figure>
-
-          <figure class="quote">
-            <blockquote>“Choosing Hogan Poools for our custom gunite pool was the best decision. The result is a pool that brings fun to our family every day.”</blockquote>
-            <figcaption>Ava Thompson</figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <section class="section section--cta">
-      <div class="container">
-        <h2>Contact Us</h2>
-        <div class="cta">
-          <a class="btn" href="tel:+16367443242">📞 +1 (636) 744-3242</a>
-          <a class="btn btn--ghost" href="mailto:anthony@hoganpools.com">anthony@hoganpools.com</a>
-        </div>
-      </div>
-    </section>
+    <button class="stage__control stage__control--right" type="button" aria-label="Next section">
+      ›
+    </button>
+    <!-- Water wash transition overlay (covers only hero/stage area) -->
+    <div id="transition-overlay" class="transition-overlay" aria-hidden="true">
+      <video class="wash-video" muted playsinline preload="auto">
+        <source src="/assets/video/water-wipe.mp4" type="video/mp4">
+      </video>
+    </div>
   </main>
 
-  <div id="site-footer"></div>
+
+  <!-- Load app as ES6 module -->
+  <script type="module" src="/js/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,60 @@
+<!-- ~/hoganpools-site/index.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hogan Pools | Custom Pool Construction Missouri | Ballwin, MO, USA</title>
+  <link rel="stylesheet" href="/css/site.css" />
+  <script defer src="/js/site.js"></script>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <main>
+    <section class="hero hero--img">
+      <div class="hero__overlay">
+        <div class="container">
+          <h1>Elevating Gunite Craftsmanship</h1>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--water section--dividers">
+      <div class="container">
+        <h2>What Our Valued Clients Say</h2>
+        <div class="divider-inset" aria-hidden="true"></div>
+
+        <div class="quotes">
+          <figure class="quote">
+            <blockquote>“Hogan Pools transformed our backyard with a breathtaking gunite pool. Their attention to detail and commitment to excellence is truly impressive.”</blockquote>
+            <figcaption>Sophia Reynolds</figcaption>
+          </figure>
+
+          <figure class="quote">
+            <blockquote>“We are thrilled with the stunning gunite pool built by Hogan Pools. Their professionalism and creativity made the entire process seamless.”</blockquote>
+            <figcaption>Ethan Parker</figcaption>
+          </figure>
+
+          <figure class="quote">
+            <blockquote>“Choosing Hogan Poools for our custom gunite pool was the best decision. The result is a pool that brings fun to our family every day.”</blockquote>
+            <figcaption>Ava Thompson</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--cta section--dividers">
+      <div class="container">
+        <h2>Contact Us</h2>
+        <div class="cta">
+          <a class="btn" href="tel:+16367443242">📞 +1 (636) 744-3242</a>
+          <a class="btn btn--ghost" href="mailto:anthony@hoganpools.com">anthony@hoganpools.com</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+</body>
+</html>
