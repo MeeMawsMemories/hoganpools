@@ -5,7 +5,8 @@ const app = document.getElementById("app");
 const siteHeader = document.getElementById("site-header");
 const stage = document.querySelector(".stage");
 const stageCard = document.querySelector(".stage__card");
-const stageVideo = document.querySelector(".stage__bg-video");
+const bg = document.querySelector(".bg");
+const bgVideo = document.querySelector(".bg__video");
 const prevButton = document.querySelector(".stage__control--left");
 const nextButton = document.querySelector(".stage__control--right");
 
@@ -19,6 +20,64 @@ function syncHeaderHeight() {
 
 function prefersReducedMotion() {
   return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function initBackgroundVideoGate() {
+  const root = document.documentElement;
+  root.classList.remove("bg-ready");
+
+  if (!bgVideo) {
+    root.classList.add("bg-ready");
+    return Promise.resolve();
+  }
+
+  try {
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      root.classList.add("bg-ready");
+      return Promise.resolve();
+    }
+  } catch {
+    // ignore
+  }
+
+  return new Promise((resolve) => {
+    let done = false;
+
+    const finish = () => {
+      if (done) return;
+      done = true;
+      if (bg) bg.classList.add("is-video-ready");
+      root.classList.add("bg-ready");
+      cleanup();
+      resolve();
+    };
+
+    const onReady = () => finish();
+
+    const cleanup = () => {
+      bgVideo.removeEventListener("playing", onReady);
+      bgVideo.removeEventListener("canplay", onReady);
+      bgVideo.removeEventListener("loadeddata", onReady);
+    };
+
+    if (bgVideo.readyState >= 3) {
+      finish();
+      return;
+    }
+
+    bgVideo.addEventListener("playing", onReady, { once: true });
+    bgVideo.addEventListener("canplay", onReady, { once: true });
+    bgVideo.addEventListener("loadeddata", onReady, { once: true });
+
+    try {
+      const p = bgVideo.play();
+      if (p && typeof p.catch === "function") p.catch(() => {});
+    } catch {
+      // ignore
+    }
+
+    window.setTimeout(finish, 1500);
+  });
 }
 
 async function injectPartials() {
@@ -46,17 +105,11 @@ function setIntroState() {
   if (prefersReducedMotion()) {
     stage.classList.add("is-ready", "is-controls");
     stage.classList.remove("is-intro");
-    if (stageVideo) {
-      stageVideo.pause();
-    }
     document.documentElement.classList.add("reduced-motion");
     return;
   }
 
   document.documentElement.classList.remove("reduced-motion");
-  if (stageVideo) {
-    stageVideo.play().catch(() => {});
-  }
 
   const introDelay = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--intro-delay"), 10) || 1800;
   const cardDelay = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--intro-card"), 10) || 900;
@@ -178,11 +231,14 @@ function onStageControl(direction) {
 }
 
 async function boot() {
+  const bgGatePromise = initBackgroundVideoGate();
+
   await injectPartials();
 
   syncHeaderHeight();
   window.addEventListener("resize", syncHeaderHeight);
 
+  await bgGatePromise;
   setIntroState();
 
   document.addEventListener("click", onNavClick);
