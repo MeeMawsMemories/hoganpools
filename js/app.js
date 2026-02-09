@@ -12,6 +12,42 @@ const nextButton = document.querySelector(".stage__control--right");
 
 const ROUTE_ORDER = ["home", "gunite", "process", "gallery", "about", "financing"];
 
+function updateHomeFitScale() {
+  if (!stageCard) return;
+
+  const isHome = document.body.classList.contains("is-home");
+  const homeStack = document.querySelector(".home-stack");
+
+  if (!isHome || !homeStack) {
+    stageCard.classList.remove("is-home-fit");
+    if (homeStack) homeStack.style.setProperty("--home-fit-scale", "1");
+    return;
+  }
+
+  const viewportHeight = window.innerHeight || 0;
+  if (viewportHeight <= 900) {
+    stageCard.classList.remove("is-home-fit");
+    homeStack.style.setProperty("--home-fit-scale", "1");
+    return;
+  }
+
+  const stageContent = document.querySelector(".stage__content");
+  const contentStyle = stageContent ? getComputedStyle(stageContent) : null;
+  const paddingTop = contentStyle ? parseFloat(contentStyle.paddingTop) || 0 : 0;
+  const paddingBottom = contentStyle ? parseFloat(contentStyle.paddingBottom) || 0 : 0;
+
+  const availableHeight = Math.max(0, stageCard.clientHeight - paddingTop - paddingBottom);
+  const naturalHeight = Math.max(1, homeStack.scrollHeight || homeStack.offsetHeight || 1);
+
+  const maxComfortScale = 1.06;
+  const minScale = 0.7;
+  const fitScale = availableHeight / naturalHeight;
+  const scale = Math.max(minScale, Math.min(maxComfortScale, fitScale));
+
+  stageCard.classList.add("is-home-fit");
+  homeStack.style.setProperty("--home-fit-scale", String(scale));
+}
+
 function syncHeaderHeight() {
   if (!siteHeader) return;
   const height = siteHeader.getBoundingClientRect().height;
@@ -147,6 +183,7 @@ async function renderRouteIntoCurrent(route) {
   await loadRoute(route, app);
   currentRoute = route;
   syncHeaderHeight();
+  updateHomeFitScale();
 }
 
 function waitForCardTransformEnd() {
@@ -190,6 +227,7 @@ async function slideCardNavigate(route, dir) {
   ignoreNextHashChange = true;
   location.hash = `#${route}`;
   syncHeaderHeight();
+  updateHomeFitScale();
 
   stage.classList.add("stage-prep");
   stage.classList.remove(slideOutClass);
@@ -236,7 +274,10 @@ async function boot() {
   await injectPartials();
 
   syncHeaderHeight();
-  window.addEventListener("resize", syncHeaderHeight);
+  window.addEventListener("resize", () => {
+    syncHeaderHeight();
+    updateHomeFitScale();
+  });
 
   await bgGatePromise;
   setIntroState();

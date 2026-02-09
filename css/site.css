@@ -662,6 +662,25 @@ a:hover{ text-decoration:underline; }
   color: rgba(255,255,255,0.7);
 }
 
+/* Home page: fit hero+intro+CTAs+testimonials into the stage card
+   - <= 900px tall: keep stage card scrollbar
+   - > 900px tall: scale content to fit and hide scrollbar */
+body.is-home .home-stack{
+  --home-fit-scale: 1;
+  transform-origin: top center;
+}
+
+@media (min-height: 901px){
+  body.is-home .stage__card.is-home-fit{
+    overflow: hidden;
+  }
+
+  body.is-home .stage__card.is-home-fit .home-stack{
+    transform: scale(var(--home-fit-scale, 1));
+    will-change: transform;
+  }
+}
+
 .gunite-hero{
   padding: 6px 0 4px;
 }
