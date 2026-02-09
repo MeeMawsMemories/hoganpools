@@ -430,7 +430,7 @@ a:hover{ text-decoration:underline; }
 .is-home .stage {
   overflow-y: hidden;
 }
-}
+
 
 .is-home .stage__card{
   border-radius: 0;
