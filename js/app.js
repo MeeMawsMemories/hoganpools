@@ -18,35 +18,52 @@ function updateHomeFitScale() {
   const isHome = document.body.classList.contains("is-home");
   const homeStack = document.querySelector(".home-stack");
 
+  // Always clean up when not on Home
   if (!isHome || !homeStack) {
     stageCard.classList.remove("is-home-fit");
     if (homeStack) homeStack.style.setProperty("--home-fit-scale", "1");
     return;
   }
 
-  const viewportHeight = window.innerHeight || 0;
-  if (viewportHeight <= 900) {
-    stageCard.classList.remove("is-home-fit");
-    homeStack.style.setProperty("--home-fit-scale", "1");
-    return;
-  }
+  stageCard.classList.add("is-home-fit");
+
+  // Measure header height (already injected into #site-header)
+  const headerEl = document.getElementById("site-header");
+  const headerH = headerEl ? headerEl.getBoundingClientRect().height : 0;
+
+  // Pull stage vertical padding from CSS variables (fallbacks are safe)
+  const rootStyle = getComputedStyle(document.documentElement);
+  const stagePadTotal = parseFloat(rootStyle.getPropertyValue("--stage-pad-total")) || 64;
+
+  // Available viewport height for the card CONTENT (not the card box)
+  const viewportH = window.innerHeight || 0;
 
   const stageContent = document.querySelector(".stage__content");
   const contentStyle = stageContent ? getComputedStyle(stageContent) : null;
-  const paddingTop = contentStyle ? parseFloat(contentStyle.paddingTop) || 0 : 0;
-  const paddingBottom = contentStyle ? parseFloat(contentStyle.paddingBottom) || 0 : 0;
+  const padTop = contentStyle ? (parseFloat(contentStyle.paddingTop) || 0) : 0;
+  const padBot = contentStyle ? (parseFloat(contentStyle.paddingBottom) || 0) : 0;
 
-  const availableHeight = Math.max(0, stageCard.clientHeight - paddingTop - paddingBottom);
-  const naturalHeight = Math.max(1, homeStack.scrollHeight || homeStack.offsetHeight || 1);
+  const desiredBottomPad = 32; // or whatever you want
+  const buffer = 38; // or 16
+  const available = Math.max(0, viewportH - headerH - stagePadTotal - padTop - desiredBottomPad - buffer);
 
-  const maxComfortScale = 1.06;
-  const minScale = 0.7;
-  const fitScale = availableHeight / naturalHeight;
-  const scale = Math.max(minScale, Math.min(maxComfortScale, fitScale));
+  // Measure natural height with scaling disabled
+  const prevTransform = homeStack.style.transform;
+  homeStack.style.transform = "none";
+  const natural = homeStack.getBoundingClientRect().height;
+  homeStack.style.transform = prevTransform;
 
-  stageCard.classList.add("is-home-fit");
+  // ONLY scale down (never scale up)
+  let scale = available / natural;
+  scale = Math.min(1, scale); // allows any scale down to 0
+  if (!Number.isFinite(scale)) scale = 1;
+
   homeStack.style.setProperty("--home-fit-scale", String(scale));
+
+  // Ensure bottom padding is always present
+  stageCard.style.paddingBottom = `${padBot || 32}px`;
 }
+
 
 function syncHeaderHeight() {
   if (!siteHeader) return;
@@ -278,6 +295,7 @@ async function boot() {
     syncHeaderHeight();
     updateHomeFitScale();
   });
+  window.addEventListener("DOMContentLoaded", updateHomeFitScale);
 
   await bgGatePromise;
   setIntroState();

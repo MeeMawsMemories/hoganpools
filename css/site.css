@@ -1,8 +1,12 @@
 html, body {
   overflow-x: hidden;
-  overflow-y: hidden;
+  /* Prevent vertical scroll caused by 100vh rounding */
   max-width: 100vw;
-  height: 100%;
+}
+
+/* Fluid typography (global) */
+html{
+  font-size: clamp(16px, 1.1vw, 19px);
 }
 
 /* === BG video ready gate: prevent initial flash of stage content === */
@@ -34,7 +38,7 @@ html.bg-ready .stage__card{ transform: translateY(0); }
   /* Scale the centered card up on wide screens (e.g., 1280x800, 1920x1080) */
   --card-max-width: clamp(1080px, 86vw, 1600px);
   --stage-pad-y: 32px;
-  --stage-pad-total: 64px;
+  --stage-pad-total: 1px;
 
   --navy: #0c2845;
   --navy2:#0a223b;
@@ -230,7 +234,7 @@ html.bg-ready .stage__card{ transform: translateY(0); }
   transform: translateY(18px);
   opacity: 0;
   transition: opacity var(--intro-card) var(--stage-ease), transform var(--intro-card) var(--stage-ease);
-  max-height: calc(100svh - var(--header-height, 0px) - var(--stage-pad-total));
+  max-height: calc(100svh - var(--header-height, 0px) - (2 * var(--stage-pad-y)));
   overflow: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(120,170,210,0.55) rgba(7,20,34,0.5);
@@ -306,7 +310,7 @@ html:not(.bg-ready) .stage__card{
 }
 
 .stage__content {
-  padding: 28px 28px 32px;
+  padding: 18px 12px 28px;
   color: rgba(235,245,255,0.92);
 }
 
