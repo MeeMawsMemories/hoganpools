@@ -24,6 +24,8 @@ export async function loadRoute(route, mountEl) {
     return;
   }
   if (targetEl) {
-    targetEl.innerHTML = await res.text();
+    const html = await res.text();
+    targetEl.innerHTML = html; // whatever your injection line is
+    window.initHearthCalculator?.(); // <-- add this
   }
 }

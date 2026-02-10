@@ -7,159 +7,277 @@
 
 <section class="content-block">
   <style>
-    /* Page-scoped: Financing embeds */
-    .financing-layout{
-      margin: 18px 0 22px;
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
+    /* Page-scoped: Financing */
+    .financing-shell{
+      max-width: 980px;
+      margin: 0 auto;
     }
-    .financing-main{
-      display: flex;
-      flex-direction: column;
+
+    .financing-header{
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .financing-header h2{ margin: 0 0 8px; }
+    .financing-lead{
+      max-width: 72ch;
+      margin: 0 auto;
+      opacity: 0.95;
+      line-height: 1.6;
+    }
+
+    .financing-grid{
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 1fr;
       gap: 18px;
+      align-items: start;
     }
+
+    .financing-card{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.18);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.45);
+      overflow: hidden;
+    }
+    .financing-card__pad{ padding: 16px; }
+
     .financing-copy{
-      max-width: 520px;
+      text-align: left;
+      max-width: 72ch;
+      margin: 0 auto;
     }
     .financing-copy p{
       margin: 0 0 0.9rem;
-      line-height: 1.55;
+      line-height: 1.6;
     }
-    .financing-copy p:last-child{
-      margin-bottom: 0;
-    }
+    .financing-copy p:last-child{ margin-bottom: 0; }
+
     .financing-figure{
       margin: 0;
       border-radius: 16px;
       overflow: hidden;
-      border: 1px solid rgba(0,0,0,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
       box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+      background: rgba(255,255,255,0.02);
     }
     .financing-figure img{
       display: block;
       width: 100%;
       height: auto;
     }
+    .financing-figure figcaption{
+      padding: 10px 12px 12px;
+      font-size: 0.95rem;
+      opacity: 0.9;
+      text-align: center;
+    }
+
+    /* Banner card (centered + responsive) */
+    .financing-bannerCard{
+      text-align: center;
+    }
+    .financing-bannerCard__cta{
+      margin: 0 0 10px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      opacity: 0.95;
+    }
     .financing-banner{
       display: block;
-      border-radius: 14px;
+      border-radius: 12px;
       overflow: hidden;
-      border: 1px solid rgba(0,0,0,0.08);
-      background: rgba(255,255,255,0.9);
-      box-shadow: 0 10px 26px rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.02);
+      transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
+      max-width: 760px;
+      margin: 0 auto;
     }
     .financing-banner img{
       display: block;
       width: 100%;
       height: auto;
+      max-width: 700px; /* respects the original 700x110 */
+      margin: 0 auto;
     }
-    .hearth-widget{
-      border-radius: 16px;
-      overflow: hidden;
-      border: 1px solid rgba(0,0,0,0.08);
-      background: rgba(255,255,255,0.98);
-      box-shadow: 0 18px 44px rgba(0,0,0,0.5);
-      max-width: 380px;
-      margin-left: auto;
+    .financing-banner:hover,
+    .financing-banner:focus-visible{
+      transform: translateY(-1px);
+      border-color: rgba(120, 214, 255, 0.35);
+      box-shadow:
+        0 14px 34px rgba(0,0,0,0.55),
+        0 0 0 4px rgba(120, 214, 255, 0.10);
+      outline: none;
     }
-    .hearth-widget__head{
-      padding: 16px 18px 10px;
-      border-bottom: 1px solid rgba(0,0,0,0.08);
+    .financing-fineprint{
+      margin: 10px auto 0;
+      max-width: 90ch;
+      font-size: 0.92rem;
+      opacity: 0.82;
+      line-height: 1.5;
+      text-align: center;
     }
-    .hearth-widget__head h3{
-      margin: 0;
+
+    /* Quick facts */
+    .financing-facts{
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .financing-fact h3{
+      margin: 0 0 6px;
       font-size: 1.05rem;
-      letter-spacing: 0.02em;
     }
-    .hearth-widget__body{
-      padding: 0;
+    .financing-fact p{
+      margin: 0;
+      opacity: 0.92;
+      line-height: 1.55;
     }
-    /* Hearth script fills this iframe. Give it a pleasant, responsive height. */
-    #hearth-widget_calculator_v1{
-      width: 100%;
-      height: min(820px, 80vh);
-      border: 0;
-      display: block;
-      background: transparent;
+
+    /* FAQ */
+    .financing-faq{
+      margin-top: 18px;
     }
-    @media (min-width: 900px){
-      .financing-layout{
-        display: grid;
-        grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.9fr);
-        align-items: flex-start;
-        column-gap: 32px;
+    .financing-faq h3{
+      text-align: center;
+      margin: 0 0 10px;
+    }
+    .financing-faq details{
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.14);
+      border-radius: 14px;
+      padding: 12px 14px;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.35);
+    }
+    .financing-faq details + details{ margin-top: 10px; }
+    .financing-faq summary{
+      cursor: pointer;
+      font-weight: 600;
+      list-style: none;
+    }
+    .financing-faq summary::-webkit-details-marker{ display: none; }
+    .financing-faq details p{
+      margin: 10px 0 0;
+      opacity: 0.92;
+      line-height: 1.6;
+    }
+
+    /* CTA */
+    .financing-cta{
+      margin-top: 18px;
+      text-align: center;
+    }
+    .financing-cta p{
+      margin: 0 0 10px;
+      line-height: 1.6;
+    }
+
+    @media (min-width: 860px){
+      .financing-grid{
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 18px;
       }
-      .hearth-widget{
-        margin-left: 0;
-        justify-self: stretch;
-      }
+      .financing-copy{ margin: 0; }
+      .financing-facts{ grid-template-columns: repeat(3, 1fr); }
     }
   </style>
 
   <div class="container">
-    <h2>Financing Options</h2>
-    <div class="financing-layout">
-      <div class="financing-main">
-        <div class="financing-copy">
-          <p>A custom pool is a long-term investment in your home and lifestyle. To make the process easier, we offer flexible financing options that allow qualified homeowners to spread the cost into manageable monthly payments.</p>
-          <p>Use the calculator to explore estimated payment options. There's no obligation, and checking your options does not commit you to a project.</p>
+    <div class="financing-shell">
+      <header class="financing-header">
+        <h2>Financing Options</h2>
+        <p class="financing-lead">
+          Flexible financing can help qualified homeowners spread project costs into manageable monthly payments.
+          Explore estimates first—then call us when you’re ready to talk scope and budget.
+        </p>
+      </header>
+
+      <div class="financing-grid">
+        <div class="financing-card">
+          <div class="financing-card__pad">
+            <div class="financing-copy">
+              <p>
+                A custom pool is a long-term investment in your home and lifestyle. Financing can help you move
+                forward sooner while keeping your cash flow predictable.
+              </p>
+              <p>
+                Use the estimator below to review possible payment ranges. Terms and approvals vary based on the
+                lender and your application.
+              </p>
+            </div>
+          </div>
         </div>
 
-        <!-- Hero image -->
         <figure class="financing-figure">
-          <img
-            src="/assets/img/Pool02.jpg"
-            alt="Custom pool project"
-            loading="lazy"
-            onload="(function(){try{if(document.getElementById('hearth-script'))return;var s=document.createElement('script');s.src='https://widget.gethearth.com/script.js';s.id='hearth-script';s.dataset.orgid='58414';s.dataset.partner='hogan-pools';s.async=true;document.head.appendChild(s);}catch(e){}})();"
-          />
+          <img src="/assets/img/Pool02.jpg" alt="Custom pool project" loading="lazy" />
+          <figcaption>Recent project build — ask us what’s possible for your space.</figcaption>
         </figure>
-
-        <!-- Wide + thin banner under the photo -->
-        <a
-          class="financing-banner"
-          href="https://app.gethearth.com/partners/hogan-pools?utm_campaign=58414&utm_content=zero_percent&utm_medium=contractor-website&utm_source=contractor&utm_term=700x110"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Open Hearth financing in a new tab"
-        >
-          <img
-            src="https://app.gethearth.com/contractor_images/hogan-pools/banner.jpg?color=zero_percent&size_id=700x110"
-            alt="Financing available through Hearth"
-            loading="lazy"
-          />
-        </a>
       </div>
 
-      <!-- Big + vertical calculator widget on the right -->
-      <section class="hearth-widget" aria-label="Financing calculator">
-        <div class="hearth-widget__head">
-          <h3>Financing Calculator</h3>
+      <div class="financing-card financing-bannerCard" aria-label="Financing promotion" style="margin-top:18px;">
+        <div class="financing-card__pad">
+          <p class="financing-bannerCard__cta">Estimate payments and view available offers.</p>
+
+          <a
+            class="financing-banner"
+            href="https://app.gethearth.com/partners/hogan-pools?utm_campaign=58414&utm_content=zero_percent&utm_medium=contractor-website&utm_source=contractor&utm_term=700x110"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="https://app.gethearth.com/contractor_images/hogan-pools/banner.jpg?color=zero_percent&size_id=700x110"
+              alt="Explore financing through Hearth"
+            />
+          </a>
+
+          <p class="financing-fineprint">
+            Financing is offered through third-party providers. Approval, rates, and terms vary.
+          </p>
         </div>
-        <div class="hearth-widget__body">
-          <!-- Hearth fills this iframe after its script loads -->
-          <iframe id="hearth-widget_calculator_v1" title="Hearth financing calculator"></iframe>
+      </div>
+
+      <div class="financing-facts">
+        <div class="financing-card financing-fact">
+          <div class="financing-card__pad">
+            <h3>Fast estimates</h3>
+            <p>Get a quick sense of monthly payments before committing to a full design.</p>
+          </div>
         </div>
+        <div class="financing-card financing-fact">
+          <div class="financing-card__pad">
+            <h3>Budget-friendly planning</h3>
+            <p>Align features and scope with a payment range that feels comfortable.</p>
+          </div>
+        </div>
+        <div class="financing-card financing-fact">
+          <div class="financing-card__pad">
+            <h3>Talk to a human</h3>
+            <p>We’ll help you match your priorities to a realistic build plan and timeline.</p>
+          </div>
+        </div>
+      </div>
+
+      <section class="financing-faq" aria-label="Financing FAQs">
+        <h3>Financing FAQs</h3>
+        <details>
+          <summary>Does exploring options obligate me to start a project?</summary>
+          <p>No. You can review estimates first and contact us when you’re ready to discuss design and pricing.</p>
+        </details>
+        <details>
+          <summary>What can be financed?</summary>
+          <p>Most project costs may be eligible, including the pool, hardscape, and related improvements (varies by lender).</p>
+        </details>
+        <details>
+          <summary>How do I get an accurate monthly payment?</summary>
+          <p>Monthly payments depend on the approved amount, term length, and rate. Use the estimator, then we’ll confirm numbers once your scope is defined.</p>
+        </details>
       </section>
+
+      <div class="financing-cta">
+        <p><strong>Ready to explore options?</strong> Call us to discuss your project and budget.</p>
+        <a href="tel:+16367443242" class="btn btn-primary">Call: (636) 744-3242</a>
+      </div>
     </div>
-    
-    <div class="financing-cards">
-      <article class="card">
-        <h3>Home Equity Line of Credit</h3>
-        <p>Flexible, competitive rates. Borrow what you need.</p>
-      </article>
-      <article class="card">
-        <h3>Pool-Specific Financing</h3>
-        <p>5–15 year terms with our lender partners.</p>
-      </article>
-      <article class="card">
-        <h3>Cash Discount</h3>
-        <p>Pay in full? We'll work with you on pricing.</p>
-      </article>
-    </div>
-    
-    <p><strong>Ready to explore options?</strong> Call us to discuss your project and budget.</p>
-    <a href="tel:+15551234567" class="btn btn-primary">Call: (555) 123-4567</a>
   </div>
 </section>

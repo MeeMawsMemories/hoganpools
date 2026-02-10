@@ -1,16 +1,13 @@
 (() => {
-  const ORG_ID = '58414';
-  const PARTNER = 'hogan-pools';
   const SCRIPT_ID = 'hearth-script';
   const SCRIPT_SRC = 'https://widget.gethearth.com/script.js';
+  const ORG_ID = '58414';
+  const PARTNER = 'hogan-pools';
   const IFRAME_ID = 'hearth-widget_calculator_v1';
 
-  const ensureHearth = () => {
-    const iframe = document.getElementById(IFRAME_ID);
-    if (!iframe) return; // not on the financing view (yet)
-
-    // If script already present, don’t add again
-    if (document.getElementById(SCRIPT_ID)) return;
+  function injectHearthScript() {
+    const old = document.getElementById(SCRIPT_ID);
+    if (old) old.remove(); // force re-run (important for SPA navigation)
 
     const s = document.createElement('script');
     s.id = SCRIPT_ID;
@@ -18,22 +15,23 @@
     s.async = true;
     s.dataset.orgid = ORG_ID;
     s.dataset.partner = PARTNER;
-
     document.head.appendChild(s);
-  };
-
-  // Run now
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', ensureHearth, { once: true });
-  } else {
-    ensureHearth();
   }
 
-  // Run on SPA navigations / DOM swaps
-  window.addEventListener('popstate', ensureHearth);
-  window.addEventListener('hashchange', ensureHearth);
+  // Call this after your router injects /pages/financing.html into the DOM
+  window.initHearthCalculator = () => {
+    const iframe = document.getElementById(IFRAME_ID);
+    if (!iframe) return false;
 
-  // Catch content injection into the DOM (common in your setup)
-  const mo = new MutationObserver(() => ensureHearth());
-  mo.observe(document.documentElement, { childList: true, subtree: true });
+    // If already initialized, don’t thrash
+    if (iframe.getAttribute('src')) return true;
+
+    injectHearthScript();
+    return true;
+  };
+
+  // On full page loads (non-SPA), attempt once
+  document.addEventListener('DOMContentLoaded', () => {
+    window.initHearthCalculator?.();
+  });
 })();
