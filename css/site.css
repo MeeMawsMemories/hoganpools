@@ -2092,3 +2092,67 @@ body.gallery-full .gallery-grid{
   gap: 16px;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
+/* =========================
+   Gallery lightbox
+   ========================= */
+
+.lightbox-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.lightbox-overlay.is-open{
+  display: flex;
+}
+
+.lightbox{
+  position: relative;
+  max-width: min(1100px, 96vw);
+  max-height: 90vh;
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(6, 20, 34, 0.9);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox__img{
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  border-radius: 12px;
+}
+
+.lightbox__close{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.65);
+  background: rgba(6, 20, 34, 0.9);
+  color: #fff;
+  font-size: 20px;
+  line-height: 28px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.lightbox__close:hover{
+  background: rgba(255,255,255,0.82);
+}
+
+body.lightbox-open{
+  overflow: hidden;
+}
