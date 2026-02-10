@@ -36,8 +36,8 @@ html.bg-ready .stage__card{ transform: translateY(0); }
   --max: 1100px;
   --pad: 20px;
   /* Scale the centered card up on wide screens (e.g., 1280x800, 1920x1080) */
-  --card-max-width: clamp(1080px, 86vw, 1600px);
-  --stage-pad-y: 32px;
+  --card-max-width: 1000px; /* or whatever fixed width you want */
+  --stage-pad-y: 16px;
   --stage-pad-total: 1px;
 
   --navy: #0c2845;
@@ -234,7 +234,11 @@ html.bg-ready .stage__card{ transform: translateY(0); }
   transform: translateY(18px);
   opacity: 0;
   transition: opacity var(--intro-card) var(--stage-ease), transform var(--intro-card) var(--stage-ease);
+  height: auto;
   max-height: calc(100svh - var(--header-height, 0px) - (2 * var(--stage-pad-y)));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   overflow: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(120,170,210,0.55) rgba(7,20,34,0.5);
@@ -310,7 +314,7 @@ html:not(.bg-ready) .stage__card{
 }
 
 .stage__content {
-  padding: 18px 12px 28px;
+  padding: 32px 12px 28px;
   color: rgba(235,245,255,0.92);
 }
 
