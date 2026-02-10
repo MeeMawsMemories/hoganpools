@@ -1993,27 +1993,25 @@ body.is-home .home-stack{
     0 0 12px rgba(255,255,255,0.28) !important;
 }
 
-/* === BG video ready gate: prevent initial flash of stage content === */
-html:not(.bg-ready) .stage__card,
-html:not(.bg-ready) .stage__control{
-  opacity: 0;
-  pointer-events: none;
-}
+/* --- Process page: desktop sizing tune (scoped; does not affect Home/Gunite) --- */
+@media (min-width: 821px){
+  /* The big culprit: the 16/9 hero inside a 1000px card becomes ~560px tall. Reduce it. */
+  .process-page .process-hero-media__media{
+    /* slightly wider aspect => less height */
+    aspect-ratio: 2 / 1;
+    /* reduce the clamp that was making it huge */
+    min-height: clamp(240px, 22vw, 420px);
+    max-height: 52vh;
+  }
 
-html.bg-ready .stage__card,
-html.bg-ready .stage__control{
-  opacity: 1;
-  pointer-events: auto;
+  /* tighten overlay content a bit */
+  .process-page .process-hero-media__content{
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+    max-width: 560px;
+  }
 }
-
-.stage__card,
-.stage__control{
-  transition: opacity 220ms ease, transform 220ms ease;
-}
-
-/* Optional: tiny lift-in when revealing */
-html:not(.bg-ready) .stage__card{ transform: translateY(4px); }
-html.bg-ready .stage__card{ transform: translateY(0); }
 
 html, body {
   overflow-x: hidden;
@@ -2023,4 +2021,74 @@ html, body {
 /* Fluid typography (global) */
 html{
   font-size: clamp(16px, 1.1vw, 19px);
+}
+/* =========================
+   Gallery page (only)
+   ========================= */
+.gallery-full .gallery-grid{
+  display: grid;
+  gap: 16px;
+  /* responsive grid that never overflows the card */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  align-items: stretch;
+}
+
+.gallery-full .gallery-item{
+  display: block;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.04);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.22);
+}
+
+/* This is the key part: constrain image size */
+.gallery-full .gallery-item img{
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  object-fit: cover;       /* crop instead of overflowing */
+  aspect-ratio: 4 / 3;     /* consistent thumbnail shape */
+}
+
+/* If you want "gallery-3col" to truly be 3 columns on desktop */
+@media (min-width: 980px){
+  .gallery-full .gallery-grid.gallery-3col{
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Smaller screens: slightly tighter tiles */
+@media (max-width: 520px){
+  .gallery-full .gallery-grid{ gap: 12px; }
+  .gallery-full .gallery-item img{ aspect-ratio: 1 / 1; }
+}
+/* =========================
+   Gallery page: constrain main image
+   ========================= */
+
+/* ensure the gallery card centers its content */
+body.gallery-full .stage__card{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* cap image size so it behaves like a pleasant gallery, not a full-screen photo */
+body.gallery-full .stage__card img{
+  display: block;
+  max-width: 100%;
+  max-height: min(520px, 70vh); /* adjust to taste */
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+}
+
+/* if you’re using the grid version, this still works */
+body.gallery-full .gallery-grid{
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
