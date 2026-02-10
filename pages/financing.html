@@ -6,9 +6,143 @@
 </section>
 
 <section class="content-block">
+  <style>
+    /* Page-scoped: Financing embeds */
+    .financing-layout{
+      margin: 18px 0 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .financing-main{
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .financing-copy{
+      max-width: 520px;
+    }
+    .financing-copy p{
+      margin: 0 0 0.9rem;
+      line-height: 1.55;
+    }
+    .financing-copy p:last-child{
+      margin-bottom: 0;
+    }
+    .financing-figure{
+      margin: 0;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+    }
+    .financing-figure img{
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .financing-banner{
+      display: block;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.9);
+      box-shadow: 0 10px 26px rgba(0,0,0,0.35);
+    }
+    .financing-banner img{
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .hearth-widget{
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.98);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.5);
+      max-width: 380px;
+      margin-left: auto;
+    }
+    .hearth-widget__head{
+      padding: 16px 18px 10px;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    .hearth-widget__head h3{
+      margin: 0;
+      font-size: 1.05rem;
+      letter-spacing: 0.02em;
+    }
+    .hearth-widget__body{
+      padding: 0;
+    }
+    /* Hearth script fills this iframe. Give it a pleasant, responsive height. */
+    #hearth-widget_calculator_v1{
+      width: 100%;
+      height: min(820px, 80vh);
+      border: 0;
+      display: block;
+      background: transparent;
+    }
+    @media (min-width: 900px){
+      .financing-layout{
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.9fr);
+        align-items: flex-start;
+        column-gap: 32px;
+      }
+      .hearth-widget{
+        margin-left: 0;
+        justify-self: stretch;
+      }
+    }
+  </style>
+
   <div class="container">
     <h2>Financing Options</h2>
-    <p>We partner with leading lenders to offer flexible financing plans. Whether you're building a $30K vinyl pool or a $150K gunite masterpiece, we have options to fit your budget.</p>
+    <div class="financing-layout">
+      <div class="financing-main">
+        <div class="financing-copy">
+          <p>A custom pool is a long-term investment in your home and lifestyle. To make the process easier, we offer flexible financing options that allow qualified homeowners to spread the cost into manageable monthly payments.</p>
+          <p>Use the calculator to explore estimated payment options. There's no obligation, and checking your options does not commit you to a project.</p>
+        </div>
+
+        <!-- Hero image -->
+        <figure class="financing-figure">
+          <img
+            src="/assets/img/Pool02.jpg"
+            alt="Custom pool project"
+            loading="lazy"
+            onload="(function(){try{if(document.getElementById('hearth-script'))return;var s=document.createElement('script');s.src='https://widget.gethearth.com/script.js';s.id='hearth-script';s.dataset.orgid='58414';s.dataset.partner='hogan-pools';s.async=true;document.head.appendChild(s);}catch(e){}})();"
+          />
+        </figure>
+
+        <!-- Wide + thin banner under the photo -->
+        <a
+          class="financing-banner"
+          href="https://app.gethearth.com/partners/hogan-pools?utm_campaign=58414&utm_content=zero_percent&utm_medium=contractor-website&utm_source=contractor&utm_term=700x110"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Open Hearth financing in a new tab"
+        >
+          <img
+            src="https://app.gethearth.com/contractor_images/hogan-pools/banner.jpg?color=zero_percent&size_id=700x110"
+            alt="Financing available through Hearth"
+            loading="lazy"
+          />
+        </a>
+      </div>
+
+      <!-- Big + vertical calculator widget on the right -->
+      <section class="hearth-widget" aria-label="Financing calculator">
+        <div class="hearth-widget__head">
+          <h3>Financing Calculator</h3>
+        </div>
+        <div class="hearth-widget__body">
+          <!-- Hearth fills this iframe after its script loads -->
+          <iframe id="hearth-widget_calculator_v1" title="Hearth financing calculator"></iframe>
+        </div>
+      </section>
+    </div>
     
     <div class="financing-cards">
       <article class="card">
