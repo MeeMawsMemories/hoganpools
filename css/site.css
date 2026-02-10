@@ -1917,20 +1917,6 @@ body.is-home .home-stack{
 }
 
 @media (max-width: 820px){
-  #site-header .navtoggle{
-    position: relative;
-    z-index: 10000;
-    pointer-events: auto;
-  }
-}
-@media (max-width: 820px){
-  #site-header .navtoggle{
-    margin-right: 32px; /* nudge left */
-  }
-}
-/* ...existing code... */
-
-@media (max-width: 820px){
   /* If any text ever ends up in the button, hide it */
   #site-header .navtoggle{
     font-size: 0 !important;
@@ -1951,10 +1937,23 @@ body.is-home .home-stack{
   }
 }
 
+@media (max-width: 820px){
+  #site-header{
+    background: var(--navy);
+  }
+
+  #site-header .topbar{
+    margin-top: 0;  /* remove the 2px gap */
+    padding-top: 0;
+  }
+}
+
 /* =========================
    Header polish (scoped)
    ========================= */
-
+.topbar{
+  margin-top: 0; /* remove the tiny top gap on desktop */
+}
 #site-header{
   position: relative;
   z-index: 50;
