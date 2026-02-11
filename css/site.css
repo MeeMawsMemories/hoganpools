@@ -1623,6 +1623,12 @@ body.is-home .home-stack{
     height: 36px;
     font-size: 22px;
     top: 70%;
+    transform: translateY(-50%);
+      line-height: 1;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   }
 
   .stage__control--left{ left: 12px; }
@@ -2189,3 +2195,273 @@ body.is-home .home-stack{
     border-radius: 12px;
   }
 }
+
+@media (max-width: 820px){
+  /* If any text ever ends up in the button, hide it */
+  #site-header .navtoggle{
+    font-size: 0 !important;
+    line-height: 0 !important;
+    color: #ffffff; /* <-- change THIS to change hamburger line color */
+  }
+
+  /* Hamburger lines use currentColor */
+  #site-header .navtoggle::before{
+    content: "";
+    width: 22px;
+    height: 2px;
+    background: currentColor;
+    position: absolute;
+    box-shadow:
+      0 -7px 0 currentColor,
+      0 7px 0 currentColor;
+  }
+}
+
+@media (max-width: 820px){
+  #site-header{
+    background: var(--navy);
+  }
+
+  #site-header .topbar{
+    margin-top: 0;  /* remove the 2px gap */
+    padding-top: 0;
+  }
+}
+
+/* =========================
+   Header polish (scoped)
+   ========================= */
+.topbar{
+  margin-top: 0; /* remove the tiny top gap on desktop */
+}
+#site-header{
+  position: relative;
+  z-index: 50;
+}
+
+/* Header surface */
+#site-header .site-header,
+#site-header header,
+#site-header .topbar,
+#site-header .navwrap{
+  background: rgba(4, 18, 34, 0.92);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+/* Desktop layout: fixed bar height, true centered nav */
+#site-header .navwrap,
+#site-header .site-header__inner{
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 18px;
+
+  height: 78px;     /* fixed header height */
+  padding: 0 22px;  /* no vertical padding */
+  overflow: hidden; /* nothing can spill outside the bar */
+}
+
+/* Left: brand/logo */
+#site-header .brand,
+#site-header .site-header__brand{
+  justify-self: start;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  height: 100%;
+}
+
+/* Critical fix: fixed logo height (no % / calc) */
+#site-header .brand__logo,
+#site-header .site-header__logo{
+  height: 72px; /* fills the 78px bar with ~3px top/bottom breathing room */
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* Safety: don't accidentally scale other images inside the header */
+#site-header img{
+  display: block;
+}
+
+/* Center: nav */
+#site-header .nav,
+#site-header .site-header__nav{
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+#site-header .nav a,
+#site-header .site-header__nav a{
+  color: rgba(255, 255, 255, 0.92);
+  text-decoration: none;
+  font-size: 15px;
+  letter-spacing: 0.01em;
+  padding: 10px 10px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+#site-header .nav a:hover,
+#site-header .site-header__nav a:hover,
+#site-header .nav a:focus-visible,
+#site-header .site-header__nav a:focus-visible{
+  background: rgba(255, 255, 255, 0.08);
+  outline: none;
+}
+
+/* Soft dividers between nav items (desktop only) */
+#site-header .nav a + a,
+#site-header .site-header__nav a + a{
+  position: relative;
+  margin-left: 14px;
+}
+
+#site-header .nav a + a::before,
+#site-header .site-header__nav a + a::before{
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* Right: hours + phone */
+#site-header .meta,
+#site-header .site-header__meta{
+  justify-self: end;
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 2px;
+  text-align: right;
+  min-width: 0;
+}
+
+#site-header .hours,
+#site-header .site-header__hours{
+  font-size: 25px;
+  color: rgba(255, 255, 255, 0.70);
+  white-space: nowrap;
+  opacity: 0.72;
+}
+
+#site-header .phone,
+#site-header .site-header__phone{
+  font-size: 19px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+#site-header .phone:hover,
+#site-header .site-header__phone:hover{
+  text-decoration: underline;
+}
+
+/* Responsive: allow wrap on mobile, reduce logo slightly */
+@media (max-width: 820px){
+  #site-header .navwrap,
+  #site-header .site-header__inner{
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    row-gap: 10px;
+
+    height: auto;        /* allow wrapping */
+    padding: 12px 16px;  /* restore vertical padding */
+    overflow: visible;
+  }
+
+  #site-header .nav,
+  #site-header .site-header__nav{
+    grid-column: 1 / -1;
+    justify-self: start;
+    flex-wrap: wrap;
+    gap: 10px 14px;
+  }
+
+  #site-header .nav a + a::before,
+  #site-header .site-header__nav a + a::before{
+    display: none;
+  }
+
+  #site-header .meta,
+  #site-header .site-header__meta{
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  #site-header .nav a,
+  #site-header .site-header__nav a{
+    font-size: 14px;
+    padding: 9px 8px;
+  }
+
+  #site-header .brand__logo,
+  #site-header .site-header__logo{
+    height: 56px;
+  }
+
+  /* Drawer look when open */
+  #site-header .nav.nav--open{
+    position: fixed;
+    top: var(--header-h, 96px);
+    left: 12px;
+    right: 12px;
+    z-index: 9999;
+
+    padding: 14px;
+    border-radius: 16px;
+    background: var(--navy, #0c2845);
+    border: 1px solid rgba(255,255,255,0.14);
+    box-shadow: 0 18px 48px rgba(0,0,0,0.55);
+  }
+
+  #site-header .nav.nav--open a{
+    width: 100%;
+    padding: 10px 10px;
+    border-radius: 12px;
+  }
+
+  #site-header .nav.nav--open a:hover,
+  #site-header .nav.nav--open a:focus-visible{
+    background: rgba(255,255,255,0.08);
+    outline: none;
+  }
+}
+/* FINAL mobile override */
+@media (max-width: 820px){
+  #site-header .nav{
+    display: none !important;
+  }
+    .topbar{
+    display: none !important;
+  }
+  #site-header .nav.nav--open{
+    display: flex !important;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+
+    position: fixed;
+    top: var(--header-h, 96px);
+    left: 12px;
+    right: 12px;
+    z-index: 9999;
+
+    padding: 14px;
+    border-radius: 16px;
+    background: #0c2845; /* navy */
+    border: 
+
+    
