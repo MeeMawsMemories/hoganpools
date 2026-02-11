@@ -147,6 +147,46 @@ async function injectPartials() {
       navtoggle.textContent = isOpen ? "Close" : "Menu";
     });
   }
+
+  if (document.documentElement.dataset.topbarBubbles !== "true") {
+    document.documentElement.dataset.topbarBubbles = "true";
+    const closeAll = () => {
+      siteHeader.querySelectorAll(".topbar__icon").forEach((btn) => {
+        const bubbleId = btn.getAttribute("aria-controls");
+        const bubble = bubbleId ? siteHeader.querySelector(`#${bubbleId}`) : null;
+        btn.setAttribute("aria-expanded", "false");
+        if (bubble) {
+          bubble.classList.remove("is-open");
+          bubble.setAttribute("aria-hidden", "true");
+        }
+      });
+    };
+
+    siteHeader.querySelectorAll(".topbar__icon").forEach((btn) => {
+      const bubbleId = btn.getAttribute("aria-controls");
+      const bubble = bubbleId ? siteHeader.querySelector(`#${bubbleId}`) : null;
+      if (!bubble) return;
+
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        closeAll();
+        if (!isOpen) {
+          btn.setAttribute("aria-expanded", "true");
+          bubble.classList.add("is-open");
+          bubble.setAttribute("aria-hidden", "false");
+        }
+      });
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!siteHeader.contains(e.target)) closeAll();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeAll();
+    });
+  }
 }
 
 
