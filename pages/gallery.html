@@ -5,157 +5,54 @@
   </div>
 </section>
 
-<style>
-  .gallery-full .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1rem;
-  }
-
-  .gallery-full .gallery-item {
-    display: block;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    background: #f6f7f9;
-  }
-
-  .gallery-full .gallery-item img {
-    width: 100%;
-    height: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.25s ease;
-  }
-
-  .gallery-full .gallery-item:hover img,
-  .gallery-full .gallery-item:focus-visible img {
-    transform: scale(1.03);
-  }
-
-  body.lightbox-open {
-    overflow: hidden;
-  }
-
-  .lightbox-overlay {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    background: rgba(9, 16, 26, 0.55);
-    backdrop-filter: blur(8px);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 200ms ease;
-    z-index: 2000;
-  }
-
-  .lightbox-overlay.is-open {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .lightbox {
-    position: relative;
-    width: min(92vw, 1100px);
-    padding: 20px;
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-  }
-
-  .lightbox__img {
-    width: 100%;
-    height: auto;
-    max-height: 75vh;
-    object-fit: contain;
-    display: block;
-    border-radius: 12px;
-    background: rgba(0, 0, 0, 0.1);
-  }
-
-  .lightbox__close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 36px;
-    height: 36px;
-    border-radius: 999px;
-    border: none;
-    background: rgba(10, 20, 30, 0.65);
-    color: #ffffff;
-    font-size: 24px;
-    line-height: 1;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: transform 120ms ease, background 120ms ease;
-  }
-
-  .lightbox__close:hover {
-    transform: scale(1.05);
-    background: rgba(10, 20, 30, 0.85);
-  }
-
-  .lightbox__close:focus-visible {
-    outline: 2px solid #ffffff;
-    outline-offset: 2px;
-  }
-</style>
-
 <section class="gallery-full">
   <div class="container">
     <div class="gallery-grid gallery-3col">
-      <a href="/assets/img/Pool02.jpg" class="gallery-item"><img src="/assets/img/Pool02.jpg" alt="Pool photo 02" loading="lazy" /></a>
-      <a href="/assets/img/Pool03.jpg" class="gallery-item"><img src="/assets/img/Pool03.jpg" alt="Pool photo 03" loading="lazy" /></a>
-      <a href="/assets/img/Pool04.jpg" class="gallery-item"><img src="/assets/img/Pool04.jpg" alt="Pool photo 04" loading="lazy" /></a>
-      <a href="/assets/img/Pool05.jpg" class="gallery-item"><img src="/assets/img/Pool05.jpg" alt="Pool photo 05" loading="lazy" /></a>
-      <a href="/assets/img/Pool07.jpg" class="gallery-item"><img src="/assets/img/Pool07.jpg" alt="Pool photo 07" loading="lazy" /></a>
-      <a href="/assets/img/Pool08.jpg" class="gallery-item"><img src="/assets/img/Pool08.jpg" alt="Pool photo 08" loading="lazy" /></a>
-      <a href="/assets/img/Pool09.jpg" class="gallery-item"><img src="/assets/img/Pool09.jpg" alt="Pool photo 09" loading="lazy" /></a>
-      <a href="/assets/img/Pool10.jpg" class="gallery-item"><img src="/assets/img/Pool10.jpg" alt="Pool photo 10" loading="lazy" /></a>
-      <a href="/assets/img/Pool11.jpg" class="gallery-item"><img src="/assets/img/Pool11.jpg" alt="Pool photo 11" loading="lazy" /></a>
-      <a href="/assets/img/Pool12.jpg" class="gallery-item"><img src="/assets/img/Pool12.jpg" alt="Pool photo 12" loading="lazy" /></a>
-      <a href="/assets/img/Pool13.jpg" class="gallery-item"><img src="/assets/img/Pool13.jpg" alt="Pool photo 13" loading="lazy" /></a>
-      <a href="/assets/img/Pool14.jpg" class="gallery-item"><img src="/assets/img/Pool14.jpg" alt="Pool photo 14" loading="lazy" /></a>
-      <a href="/assets/img/Pool15.jpg" class="gallery-item"><img src="/assets/img/Pool15.jpg" alt="Pool photo 15" loading="lazy" /></a>
-      <a href="/assets/img/Pool16.jpg" class="gallery-item"><img src="/assets/img/Pool16.jpg" alt="Pool photo 16" loading="lazy" /></a>
-      <a href="/assets/img/Pool17.jpg" class="gallery-item"><img src="/assets/img/Pool17.jpg" alt="Pool photo 17" loading="lazy" /></a>
-      <a href="/assets/img/Pool18.jpg" class="gallery-item"><img src="/assets/img/Pool18.jpg" alt="Pool photo 18" loading="lazy" /></a>
-      <a href="/assets/img/Pool19.jpg" class="gallery-item"><img src="/assets/img/Pool19.jpg" alt="Pool photo 19" loading="lazy" /></a>
-      <a href="/assets/img/Pool20.jpg" class="gallery-item"><img src="/assets/img/Pool20.jpg" alt="Pool photo 20" loading="lazy" /></a>
-      <a href="/assets/img/Pool21.jpg" class="gallery-item"><img src="/assets/img/Pool21.jpg" alt="Pool photo 21" loading="lazy" /></a>
-      <a href="/assets/img/Pool22.jpg" class="gallery-item"><img src="/assets/img/Pool22.jpg" alt="Pool photo 22" loading="lazy" /></a>
-      <a href="/assets/img/Pool23.jpg" class="gallery-item"><img src="/assets/img/Pool23.jpg" alt="Pool photo 23" loading="lazy" /></a>
-      <a href="/assets/img/Pool24.jpg" class="gallery-item"><img src="/assets/img/Pool24.jpg" alt="Pool photo 24" loading="lazy" /></a>
-      <a href="/assets/img/Pool25.jpg" class="gallery-item"><img src="/assets/img/Pool25.jpg" alt="Pool photo 25" loading="lazy" /></a>
-      <a href="/assets/img/Pool26.jpg" class="gallery-item"><img src="/assets/img/Pool26.jpg" alt="Pool photo 26" loading="lazy" /></a>
-      <a href="/assets/img/Pool27.jpg" class="gallery-item"><img src="/assets/img/Pool27.jpg" alt="Pool photo 27" loading="lazy" /></a>
-      <a href="/assets/img/Pool28.jpg" class="gallery-item"><img src="/assets/img/Pool28.jpg" alt="Pool photo 28" loading="lazy" /></a>
-      <a href="/assets/img/Pool29.jpg" class="gallery-item"><img src="/assets/img/Pool29.jpg" alt="Pool photo 29" loading="lazy" /></a>
-      <a href="/assets/img/Pool30.jpg" class="gallery-item"><img src="/assets/img/Pool30.jpg" alt="Pool photo 30" loading="lazy" /></a>
-      <a href="/assets/img/Pool31.jpg" class="gallery-item"><img src="/assets/img/Pool31.jpg" alt="Pool photo 31" loading="lazy" /></a>
-      <a href="/assets/img/Pool32.jpg" class="gallery-item"><img src="/assets/img/Pool32.jpg" alt="Pool photo 32" loading="lazy" /></a>
-      <a href="/assets/img/Pool33.jpg" class="gallery-item"><img src="/assets/img/Pool33.jpg" alt="Pool photo 33" loading="lazy" /></a>
-      <a href="/assets/img/Pool34.jpg" class="gallery-item"><img src="/assets/img/Pool34.jpg" alt="Pool photo 34" loading="lazy" /></a>
-      <a href="/assets/img/Pool35.jpg" class="gallery-item"><img src="/assets/img/Pool35.jpg" alt="Pool photo 35" loading="lazy" /></a>
-      <a href="/assets/img/Pool36.jpg" class="gallery-item"><img src="/assets/img/Pool36.jpg" alt="Pool photo 36" loading="lazy" /></a>
-      <a href="/assets/img/Pool37.jpg" class="gallery-item"><img src="/assets/img/Pool37.jpg" alt="Pool photo 37" loading="lazy" /></a>
-      <a href="/assets/img/Pool38.jpg" class="gallery-item"><img src="/assets/img/Pool38.jpg" alt="Pool photo 38" loading="lazy" /></a>
-      <a href="/assets/img/Pool39.jpg" class="gallery-item"><img src="/assets/img/Pool39.jpg" alt="Pool photo 39" loading="lazy" /></a>
-      <a href="/assets/img/Pool40.jpg" class="gallery-item"><img src="/assets/img/Pool40.jpg" alt="Pool photo 40" loading="lazy" /></a>
-      <a href="/assets/img/Pool41.jpg" class="gallery-item"><img src="/assets/img/Pool41.jpg" alt="Pool photo 41" loading="lazy" /></a>
-      <a href="/assets/img/Pool42.jpg" class="gallery-item"><img src="/assets/img/Pool42.jpg" alt="Pool photo 42" loading="lazy" /></a>
-      <a href="/assets/img/Pool43.jpg" class="gallery-item"><img src="/assets/img/Pool43.jpg" alt="Pool photo 43" loading="lazy" /></a>
-      <a href="/assets/img/Pool44.jpg" class="gallery-item"><img src="/assets/img/Pool44.jpg" alt="Pool photo 44" loading="lazy" /></a>
-      <a href="/assets/img/Pool45.jpg" class="gallery-item"><img src="/assets/img/Pool45.jpg" alt="Pool photo 45" loading="lazy" /></a>
-      <a href="/assets/img/Pool46.jpg" class="gallery-item"><img src="/assets/img/Pool46.jpg" alt="Pool photo 46" loading="lazy" /></a>
-    </div>
+<a href="/assets/img/Pool02.jpg" class="gallery-item"><img src="/assets/img/Pool02.jpg" alt="" /></a>
+<a href="/assets/img/Pool03.jpg" class="gallery-item"><img src="/assets/img/Pool03.jpg" alt="" /></a>
+<a href="/assets/img/Pool04.jpg" class="gallery-item"><img src="/assets/img/Pool04.jpg" alt="" /></a>
+<a href="/assets/img/Pool05.jpg" class="gallery-item"><img src="/assets/img/Pool05.jpg" alt="" /></a>
+<a href="/assets/img/Pool07.jpg" class="gallery-item"><img src="/assets/img/Pool07.jpg" alt="" /></a>
+<a href="/assets/img/Pool08.jpg" class="gallery-item"><img src="/assets/img/Pool08.jpg" alt="" /></a>
+<a href="/assets/img/Pool09.jpg" class="gallery-item"><img src="/assets/img/Pool09.jpg" alt="" /></a>
+<a href="/assets/img/Pool10.jpg" class="gallery-item"><img src="/assets/img/Pool10.jpg" alt="" /></a>
+<a href="/assets/img/Pool11.jpg" class="gallery-item"><img src="/assets/img/Pool11.jpg" alt="" /></a>
+<a href="/assets/img/Pool12.jpg" class="gallery-item"><img src="/assets/img/Pool12.jpg" alt="" /></a>
+<a href="/assets/img/Pool13.jpg" class="gallery-item"><img src="/assets/img/Pool13.jpg" alt="" /></a>
+<a href="/assets/img/Pool14.jpg" class="gallery-item"><img src="/assets/img/Pool14.jpg" alt="" /></a>
+<a href="/assets/img/Pool15.jpg" class="gallery-item"><img src="/assets/img/Pool15.jpg" alt="" /></a>
+<a href="/assets/img/Pool16.jpg" class="gallery-item"><img src="/assets/img/Pool16.jpg" alt="" /></a>
+<a href="/assets/img/Pool17.jpg" class="gallery-item"><img src="/assets/img/Pool17.jpg" alt="" /></a>
+<a href="/assets/img/Pool18.jpg" class="gallery-item"><img src="/assets/img/Pool18.jpg" alt="" /></a>
+<a href="/assets/img/Pool19.jpg" class="gallery-item"><img src="/assets/img/Pool19.jpg" alt="" /></a>
+<a href="/assets/img/Pool20.jpg" class="gallery-item"><img src="/assets/img/Pool20.jpg" alt="" /></a>
+<a href="/assets/img/Pool21.jpg" class="gallery-item"><img src="/assets/img/Pool21.jpg" alt="" /></a>
+<a href="/assets/img/Pool22.jpg" class="gallery-item"><img src="/assets/img/Pool22.jpg" alt="" /></a>
+<a href="/assets/img/Pool23.jpg" class="gallery-item"><img src="/assets/img/Pool23.jpg" alt="" /></a>
+<a href="/assets/img/Pool24.jpg" class="gallery-item"><img src="/assets/img/Pool24.jpg" alt="" /></a>
+<a href="/assets/img/Pool25.jpg" class="gallery-item"><img src="/assets/img/Pool25.jpg" alt="" /></a>
+<a href="/assets/img/Pool26.jpg" class="gallery-item"><img src="/assets/img/Pool26.jpg" alt="" /></a>
+<a href="/assets/img/Pool27.jpg" class="gallery-item"><img src="/assets/img/Pool27.jpg" alt="" /></a>
+<a href="/assets/img/Pool28.jpg" class="gallery-item"><img src="/assets/img/Pool28.jpg" alt="" /></a>
+<a href="/assets/img/Pool29.jpg" class="gallery-item"><img src="/assets/img/Pool29.jpg" alt="" /></a>
+<a href="/assets/img/Pool30.jpg" class="gallery-item"><img src="/assets/img/Pool30.jpg" alt="" /></a>
+<a href="/assets/img/Pool31.jpg" class="gallery-item"><img src="/assets/img/Pool31.jpg" alt="" /></a>
+<a href="/assets/img/Pool32.jpg" class="gallery-item"><img src="/assets/img/Pool32.jpg" alt="" /></a>
+<a href="/assets/img/Pool33.jpg" class="gallery-item"><img src="/assets/img/Pool33.jpg" alt="" /></a>
+<a href="/assets/img/Pool34.jpg" class="gallery-item"><img src="/assets/img/Pool34.jpg" alt="" /></a>
+<a href="/assets/img/Pool35.jpg" class="gallery-item"><img src="/assets/img/Pool35.jpg" alt="" /></a>
+<a href="/assets/img/Pool36.jpg" class="gallery-item"><img src="/assets/img/Pool36.jpg" alt="" /></a>
+<a href="/assets/img/Pool37.jpg" class="gallery-item"><img src="/assets/img/Pool37.jpg" alt="" /></a>
+<a href="/assets/img/Pool38.jpg" class="gallery-item"><img src="/assets/img/Pool38.jpg" alt="" /></a>
+<a href="/assets/img/Pool39.jpg" class="gallery-item"><img src="/assets/img/Pool39.jpg" alt="" /></a>
+<a href="/assets/img/Pool40.jpg" class="gallery-item"><img src="/assets/img/Pool40.jpg" alt="" /></a>
+<a href="/assets/img/Pool41.jpg" class="gallery-item"><img src="/assets/img/Pool41.jpg" alt="" /></a>
+<a href="/assets/img/Pool42.jpg" class="gallery-item"><img src="/assets/img/Pool42.jpg" alt="" /></a>
+<a href="/assets/img/Pool43.jpg" class="gallery-item"><img src="/assets/img/Pool43.jpg" alt="" /></a>
+<a href="/assets/img/Pool44.jpg" class="gallery-item"><img src="/assets/img/Pool44.jpg" alt="" /></a>
+<a href="/assets/img/Pool45.jpg" class="gallery-item"><img src="/assets/img/Pool45.jpg" alt="" /></a>
+<a href="/assets/img/Pool46.jpg" class="gallery-item"><img src="/assets/img/Pool46.jpg" alt="" /></a>
+  </div>
   </div>
 </section>
 <!-- Gallery lightbox -->

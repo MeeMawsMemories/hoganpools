@@ -1,8 +1,65 @@
+document.addEventListener('DOMContentLoaded', () => {
+  const overlay = document.getElementById('gallery-lightbox');
+  const grid = document.querySelector('.gallery-full .gallery-grid');
+  if (!overlay || !grid) return;
+
+  const imgEl = overlay.querySelector('.lightbox__img');
+  const closeBtn = overlay.querySelector('.lightbox__close');
+
+  const openLightbox = (src, alt) => {
+    imgEl.src = src;
+    imgEl.alt = alt || '';
+    overlay.classList.add('is-open');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('lightbox-open');
+    closeBtn?.focus?.();
+  };
+
+  const closeLightbox = () => {
+    overlay.classList.remove('is-open');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('lightbox-open');
+    imgEl.src = '';
+    imgEl.alt = '';
+  };
+
+  // Delegate clicks from the grid (works for clicking img or the anchor)
+  grid.addEventListener('click', (e) => {
+    const link = e.target.closest('a.gallery-item');
+    if (!link) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const img = link.querySelector('img');
+    const src = link.getAttribute('href') || img?.src;
+    const alt = img?.alt || '';
+    if (!src) return;
+
+    openLightbox(src, alt);
+  });
+
+  closeBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    closeLightbox();
+  });
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeLightbox();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeLightbox();
+  });
+});
+
 (() => {
   const ensureOverlay = () => {
     let overlay = document.getElementById('gallery-lightbox');
     if (overlay) return overlay;
 
+    // Optional: create overlay if it doesn't exist in the HTML
     overlay = document.createElement('div');
     overlay.className = 'lightbox-overlay';
     overlay.id = 'gallery-lightbox';
@@ -17,68 +74,65 @@
     return overlay;
   };
 
-  const initLightbox = () => {
-    if (document.documentElement.dataset.galleryLightbox === 'true') return;
-    document.documentElement.dataset.galleryLightbox = 'true';
-
+  const openLightbox = (src, alt) => {
     const overlay = ensureOverlay();
     const imgEl = overlay.querySelector('.lightbox__img');
     const closeBtn = overlay.querySelector('.lightbox__close');
 
-    const openLightbox = (src, alt) => {
-      imgEl.src = src;
-      imgEl.alt = alt || '';
-      overlay.classList.add('is-open');
-      overlay.setAttribute('aria-hidden', 'false');
-      document.body.classList.add('lightbox-open');
-      closeBtn?.focus?.();
-    };
-
-    const closeLightbox = () => {
-      overlay.classList.remove('is-open');
-      overlay.setAttribute('aria-hidden', 'true');
-      document.body.classList.remove('lightbox-open');
-      imgEl.src = '';
-      imgEl.alt = '';
-    };
-
-    document.addEventListener(
-      'click',
-      (e) => {
-        const link = e.target.closest?.('a.gallery-item');
-        if (!link || !link.closest('.gallery-full')) return;
-
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation?.();
-
-        const img = link.querySelector('img');
-        const src = link.getAttribute('href') || img?.src;
-        const alt = img?.alt || '';
-        if (!src) return;
-
-        openLightbox(src, alt);
-      },
-      true
-    );
-
-    closeBtn?.addEventListener('click', (e) => {
-      e.preventDefault();
-      closeLightbox();
-    });
-
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) closeLightbox();
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeLightbox();
-    });
+    imgEl.src = src;
+    imgEl.alt = alt || '';
+    overlay.classList.add('is-open');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('lightbox-open');
+    closeBtn?.focus?.();
   };
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initLightbox, { once: true });
-  } else {
-    initLightbox();
-  }
+  const closeLightbox = () => {
+    const overlay = document.getElementById('gallery-lightbox');
+    if (!overlay) return;
+    const imgEl = overlay.querySelector('.lightbox__img');
+
+    overlay.classList.remove('is-open');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('lightbox-open');
+    imgEl.src = '';
+    imgEl.alt = '';
+  };
+
+  // Capture phase so we beat router/navigation handlers
+  document.addEventListener(
+    'click',
+    (e) => {
+      const link = e.target.closest?.('a.gallery-item');
+      if (!link) return;
+
+      // Only activate inside the gallery section
+      if (!link.closest('.gallery-full')) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation?.();
+
+      const img = link.querySelector('img');
+      const src = link.getAttribute('href') || img?.src;
+      const alt = img?.alt || '';
+      if (!src) return;
+
+      openLightbox(src, alt);
+    },
+    true
+  );
+
+  document.addEventListener('click', (e) => {
+    const overlay = document.getElementById('gallery-lightbox');
+    if (!overlay || !overlay.classList.contains('is-open')) return;
+
+    if (e.target === overlay) closeLightbox();
+    if (e.target.closest?.('.lightbox__close')) closeLightbox();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    const overlay = document.getElementById('gallery-lightbox');
+    if (e.key === 'Escape' && overlay?.classList.contains('is-open')) closeLightbox();
+  });
 })();
