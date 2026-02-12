@@ -12,6 +12,13 @@ const nextButton = document.querySelector(".stage__control--right");
 
 const ROUTE_ORDER = ["home", "gunite", "process", "gallery", "about", "financing"];
 
+let cleanupHomeTestimonialsMobileRotator = null;
+
+function syncRouteBodyClasses(route) {
+  document.body.classList.toggle("is-home", route === "home");
+  document.body.classList.toggle("is-gunite", route === "gunite");
+}
+
 function updateHomeFitScale() {
   if (!stageCard) return;
 
@@ -21,6 +28,9 @@ function updateHomeFitScale() {
   // Always clean up when not on Home
   if (!isHome || !homeStack) {
     stageCard.classList.remove("is-home-fit");
+    // Home sets an inline paddingBottom for its fit behavior; clear it when leaving Home
+    // so other routes (e.g. Gunite) don't inherit extra space below their content.
+    stageCard.style.paddingBottom = "";
     if (homeStack) homeStack.style.setProperty("--home-fit-scale", "1");
     return;
   }
@@ -43,8 +53,8 @@ function updateHomeFitScale() {
   const padTop = contentStyle ? (parseFloat(contentStyle.paddingTop) || 0) : 0;
   const padBot = contentStyle ? (parseFloat(contentStyle.paddingBottom) || 0) : 0;
 
-  const desiredBottomPad = 32; // or whatever you want
-  const buffer = 38; // or 16
+  const desiredBottomPad = 32;
+  const buffer = 38;
   const available = Math.max(0, viewportH - headerH - stagePadTotal - padTop - desiredBottomPad - buffer);
 
   // Measure natural height with scaling disabled
@@ -55,7 +65,7 @@ function updateHomeFitScale() {
 
   // ONLY scale down (never scale up)
   let scale = available / natural;
-  scale = Math.min(1, scale); // allows any scale down to 0
+  scale = Math.min(1, scale);
   if (!Number.isFinite(scale)) scale = 1;
 
   homeStack.style.setProperty("--home-fit-scale", String(scale));
@@ -63,7 +73,6 @@ function updateHomeFitScale() {
   // Ensure bottom padding is always present
   stageCard.style.paddingBottom = `${padBot || 32}px`;
 }
-
 
 function syncHeaderHeight() {
   if (!siteHeader) return;
@@ -73,6 +82,81 @@ function syncHeaderHeight() {
 
 function prefersReducedMotion() {
   return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function initHomeTestimonialsMobileRotator() {
+  cleanupHomeTestimonialsMobileRotator?.();
+  cleanupHomeTestimonialsMobileRotator = null;
+
+  if (!document.body.classList.contains("is-home")) return;
+  if (!window.matchMedia?.("(max-width: 820px)")?.matches) return;
+
+  const section = document.querySelector(".home-testimonials");
+  const rail = section?.querySelector(".home-testimonials__rail");
+  const cards = rail ? Array.from(rail.querySelectorAll(".home-testimonial")) : [];
+  if (!section || !rail || cards.length === 0) return;
+
+  const items = cards
+    .map((card) => {
+      const quote = card.querySelector(".home-testimonial__quote")?.textContent?.trim() || "";
+      const name = card.querySelector(".home-testimonial__name")?.textContent?.trim() || "";
+      return { quote, name };
+    })
+    .filter((item) => item.quote.length > 0);
+
+  if (items.length === 0) return;
+
+  let rotator = section.querySelector(".home-testimonial-rotator");
+  if (!rotator) {
+    rotator = document.createElement("article");
+    rotator.className = "home-testimonial home-testimonial-rotator";
+    rotator.setAttribute("role", "status");
+    rotator.setAttribute("aria-live", "polite");
+    rotator.innerHTML = `
+      <p class="home-testimonial__quote"></p>
+      <div class="home-testimonial__name"></div>
+    `.trim();
+    rail.insertAdjacentElement("beforebegin", rotator);
+  }
+
+  const quoteEl = rotator.querySelector(".home-testimonial__quote");
+  const nameEl = rotator.querySelector(".home-testimonial__name");
+  if (!quoteEl || !nameEl) return;
+
+  let index = 0;
+  let tickTimer = 0;
+  let swapTimer = 0;
+  const fadeMs = 420;
+  const holdMs = 5200;
+
+  const render = () => {
+    const next = items[index % items.length];
+    quoteEl.textContent = next.quote;
+    nameEl.textContent = next.name;
+  };
+
+  render();
+
+  if (!prefersReducedMotion() && items.length > 1) {
+    const scheduleNext = () => {
+      tickTimer = window.setTimeout(() => {
+        rotator.classList.add("is-fading");
+        swapTimer = window.setTimeout(() => {
+          index = (index + 1) % items.length;
+          render();
+          rotator.classList.remove("is-fading");
+          scheduleNext();
+        }, fadeMs);
+      }, holdMs);
+    };
+    scheduleNext();
+  }
+
+  cleanupHomeTestimonialsMobileRotator = () => {
+    if (tickTimer) window.clearTimeout(tickTimer);
+    if (swapTimer) window.clearTimeout(swapTimer);
+    rotator?.remove();
+  };
 }
 
 function initBackgroundVideoGate() {
@@ -134,7 +218,7 @@ function initBackgroundVideoGate() {
 }
 
 async function injectPartials() {
-  const h = await fetch("/partials/header.html", { cache: "no-cache" }).then(r => r.text());
+  const h = await fetch("/partials/header.html", { cache: "no-cache" }).then((r) => r.text());
   siteHeader.innerHTML = h;
 
   // Wire nav toggle for mobile
@@ -189,7 +273,6 @@ async function injectPartials() {
   }
 }
 
-
 function setIntroState() {
   if (!stage) return;
   stage.classList.add("is-intro");
@@ -236,16 +319,17 @@ let isTransitioning = false;
 let ignoreNextHashChange = false;
 
 async function renderRouteIntoCurrent(route) {
-  document.body.classList.toggle("is-home", route === "home");
+  syncRouteBodyClasses(route);
   await loadRoute(route, app);
   currentRoute = route;
   syncHeaderHeight();
   updateHomeFitScale();
+  initHomeTestimonialsMobileRotator();
 }
 
 function waitForCardTransformEnd() {
   if (!stageCard) return Promise.resolve();
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const onEnd = (e) => {
       if (e.propertyName !== "transform") return;
       stageCard.removeEventListener("transitionend", onEnd);
@@ -279,12 +363,16 @@ async function slideCardNavigate(route, dir) {
 
   await waitForCardTransformEnd();
 
+  // Apply route-scoped body classes BEFORE injecting new HTML so page-specific
+  // padding (e.g. Gunite) is correct on first paint during the transition.
+  syncRouteBodyClasses(route);
   await loadRoute(route, app);
   currentRoute = route;
   ignoreNextHashChange = true;
   location.hash = `#${route}`;
   syncHeaderHeight();
   updateHomeFitScale();
+  initHomeTestimonialsMobileRotator();
 
   stage.classList.add("stage-prep");
   stage.classList.remove(slideOutClass);
@@ -334,6 +422,7 @@ async function boot() {
   window.addEventListener("resize", () => {
     syncHeaderHeight();
     updateHomeFitScale();
+    initHomeTestimonialsMobileRotator();
   });
   window.addEventListener("DOMContentLoaded", updateHomeFitScale);
 
@@ -365,4 +454,3 @@ async function boot() {
 }
 
 boot();
-
