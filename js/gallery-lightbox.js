@@ -3,16 +3,61 @@ document.addEventListener('DOMContentLoaded', () => {
   const grid = document.querySelector('.gallery-full .gallery-grid');
   if (!overlay || !grid) return;
 
+  const isMobileViewport = () => window.matchMedia?.('(max-width: 820px)')?.matches;
+  let lockedScrollTop = 0;
+  let isScrollLocked = false;
+  let lockedScrollEl = null;
+  let lockedPrevOverflow = '';
+
+  const lockScroll = () => {
+    if (!isMobileViewport() || isScrollLocked) return;
+    const stageCard = document.querySelector('.stage__card');
+    const scrollEl = stageCard || document.scrollingElement || document.documentElement;
+    lockedScrollEl = scrollEl;
+    lockedScrollTop = scrollEl.scrollTop;
+    lockedPrevOverflow = scrollEl.style.overflow;
+    scrollEl.style.overflow = 'hidden';
+    isScrollLocked = true;
+  };
+
+  const unlockScroll = () => {
+    if (!isScrollLocked) return;
+    const scrollEl = lockedScrollEl;
+    if (scrollEl) {
+      scrollEl.style.overflow = lockedPrevOverflow;
+      scrollEl.scrollTop = lockedScrollTop;
+    }
+    isScrollLocked = false;
+    lockedScrollEl = null;
+  };
+
   const imgEl = overlay.querySelector('.lightbox__img');
   const closeBtn = overlay.querySelector('.lightbox__close');
 
   const openLightbox = (src, alt) => {
     imgEl.src = src;
     imgEl.alt = alt || '';
+
+    // On mobile, ensure the overlay is fixed to the true viewport (not inside a transformed card).
+    if (isMobileViewport() && overlay.parentElement !== document.body) {
+      document.body.appendChild(overlay);
+    }
+
     overlay.classList.add('is-open');
     overlay.setAttribute('aria-hidden', 'false');
     document.body.classList.add('lightbox-open');
-    closeBtn?.focus?.();
+    lockScroll();
+
+    // Avoid mobile scroll-jumps from focus management.
+    if (!isMobileViewport()) {
+      closeBtn?.focus?.();
+    } else {
+      try {
+        closeBtn?.focus?.({ preventScroll: true });
+      } catch {
+        /* no-op */
+      }
+    }
   };
 
   const closeLightbox = () => {
@@ -21,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.remove('lightbox-open');
     imgEl.src = '';
     imgEl.alt = '';
+    unlockScroll();
   };
 
   // Delegate clicks from the grid (works for clicking img or the anchor)
@@ -55,6 +101,34 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 (() => {
+  const isMobileViewport = () => window.matchMedia?.('(max-width: 820px)')?.matches;
+  let lockedScrollTop = 0;
+  let isScrollLocked = false;
+  let lockedScrollEl = null;
+  let lockedPrevOverflow = '';
+
+  const lockScroll = () => {
+    if (!isMobileViewport() || isScrollLocked) return;
+    const stageCard = document.querySelector('.stage__card');
+    const scrollEl = stageCard || document.scrollingElement || document.documentElement;
+    lockedScrollEl = scrollEl;
+    lockedScrollTop = scrollEl.scrollTop;
+    lockedPrevOverflow = scrollEl.style.overflow;
+    scrollEl.style.overflow = 'hidden';
+    isScrollLocked = true;
+  };
+
+  const unlockScroll = () => {
+    if (!isScrollLocked) return;
+    const scrollEl = lockedScrollEl;
+    if (scrollEl) {
+      scrollEl.style.overflow = lockedPrevOverflow;
+      scrollEl.scrollTop = lockedScrollTop;
+    }
+    isScrollLocked = false;
+    lockedScrollEl = null;
+  };
+
   const ensureOverlay = () => {
     let overlay = document.getElementById('gallery-lightbox');
     if (overlay) return overlay;
@@ -81,10 +155,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     imgEl.src = src;
     imgEl.alt = alt || '';
+
+    // On mobile, ensure the overlay is fixed to the true viewport (not inside a transformed card).
+    if (isMobileViewport() && overlay.parentElement !== document.body) {
+      document.body.appendChild(overlay);
+    }
+
     overlay.classList.add('is-open');
     overlay.setAttribute('aria-hidden', 'false');
     document.body.classList.add('lightbox-open');
-    closeBtn?.focus?.();
+    lockScroll();
+
+    // Avoid mobile scroll-jumps from focus management.
+    if (!isMobileViewport()) {
+      closeBtn?.focus?.();
+    } else {
+      try {
+        closeBtn?.focus?.({ preventScroll: true });
+      } catch {
+        /* no-op */
+      }
+    }
   };
 
   const closeLightbox = () => {
@@ -97,6 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.remove('lightbox-open');
     imgEl.src = '';
     imgEl.alt = '';
+    unlockScroll();
   };
 
   // Capture phase so we beat router/navigation handlers
