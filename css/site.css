@@ -1280,6 +1280,27 @@ body.is-home .home-stack{
   }
 }
 
+@media (max-width: 640px){
+  .gunite-hero__text-seq{
+    padding: 12px 14px 14px;
+    font-size: clamp(0.66rem, 3.2vw, 1.1rem);
+    line-height: 1.35;
+    height: calc(10% + 68px);
+  }
+
+  .gunite-hero__text-line{
+    bottom: 10px;
+    max-width: min(520px, 92%);
+  }
+}
+
+@media (max-width: 420px){
+  .gunite-hero__text-seq{
+    padding: 10px 12px 12px;
+    height: calc(10% + 58px);
+  }
+}
+
 @media (max-width: 820px){
   .stage__content{
     padding: 22px 20px 26px;
@@ -2297,8 +2318,8 @@ body.lightbox-open{
 
     position: fixed;
     top: var(--header-h, 96px);
-+    left: var(--pad, 20px);
-+    right: var(--pad, 20px);
+    left: var(--pad, 20px);
+    right: var(--pad, 20px);
     
     z-index: 9999;
 
