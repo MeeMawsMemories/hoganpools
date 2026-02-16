@@ -1814,6 +1814,7 @@ body.is-gunite .stage__content{
 }
 
 .about-emblems__img--npc{
+  margin-top: 13px;
   width: 168px;
   height: 168px;
 }
