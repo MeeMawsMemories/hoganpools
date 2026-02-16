@@ -1773,6 +1773,51 @@ body.is-gunite .stage__content{
   border: none;
 }
 
+.about-emblems{
+  padding: 22px 0 34px;
+}
+
+.about-emblems__links{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.about-emblems__link{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .2s ease;
+}
+
+.about-emblems__link:hover{
+  transform: translateY(-2px);
+}
+
+.about-emblems__img{
+  display: block;
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+.about-emblems__img--fb{
+  width: 79px;
+  height: 79px;
+}
+
+.about-emblems__img--insta{
+  width: 56px;
+  height: 56px;
+}
+
+.about-emblems__img--npc{
+  width: 168px;
+  height: 168px;
+}
+
 /* Footer (rendered via /partials/footer.html) */
 .site-footer{
   background: var(--navy);
