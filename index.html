@@ -4,7 +4,22 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Hogan Pools | Custom Pool Construction Missouri | Ballwin, MO, USA</title>
-  <link rel="preload" as="image" href="/assets/img/home-hero.png" fetchpriority="high" />
+  <script>
+    (function () {
+      var h = window.location.hash;
+      var isHome = !h || h === "#" || h === "#home";
+      if (!isHome) return;
+
+      var link = document.createElement("link");
+      link.rel = "preload";
+      link.as = "image";
+      link.href = "/assets/hero/hero-1024.jpg";
+      link.setAttribute("imagesrcset", "/assets/hero/hero-480.jpg 480w, /assets/hero/hero-768.jpg 768w, /assets/hero/hero-1024.jpg 1024w, /assets/hero/hero-1440.jpg 1440w");
+      link.setAttribute("imagesizes", "(max-width: 480px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 1440px");
+      link.fetchPriority = "high";
+      document.head.appendChild(link);
+    })();
+  </script>
   <link rel="stylesheet" href="/css/site.css?v=22" />
 </head>
 <body>
@@ -83,16 +98,23 @@
         <div id="app" class="stage__content"><section class="home-stack">
   <section class="home-hero-media">
     <div class="home-hero-media__media">
-      <picture>
-        <img
-          src="/assets/img/home-hero.png"
-          alt="Custom Hogan Pools backyard design"
-          width="1920"
-          height="1080"
-          fetchpriority="high"
-          decoding="async"
-        />
-      </picture>
+      <img
+        src="/assets/hero/hero-1024.jpg"
+        srcset="/assets/hero/hero-480.jpg 480w,
+          /assets/hero/hero-768.jpg 768w,
+          /assets/hero/hero-1024.jpg 1024w,
+          /assets/hero/hero-1440.jpg 1440w"
+        sizes="(max-width: 480px) 100vw,
+          (max-width: 768px) 100vw,
+          (max-width: 1024px) 100vw,
+          1440px"
+        width="1440"
+        height="900"
+        alt=""
+        loading="lazy"
+        fetchpriority="auto"
+        decoding="async"
+      />
       <div class="home-hero-media__overlay"></div>
       <div class="home-hero-media__content">
         <div class="home-hero-media__eyebrow">Custom Gunite & Vinyl Pools</div>

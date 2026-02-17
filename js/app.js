@@ -17,6 +17,19 @@ let galleryLightboxModulePromise = null;
 let hearthLoaderModulePromise = null;
 let hasStartedBackgroundVideo = false;
 
+function syncHomeHeroPriority(route) {
+  const heroImg = app?.querySelector(".home-hero-media__media img");
+  if (!heroImg) return;
+
+  if (route === "home") {
+    heroImg.loading = "eager";
+    heroImg.fetchPriority = "high";
+  } else {
+    heroImg.loading = "lazy";
+    heroImg.fetchPriority = "auto";
+  }
+}
+
 async function ensureRouteAssets(route) {
   if (route === "gallery") {
     if (!galleryLightboxModulePromise) {
@@ -328,6 +341,7 @@ async function renderRouteIntoCurrent(route) {
   syncRouteBodyClasses(route);
   await ensureRouteAssets(route);
   await loadRoute(route, app);
+  syncHomeHeroPriority(route);
   if (route === "financing") {
     window.initHearthCalculator?.();
   }
@@ -468,6 +482,7 @@ async function boot() {
 
   if (hasInlineHome) {
     syncRouteBodyClasses("home");
+    syncHomeHeroPriority("home");
     currentRoute = "home";
     syncHeaderHeight();
     updateHomeFitScale();

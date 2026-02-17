@@ -78,7 +78,10 @@ document.addEventListener('DOMContentLoaded', () => {
     e.stopPropagation();
 
     const img = link.querySelector('img');
-    const src = link.getAttribute('href') || img?.src;
+    const hrefSrc = link.getAttribute('href') || '';
+    const src = isMobileViewport()
+      ? (hrefSrc ? hrefSrc.replace('-1440.jpg', '-1024.jpg') : img?.src)
+      : (hrefSrc || img?.src);
     const alt = img?.alt || '';
     if (!src) return;
 
@@ -206,7 +209,10 @@ document.addEventListener('DOMContentLoaded', () => {
       e.stopImmediatePropagation?.();
 
       const img = link.querySelector('img');
-      const src = link.getAttribute('href') || img?.src;
+      const hrefSrc = link.getAttribute('href') || '';
+      const src = isMobileViewport()
+        ? (hrefSrc ? hrefSrc.replace('-1440.jpg', '-1024.jpg') : img?.src)
+        : (hrefSrc || img?.src);
       const alt = img?.alt || '';
       if (!src) return;
 
