@@ -4,18 +4,19 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Hogan Pools | Custom Pool Construction Missouri | Ballwin, MO, USA</title>
+  <link rel="preload" as="image" href="/assets/img/home-hero.png" fetchpriority="high" />
   <link rel="stylesheet" href="/css/site.css?v=22" />
 </head>
 <body>
   <div class="bg" aria-hidden="true">
     <img
       class="bg__poster"
-      src="/assets/bg-poster-640.jpg"
-      srcset="/assets/bg-poster-640.jpg 640w, /assets/bg-poster-1280.jpg 1280w"
+      src="/assets/img/bg-poster-640.jpg"
+      srcset="/assets/img/bg-poster-640.jpg 640w, /assets/img/bg-poster-1280.jpg 1280w"
       sizes="100vw"
       alt=""
     />
-    <video class="bg__video" autoplay muted loop playsinline preload="metadata" poster="/assets/bg-poster-640.jpg">
+    <video class="bg__video" autoplay muted loop playsinline preload="metadata" poster="/assets/img/bg-poster-640.jpg">
       <source src="/assets/video/water-wipe2.mp4" type="video/mp4">
     </video>
   </div>
@@ -40,7 +41,7 @@
     </button>
     <!-- Water wash transition overlay (covers only hero/stage area) -->
     <div id="transition-overlay" class="transition-overlay" aria-hidden="true">
-      <video class="wash-video" muted playsinline preload="auto">
+      <video class="wash-video" muted playsinline preload="none">
         <source src="/assets/video/water-wipe.mp4" type="video/mp4">
       </video>
     </div>
@@ -49,7 +50,5 @@
 
   <!-- Load app as ES6 module -->
   <script type="module" src="/js/app.js"></script>
-  <script src="/js/gallery-lightbox.js" defer></script>
-  <script src="/js/hearth-loader.js" defer></script>
 </body>
 </html>

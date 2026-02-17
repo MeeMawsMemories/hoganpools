@@ -35,6 +35,7 @@ html.bg-ready .stage__card{ transform: translateY(0); }
 :root{
   --max: 1100px;
   --pad: 20px;
+  --header-height: 98px;
   /* Scale the centered card up on wide screens (e.g., 1280x800, 1920x1080) */
   --card-max-width: 1000px; /* or whatever fixed width you want */
   --stage-pad-y: 16px;
@@ -1939,6 +1940,11 @@ body.is-gunite .stage__content{
 #site-header{
   position: relative;
   z-index: 50;
+}
+
+#site-header:empty{
+  display: block;
+  min-height: 98px;
 }
 
 /* Header surface */

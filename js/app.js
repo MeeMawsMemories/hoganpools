@@ -13,6 +13,24 @@ const nextButton = document.querySelector(".stage__control--right");
 const ROUTE_ORDER = ["home", "gunite", "process", "gallery", "about", "financing"];
 
 let cleanupHomeTestimonialsMobileRotator = null;
+let galleryLightboxModulePromise = null;
+let hearthLoaderModulePromise = null;
+
+async function ensureRouteAssets(route) {
+  if (route === "gallery") {
+    if (!galleryLightboxModulePromise) {
+      galleryLightboxModulePromise = import("./gallery-lightbox.js");
+    }
+    await galleryLightboxModulePromise;
+  }
+
+  if (route === "financing") {
+    if (!hearthLoaderModulePromise) {
+      hearthLoaderModulePromise = import("./hearth-loader.js");
+    }
+    await hearthLoaderModulePromise;
+  }
+}
 
 function syncRouteBodyClasses(route) {
   document.body.classList.toggle("is-home", route === "home");
@@ -161,16 +179,14 @@ function initHomeTestimonialsMobileRotator() {
 
 function initBackgroundVideoGate() {
   const root = document.documentElement;
-  root.classList.remove("bg-ready");
+  root.classList.add("bg-ready");
 
   if (!bgVideo) {
-    root.classList.add("bg-ready");
     return Promise.resolve();
   }
 
   try {
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      root.classList.add("bg-ready");
       return Promise.resolve();
     }
   } catch {
@@ -184,7 +200,6 @@ function initBackgroundVideoGate() {
       if (done) return;
       done = true;
       if (bg) bg.classList.add("is-video-ready");
-      root.classList.add("bg-ready");
       cleanup();
       resolve();
     };
@@ -218,7 +233,7 @@ function initBackgroundVideoGate() {
 }
 
 async function injectPartials() {
-  const h = await fetch("/partials/header.html", { cache: "no-cache" }).then((r) => r.text());
+  const h = await fetch("/partials/header.html").then((r) => r.text());
   siteHeader.innerHTML = h;
 
   // Wire nav toggle for mobile
@@ -320,7 +335,11 @@ let ignoreNextHashChange = false;
 
 async function renderRouteIntoCurrent(route) {
   syncRouteBodyClasses(route);
+  await ensureRouteAssets(route);
   await loadRoute(route, app);
+  if (route === "financing") {
+    window.initHearthCalculator?.();
+  }
   currentRoute = route;
   syncHeaderHeight();
   updateHomeFitScale();
@@ -366,7 +385,11 @@ async function slideCardNavigate(route, dir) {
   // Apply route-scoped body classes BEFORE injecting new HTML so page-specific
   // padding (e.g. Gunite) is correct on first paint during the transition.
   syncRouteBodyClasses(route);
+  await ensureRouteAssets(route);
   await loadRoute(route, app);
+  if (route === "financing") {
+    window.initHearthCalculator?.();
+  }
   currentRoute = route;
   ignoreNextHashChange = true;
   location.hash = `#${route}`;
@@ -426,7 +449,7 @@ async function boot() {
   });
   window.addEventListener("DOMContentLoaded", updateHomeFitScale);
 
-  await bgGatePromise;
+  void bgGatePromise;
   setIntroState();
 
   document.addEventListener("click", onNavClick);
