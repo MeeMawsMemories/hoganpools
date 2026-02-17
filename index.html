@@ -16,13 +16,61 @@
       sizes="100vw"
       alt=""
     />
-    <video class="bg__video" autoplay muted loop playsinline preload="metadata" poster="/assets/img/bg-poster-640.jpg">
+    <video class="bg__video" muted loop playsinline preload="none" poster="/assets/img/bg-poster-640.jpg">
       <source src="/assets/video/water-wipe2.mp4" type="video/mp4">
     </video>
   </div>
 
   <!-- Persistent header -->
-  <div id="site-header"></div>
+  <div id="site-header"><header class="site-header">
+  <div class="topbar">
+    <div class="topbar__left">
+      <div class="topbar__item" aria-label="Hours">
+        <span class="topbar__item-text">🕙 Mon - Fri: 7 am. - 4 pm.</span>
+        <button class="topbar__icon topbar__icon--hours" type="button" aria-expanded="false" aria-controls="topbar-hours-bubble" aria-label="Hours">
+          <span aria-hidden="true">🕙</span>
+        </button>
+        <div id="topbar-hours-bubble" class="topbar__bubble" role="dialog" aria-hidden="true">
+          <div class="topbar__bubble-title">Hours</div>
+          <div class="topbar__bubble-text">Mon - Fri: 7 am. - 4 pm.</div>
+        </div>
+      </div>
+    </div>
+    <div class="topbar__right">
+      <div class="topbar__item topbar__phone">
+        <a class="topbar__item-text" href="tel:+16367443242" aria-label="Call Hogan Pools">📞 +1 (636) 744-3242</a>
+        <button class="topbar__icon topbar__icon--phone" type="button" aria-expanded="false" aria-controls="topbar-phone-bubble" aria-label="Phone">
+          <span aria-hidden="true">📞</span>
+        </button>
+        <div id="topbar-phone-bubble" class="topbar__bubble" role="dialog" aria-hidden="true">
+          <div class="topbar__bubble-title">Call</div>
+          <a class="topbar__bubble-link" href="tel:+16367443242">+1 (636) 744-3242</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="navwrap">
+    <a class="brand" href="/" aria-label="Hogan Pools">
+      <img src="/assets/img/logo.png" alt="Hogan Pools logo" class="brand__logo" />
+    </a>
+
+    <button class="navtoggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      Menu
+    </button>
+
+    <nav id="site-nav" class="nav" aria-label="Primary">
+      
+      <a href="#" data-nav="home">Home</a>
+      <a href="#" data-nav="gunite">Gunite Pools</a>
+      <a href="#" data-nav="process">Our Process</a>
+      <a href="#" data-nav="gallery">Gallery</a>
+      <a href="#" data-nav="about">About Us</a>
+      <a href="#" data-nav="financing">Financing</a>
+    </nav>
+  </div>
+</header>
+</div>
 
   <!-- Main content area (swapped by router) -->
   <main class="stage" aria-live="polite">
@@ -32,7 +80,62 @@
 
     <div class="stage__frame">
       <div class="stage__card">
-        <div id="app" class="stage__content"></div>
+        <div id="app" class="stage__content"><section class="home-stack">
+  <section class="home-hero-media">
+    <div class="home-hero-media__media">
+      <picture>
+        <img
+          src="/assets/img/home-hero.png"
+          alt="Custom Hogan Pools backyard design"
+          width="1920"
+          height="1080"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </picture>
+      <div class="home-hero-media__overlay"></div>
+      <div class="home-hero-media__content">
+        <div class="home-hero-media__eyebrow">Custom Gunite & Vinyl Pools</div>
+        <h1 class="home-hero-media__title">Exceptional Pools, Built to Last</h1>
+        <p class="home-hero-media__subtitle">St. Louis craftsmanship with a boutique, design-first approach.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-intro">
+    <h2 class="home-intro__title">Designed around your backyard, built around your family.</h2>
+    <p class="home-intro__copy">We combine elegant engineering with thoughtful layout planning so your pool feels like it has always belonged.</p>
+    <ul class="home-intro__bullets">
+      <li>Custom layouts for every yard and lifestyle</li>
+      <li>Expert project management from dig to finish</li>
+      <li>Materials and finishes chosen for longevity</li>
+    </ul>
+  </section>
+
+  <div class="home-ctas">
+    <a class="home-cta home-cta--primary" href="mailto:anthony@hoganpools.com">Get a Quote</a>
+    <a class="home-cta home-cta--ghost" href="#" data-nav="process">See Our Process</a>
+  </div>
+
+  <section class="home-testimonials">
+    <h3 class="home-testimonials__title">What homeowners are saying</h3>
+    <div class="home-testimonials__rail" role="list">
+      <article class="home-testimonial" role="listitem">
+        <p class="home-testimonial__quote">“Hogan Pools turned our backyard into a resort. The team handled every detail with care.”</p>
+        <div class="home-testimonial__name">Sophia Reynolds</div>
+      </article>
+      <article class="home-testimonial" role="listitem">
+        <p class="home-testimonial__quote">“The design process felt personal, and the final pool is stunning. Truly premium work.”</p>
+        <div class="home-testimonial__name">Ethan Parker</div>
+      </article>
+      <article class="home-testimonial" role="listitem">
+        <p class="home-testimonial__quote">“From excavation to final walkthrough, everything was smooth and professional.”</p>
+        <div class="home-testimonial__name">Ava Thompson</div>
+      </article>
+    </div>
+  </section>
+</section>
+</div>
       </div>
     </div>
 
@@ -46,6 +149,17 @@
       </video>
     </div>
   </main>
+
+  <footer class="site-footer">
+    <div class="footer__grid">
+      <div class="footer__tagline">Your ideas. Our expertise. A pool built to last.</div>
+      <div class="footer__contact">
+        <a href="tel:+16367443242">+1 (636) 744-3242</a>
+        <a href="mailto:anthony@hoganpools.com">anthony@hoganpools.com</a>
+      </div>
+    </div>
+    <div class="footer__copyright">© 2026 by Hogan Pools</div>
+  </footer>
 
 
   <!-- Load app as ES6 module -->

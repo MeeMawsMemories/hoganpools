@@ -15,6 +15,7 @@ const ROUTE_ORDER = ["home", "gunite", "process", "gallery", "about", "financing
 let cleanupHomeTestimonialsMobileRotator = null;
 let galleryLightboxModulePromise = null;
 let hearthLoaderModulePromise = null;
+let hasStartedBackgroundVideo = false;
 
 async function ensureRouteAssets(route) {
   if (route === "gallery") {
@@ -180,61 +181,51 @@ function initHomeTestimonialsMobileRotator() {
 function initBackgroundVideoGate() {
   const root = document.documentElement;
   root.classList.add("bg-ready");
+  return Promise.resolve();
+}
 
-  if (!bgVideo) {
-    return Promise.resolve();
-  }
+function startBackgroundVideo() {
+  if (!bgVideo || hasStartedBackgroundVideo) return;
 
   try {
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return Promise.resolve();
+      return;
     }
   } catch {
     // ignore
   }
 
-  return new Promise((resolve) => {
-    let done = false;
+  hasStartedBackgroundVideo = true;
 
-    const finish = () => {
-      if (done) return;
-      done = true;
-      if (bg) bg.classList.add("is-video-ready");
-      cleanup();
-      resolve();
-    };
+  const reveal = () => {
+    if (bg) bg.classList.add("is-video-ready");
+  };
 
-    const onReady = () => finish();
+  if (bgVideo.readyState >= 3) {
+    reveal();
+  } else {
+    bgVideo.addEventListener("playing", reveal, { once: true });
+    bgVideo.addEventListener("canplay", reveal, { once: true });
+    bgVideo.addEventListener("loadeddata", reveal, { once: true });
+  }
 
-    const cleanup = () => {
-      bgVideo.removeEventListener("playing", onReady);
-      bgVideo.removeEventListener("canplay", onReady);
-      bgVideo.removeEventListener("loadeddata", onReady);
-    };
-
-    if (bgVideo.readyState >= 3) {
-      finish();
-      return;
+  try {
+    const p = bgVideo.play();
+    if (p && typeof p.catch === "function") {
+      p.catch(() => {
+        hasStartedBackgroundVideo = false;
+      });
     }
-
-    bgVideo.addEventListener("playing", onReady, { once: true });
-    bgVideo.addEventListener("canplay", onReady, { once: true });
-    bgVideo.addEventListener("loadeddata", onReady, { once: true });
-
-    try {
-      const p = bgVideo.play();
-      if (p && typeof p.catch === "function") p.catch(() => {});
-    } catch {
-      // ignore
-    }
-
-    window.setTimeout(finish, 1500);
-  });
+  } catch {
+    hasStartedBackgroundVideo = false;
+  }
 }
 
 async function injectPartials() {
-  const h = await fetch("/partials/header.html").then((r) => r.text());
-  siteHeader.innerHTML = h;
+  if (!siteHeader.querySelector(".site-header")) {
+    const h = await fetch("/partials/header.html").then((r) => r.text());
+    siteHeader.innerHTML = h;
+  }
 
   // Wire nav toggle for mobile
   const navtoggle = siteHeader.querySelector(".navtoggle");
@@ -437,7 +428,7 @@ function onStageControl(direction) {
 }
 
 async function boot() {
-  const bgGatePromise = initBackgroundVideoGate();
+  initBackgroundVideoGate();
 
   await injectPartials();
 
@@ -449,8 +440,13 @@ async function boot() {
   });
   window.addEventListener("DOMContentLoaded", updateHomeFitScale);
 
-  void bgGatePromise;
   setIntroState();
+
+  const wakeVideo = () => startBackgroundVideo();
+  ["pointerdown", "touchstart", "keydown", "scroll"].forEach((eventName) => {
+    window.addEventListener(eventName, wakeVideo, { once: true, passive: true });
+  });
+  window.setTimeout(startBackgroundVideo, 12000);
 
   document.addEventListener("click", onNavClick);
 
@@ -467,7 +463,18 @@ async function boot() {
   });
 
   // initial load
-  await renderRouteIntoCurrent(getRouteFromLocation());
+  const initialRoute = getRouteFromLocation();
+  const hasInlineHome = initialRoute === "home" && app?.querySelector(".home-stack");
+
+  if (hasInlineHome) {
+    syncRouteBodyClasses("home");
+    currentRoute = "home";
+    syncHeaderHeight();
+    updateHomeFitScale();
+    initHomeTestimonialsMobileRotator();
+  } else {
+    await renderRouteIntoCurrent(initialRoute);
+  }
 
   // hash changes
   window.addEventListener("hashchange", async () => {
