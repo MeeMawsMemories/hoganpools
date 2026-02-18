@@ -10,7 +10,7 @@ const bgVideo = document.querySelector(".bg__video");
 const prevButton = document.querySelector(".stage__control--left");
 const nextButton = document.querySelector(".stage__control--right");
 
-const ROUTE_ORDER = ["home", "gunite", "process", "gallery", "about", "financing"];
+const ROUTE_ORDER = ["home", "process", "gallery", "about", "financing", "careers"];
 
 let cleanupHomeTestimonialsMobileRotator = null;
 let galleryLightboxModulePromise = null;
@@ -48,7 +48,6 @@ async function ensureRouteAssets(route) {
 
 function syncRouteBodyClasses(route) {
   document.body.classList.toggle("is-home", route === "home");
-  document.body.classList.toggle("is-gunite", route === "gunite");
 }
 
 function updateHomeFitScale() {

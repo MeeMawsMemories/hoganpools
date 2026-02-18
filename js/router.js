@@ -1,11 +1,11 @@
 // /js/router.js
 export const ROUTES = {
   home: "home",
-  gunite: "gunite",
   process: "process",
   gallery: "gallery",
   about: "about",
   financing: "financing",
+  careers: "careers",
 };
 
 export function getRouteFromLocation() {

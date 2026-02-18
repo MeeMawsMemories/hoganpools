@@ -324,7 +324,7 @@ html:not(.bg-ready) .stage__card{
 }
 
 .stage__content {
-  padding: 32px 12px 28px;
+  padding: 24px 12px 2px;
   color: rgba(235,245,255,0.92);
 }
 
