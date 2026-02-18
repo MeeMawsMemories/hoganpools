@@ -17,6 +17,27 @@ let galleryLightboxModulePromise = null;
 let hearthLoaderModulePromise = null;
 let hasStartedBackgroundVideo = false;
 
+function initObfuscatedPhoneLinks(root = document) {
+  root.querySelectorAll("a[data-obf-tel]").forEach((link) => {
+    if (link.dataset.obfBound === "true") return;
+    link.dataset.obfBound = "true";
+
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+
+      const encoded = link.getAttribute("data-obf-tel") || "";
+      try {
+        const decoded = window.atob(encoded);
+        if (decoded.startsWith("tel:")) {
+          window.location.href = decoded;
+        }
+      } catch {
+        // ignore invalid payloads
+      }
+    });
+  });
+}
+
 function syncHomeHeroPriority(route) {
   const heroImg = app?.querySelector(".home-hero-media__media img");
   if (!heroImg) return;
@@ -340,6 +361,7 @@ async function renderRouteIntoCurrent(route) {
   syncRouteBodyClasses(route);
   await ensureRouteAssets(route);
   await loadRoute(route, app);
+  initObfuscatedPhoneLinks(app || document);
   syncHomeHeroPriority(route);
   if (route === "financing") {
     window.initHearthCalculator?.();
@@ -391,6 +413,7 @@ async function slideCardNavigate(route, dir) {
   syncRouteBodyClasses(route);
   await ensureRouteAssets(route);
   await loadRoute(route, app);
+  initObfuscatedPhoneLinks(app || document);
   if (route === "financing") {
     window.initHearthCalculator?.();
   }
@@ -444,6 +467,7 @@ async function boot() {
   initBackgroundVideoGate();
 
   await injectPartials();
+  initObfuscatedPhoneLinks(document);
 
   syncHeaderHeight();
   window.addEventListener("resize", () => {
@@ -481,6 +505,7 @@ async function boot() {
 
   if (hasInlineHome) {
     syncRouteBodyClasses("home");
+    initObfuscatedPhoneLinks(app || document);
     syncHomeHeroPriority("home");
     currentRoute = "home";
     syncHeaderHeight();

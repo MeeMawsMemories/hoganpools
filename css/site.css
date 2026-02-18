@@ -478,6 +478,20 @@ a:hover{ text-decoration:underline; }
   gap: 6px;
 }
 
+.topbar__contact-inline{
+  white-space: nowrap;
+}
+
+.topbar__contact-image{
+  display: block;
+  width: auto;
+  height: 24px;
+}
+
+.topbar__contact-image--bubble{
+  height: 24px;
+}
+
 .topbar__icon{
   display: none;
   align-items: center;
@@ -537,6 +551,11 @@ a:hover{ text-decoration:underline; }
 
 .topbar__bubble-link{
   text-decoration: none;
+}
+
+.topbar__contact-bubble{
+  display: inline-flex;
+  align-items: center;
 }
 
 @media (max-width: 1700px){
@@ -1787,6 +1806,23 @@ body.is-gunite .stage__content{
   background: transparent;
   color: rgba(255,255,255,.9);
   border: none;
+}
+
+.obf-phone-link{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.obf-phone-icon{
+  line-height: 1;
+}
+
+.obf-phone-image{
+  display: block;
+  width: auto;
+  height: 18px;
 }
 
 .about-emblems{
