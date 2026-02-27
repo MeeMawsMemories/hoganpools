@@ -254,6 +254,23 @@ function startBackgroundVideo() {
   }
 }
 
+function startBackgroundVideoAfterInitialPaint() {
+  const launch = () => {
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        startBackgroundVideo();
+      });
+    });
+  };
+
+  if (document.readyState === "complete") {
+    launch();
+    return;
+  }
+
+  window.addEventListener("load", launch, { once: true });
+}
+
 async function injectPartials() {
   if (!siteHeader.querySelector(".site-header")) {
     const h = await fetch("/partials/header.html").then((r) => r.text());
@@ -483,7 +500,6 @@ async function boot() {
   ["pointerdown", "touchstart", "keydown", "scroll"].forEach((eventName) => {
     window.addEventListener(eventName, wakeVideo, { once: true, passive: true });
   });
-  window.setTimeout(startBackgroundVideo, 12000);
 
   document.addEventListener("click", onNavClick);
 
@@ -514,6 +530,8 @@ async function boot() {
   } else {
     await renderRouteIntoCurrent(initialRoute);
   }
+
+  startBackgroundVideoAfterInitialPaint();
 
   // hash changes
   window.addEventListener("hashchange", async () => {

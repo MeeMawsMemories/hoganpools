@@ -20,6 +20,14 @@
       document.head.appendChild(link);
     })();
   </script>
+  <link
+    rel="preload"
+    as="image"
+    href="/assets/img/bg-poster-1280.jpg"
+    imagesrcset="/assets/img/bg-poster-640.jpg 640w, /assets/img/bg-poster-1280.jpg 1280w"
+    imagesizes="100vw"
+    fetchpriority="high"
+  />
   <link rel="stylesheet" href="/css/site.css?v=22" />
 </head>
 <body>
@@ -29,9 +37,10 @@
       src="/assets/img/bg-poster-640.jpg"
       srcset="/assets/img/bg-poster-640.jpg 640w, /assets/img/bg-poster-1280.jpg 1280w"
       sizes="100vw"
+      fetchpriority="high"
       alt=""
     />
-    <video class="bg__video" muted loop playsinline preload="none" poster="/assets/img/bg-poster-640.jpg">
+    <video class="bg__video" muted loop playsinline preload="metadata" poster="/assets/img/bg-poster-640.jpg">
       <source src="/assets/video/water-wipe2.mp4" type="video/mp4">
     </video>
   </div>

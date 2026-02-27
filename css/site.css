@@ -496,13 +496,13 @@ a:hover{ text-decoration:underline; }
   display: none;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.3);
   background: rgba(6,20,34,0.55);
   color: rgba(255,255,255,0.95);
-  font-size: 14px;
+  font-size: 20px;
   cursor: pointer;
 }
 
@@ -545,7 +545,7 @@ a:hover{ text-decoration:underline; }
 .topbar__bubble-text,
 .topbar__bubble-link{
   color: #fff;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.4;
 }
 
@@ -1870,6 +1870,28 @@ body.is-gunite .stage__content{
   width: 168px;
   height: 168px;
 }
+
+.about-card__cta{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.about-card__cta h2{
+  margin: 0;
+}
+
+.about-card__cta .btn{
+  margin: 0;
+}
+
+.cta-link-match{
+  font-size: 19px;
+}
+
 
 /* Footer (rendered via /partials/footer.html) */
 .site-footer{
