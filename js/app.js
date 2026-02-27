@@ -11,11 +11,86 @@ const prevButton = document.querySelector(".stage__control--left");
 const nextButton = document.querySelector(".stage__control--right");
 
 const ROUTE_ORDER = ["home", "process", "gallery", "about", "financing", "careers"];
+const SEO_BASE_URL = "https://www.hoganpools.com";
+const SEO_ROUTES = {
+  home: {
+    title: "Hogan Pools | Custom Pool Construction | Ballwin, MO, USA",
+    description: "Hogan Pools designs and builds custom gunite pools in Ballwin and the greater St. Louis area, with quality craftsmanship, clear communication, and lasting finishes.",
+  },
+  process: {
+    title: "Our Process | Hogan Pools",
+    description: "Learn the Hogan Pools process, from consultation and excavation to gunite application, startup, and long-term pool care.",
+  },
+  gallery: {
+    title: "Pool Gallery | Hogan Pools",
+    description: "Browse recent custom pool projects by Hogan Pools and explore design inspiration from completed backyard builds.",
+  },
+  about: {
+    title: "About Hogan Pools | Family-Owned Pool Builders",
+    description: "Meet Hogan Pools, a family-owned pool builder serving the St. Louis area with three generations of construction experience.",
+  },
+  financing: {
+    title: "Financing Options | Hogan Pools",
+    description: "Review financing options for your custom pool project and estimate monthly payment ranges with Hogan Pools.",
+  },
+  careers: {
+    title: "Careers at Hogan Pools",
+    description: "Join the Hogan Pools team and help build premium custom pool projects across Ballwin and the St. Louis area.",
+  },
+};
 
 let cleanupHomeTestimonialsMobileRotator = null;
 let galleryLightboxModulePromise = null;
 let hearthLoaderModulePromise = null;
 let hasStartedBackgroundVideo = false;
+
+function ensureMetaByName(name) {
+  let tag = document.head.querySelector(`meta[name="${name}"]`);
+  if (!tag) {
+    tag = document.createElement("meta");
+    tag.setAttribute("name", name);
+    document.head.appendChild(tag);
+  }
+  return tag;
+}
+
+function ensureMetaByProperty(property) {
+  let tag = document.head.querySelector(`meta[property="${property}"]`);
+  if (!tag) {
+    tag = document.createElement("meta");
+    tag.setAttribute("property", property);
+    document.head.appendChild(tag);
+  }
+  return tag;
+}
+
+function ensureCanonicalLink() {
+  let link = document.head.querySelector('link[rel="canonical"]');
+  if (!link) {
+    link = document.createElement("link");
+    link.setAttribute("rel", "canonical");
+    document.head.appendChild(link);
+  }
+  return link;
+}
+
+function updateSeoForRoute(route) {
+  const fallback = SEO_ROUTES.home;
+  const seo = SEO_ROUTES[route] || fallback;
+  const routePath = route === "home" ? "/" : `/#${route}`;
+  const routeUrl = `${SEO_BASE_URL}${routePath}`;
+
+  document.title = seo.title;
+  ensureMetaByName("description").setAttribute("content", seo.description);
+  ensureMetaByName("twitter:title").setAttribute("content", seo.title);
+  ensureMetaByName("twitter:description").setAttribute("content", seo.description);
+  ensureMetaByProperty("og:title").setAttribute("content", seo.title);
+  ensureMetaByProperty("og:description").setAttribute("content", seo.description);
+  ensureMetaByProperty("og:url").setAttribute("content", routeUrl);
+
+  // Keep canonical fixed to the primary URL because hash routes are fragments.
+  ensureCanonicalLink().setAttribute("href", `${SEO_BASE_URL}/`);
+}
 
 function initObfuscatedPhoneLinks(root = document) {
   root.querySelectorAll("a[data-obf-tel]").forEach((link) => {
@@ -394,6 +469,7 @@ let ignoreNextHashChange = false;
 
 async function renderRouteIntoCurrent(route) {
   syncRouteBodyClasses(route);
+  updateSeoForRoute(route);
   await ensureRouteAssets(route);
   await loadRoute(route, app);
   initObfuscatedPhoneLinks(app || document);
@@ -446,6 +522,7 @@ async function slideCardNavigate(route, dir) {
   // Apply route-scoped body classes BEFORE injecting new HTML so page-specific
   // padding (e.g. Gunite) is correct on first paint during the transition.
   syncRouteBodyClasses(route);
+  updateSeoForRoute(route);
   await ensureRouteAssets(route);
   await loadRoute(route, app);
   initObfuscatedPhoneLinks(app || document);
@@ -558,6 +635,7 @@ async function boot() {
 
   if (hasInlineHome) {
     syncRouteBodyClasses("home");
+    updateSeoForRoute("home");
     initObfuscatedPhoneLinks(app || document);
     syncHomeHeroPriority("home");
     currentRoute = "home";

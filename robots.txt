@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /_capture/
+Disallow: /*.bak*
+
+Sitemap: https://www.hoganpools.com/sitemap.xml
