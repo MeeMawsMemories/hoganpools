@@ -661,20 +661,7 @@ async function boot() {
 
   // initial load
   const initialRoute = getRouteFromLocation();
-  const hasInlineHome = initialRoute === "home" && app?.querySelector(".home-stack");
-
-  if (hasInlineHome) {
-    syncRouteBodyClasses("home");
-    updateSeoForRoute("home");
-    initObfuscatedPhoneLinks(app || document);
-    syncHomeHeroPriority("home");
-    currentRoute = "home";
-    syncHeaderHeight();
-    updateHomeFitScale();
-    initHomeTestimonialsMobileRotator();
-  } else {
-    await renderRouteIntoCurrent(initialRoute);
-  }
+  await renderRouteIntoCurrent(initialRoute);
 
   const expectedPath = routeToPath(currentRoute);
   if (location.pathname !== expectedPath || location.hash) {

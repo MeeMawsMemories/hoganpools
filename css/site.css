@@ -664,8 +664,8 @@ a:hover{ text-decoration:underline; }
   position: absolute;
   left: 24px;
   right: 24px;
-  bottom: 22px;
-  max-width: 600px;
+  bottom: 12px;
+  max-width: 700px;
   z-index: 2;
 
   /* Put readability behind the text (instead of darkening the whole image) */

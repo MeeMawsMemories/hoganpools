@@ -58,7 +58,7 @@ export function getRouteFromLocation() {
 
 export async function loadRoute(route, mountEl) {
   const url = `/pages/${route}.html`;
-  const res = await fetch(url);
+  const res = await fetch(url, { cache: "no-store" });
   const targetEl = mountEl || document.getElementById("app");
   if (!res.ok) {
     if (targetEl) {
