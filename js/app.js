@@ -9,10 +9,8 @@ const bg = document.querySelector(".bg");
 const bgVideo = document.querySelector(".bg__video");
 const prevButton = document.querySelector(".stage__control--left");
 const nextButton = document.querySelector(".stage__control--right");
+const BG_VIDEO_BASELINE_SRC = "/assets/video/water720p-baseline.mp4";
 const BG_VIDEO_DEFAULT_SRC = "/assets/video/water720p.mp4";
-const BG_VIDEO_LARGE_SRC = "/assets/video/water-wipe2.mp4";
-const LARGE_SCREEN_MIN_WIDTH = 2561;
-const LARGE_SCREEN_MIN_HEIGHT = 1441;
 
 const ROUTE_ORDER = ["home", "process", "gallery", "about", "financing", "careers"];
 const SEO_BASE_URL = "https://www.hoganpools.com";
@@ -47,28 +45,63 @@ let cleanupHomeTestimonialsMobileRotator = null;
 let galleryLightboxModulePromise = null;
 let hearthLoaderModulePromise = null;
 let hasStartedBackgroundVideo = false;
-
-function shouldUseLargeBackgroundVideo() {
-  const screenWidth = window.screen?.width || window.innerWidth || 0;
-  const screenHeight = window.screen?.height || window.innerHeight || 0;
-  return screenWidth >= LARGE_SCREEN_MIN_WIDTH || screenHeight >= LARGE_SCREEN_MIN_HEIGHT;
-}
+let hasArmedBackgroundVideoRetry = false;
 
 function selectBackgroundVideoSource(videoEl) {
   if (!videoEl) return;
 
-  const nextSrc = shouldUseLargeBackgroundVideo() ? BG_VIDEO_LARGE_SRC : BG_VIDEO_DEFAULT_SRC;
-  let source = videoEl.querySelector("source");
-  if (!source) {
-    source = document.createElement("source");
-    source.type = "video/mp4";
-    videoEl.appendChild(source);
-  }
+  const desiredSources = [BG_VIDEO_BASELINE_SRC, BG_VIDEO_DEFAULT_SRC];
+  const existingSources = Array.from(videoEl.querySelectorAll('source[type="video/mp4"]'));
+  let changed = false;
 
-  const currentSrc = source.getAttribute("src") || "";
-  if (currentSrc === nextSrc) return;
-  source.setAttribute("src", nextSrc);
-  videoEl.load();
+  desiredSources.forEach((src, index) => {
+    let source = existingSources[index];
+    if (!source) {
+      source = document.createElement("source");
+      source.type = "video/mp4";
+      videoEl.appendChild(source);
+      changed = true;
+    }
+
+    if (source.getAttribute("src") !== src) {
+      source.setAttribute("src", src);
+      changed = true;
+    }
+  });
+
+  existingSources.slice(desiredSources.length).forEach((source) => {
+    source.remove();
+    changed = true;
+  });
+
+  if (changed) {
+    videoEl.load();
+  }
+}
+
+function armBackgroundVideoRetry(videoEl) {
+  if (!videoEl || hasArmedBackgroundVideoRetry) return;
+  hasArmedBackgroundVideoRetry = true;
+
+  const retryPlay = () => {
+    window.removeEventListener("touchstart", retryPlay, true);
+    window.removeEventListener("click", retryPlay, true);
+    hasArmedBackgroundVideoRetry = false;
+
+    try {
+      const retryPromise = videoEl.play();
+      if (retryPromise && typeof retryPromise.catch === "function") {
+        retryPromise.catch(() => {
+          // Ignore second-play failures and keep poster fallback.
+        });
+      }
+    } catch {
+      // Ignore second-play failures and keep poster fallback.
+    }
+  };
+
+  window.addEventListener("touchstart", retryPlay, true);
+  window.addEventListener("click", retryPlay, true);
 }
 
 function ensureMetaByName(name) {
@@ -331,6 +364,11 @@ function startBackgroundVideo() {
   }
 
   hasStartedBackgroundVideo = true;
+  bgVideo.muted = true;
+  bgVideo.defaultMuted = true;
+  bgVideo.playsInline = true;
+  bgVideo.setAttribute("muted", "");
+  bgVideo.setAttribute("playsinline", "");
 
   const reveal = () => {
     if (bg) bg.classList.add("is-video-ready");
@@ -349,10 +387,12 @@ function startBackgroundVideo() {
     if (p && typeof p.catch === "function") {
       p.catch(() => {
         hasStartedBackgroundVideo = false;
+        armBackgroundVideoRetry(bgVideo);
       });
     }
   } catch {
     hasStartedBackgroundVideo = false;
+    armBackgroundVideoRetry(bgVideo);
   }
 }
 
