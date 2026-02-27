@@ -278,14 +278,32 @@ async function injectPartials() {
   }
 
   // Wire nav toggle for mobile
-  const navtoggle = siteHeader.querySelector(".navtoggle");
+  const navToggles = Array.from(siteHeader.querySelectorAll(".navtoggle[aria-controls='site-nav']"));
   const siteNav = siteHeader.querySelector("#site-nav");
-  if (navtoggle && siteNav) {
-    navtoggle.addEventListener("click", () => {
+  if (navToggles.length && siteNav) {
+    const syncNavToggleState = (isOpen) => {
+      navToggles.forEach((navtoggle) => {
+        navtoggle.setAttribute("aria-expanded", String(isOpen));
+        if (navtoggle.dataset.iconToggle === "true") {
+          navtoggle.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+          const icon = navtoggle.querySelector("span[aria-hidden='true']");
+          if (icon) {
+            icon.textContent = isOpen ? "✕" : "☰";
+          }
+        } else {
+          navtoggle.textContent = isOpen ? "Close" : "Menu";
+        }
+      });
+    };
+
+    navToggles.forEach((navtoggle) => {
+      navtoggle.addEventListener("click", () => {
       const isOpen = siteNav.classList.toggle("nav--open");
-      navtoggle.setAttribute("aria-expanded", String(isOpen));
-      navtoggle.textContent = isOpen ? "Close" : "Menu";
+      syncNavToggleState(isOpen);
     });
+    });
+
+    syncNavToggleState(siteNav.classList.contains("nav--open"));
   }
 
   if (document.documentElement.dataset.topbarBubbles !== "true") {
@@ -467,6 +485,25 @@ function onNavClick(e) {
   const a = e.target.closest("a[data-nav]");
   if (!a) return;
   e.preventDefault();
+
+  const siteNav = siteHeader?.querySelector("#site-nav");
+  if (siteNav?.classList.contains("nav--open")) {
+    siteNav.classList.remove("nav--open");
+    const navToggles = Array.from(siteHeader.querySelectorAll(".navtoggle[aria-controls='site-nav']"));
+    navToggles.forEach((navtoggle) => {
+      navtoggle.setAttribute("aria-expanded", "false");
+      if (navtoggle.dataset.iconToggle === "true") {
+        navtoggle.setAttribute("aria-label", "Open menu");
+        const icon = navtoggle.querySelector("span[aria-hidden='true']");
+        if (icon) {
+          icon.textContent = "☰";
+        }
+      } else {
+        navtoggle.textContent = "Menu";
+      }
+    });
+  }
+
   const route = a.getAttribute("data-nav");
   if (!route) return;
   if (location.hash.replace("#", "") === route) return;

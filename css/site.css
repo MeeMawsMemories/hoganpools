@@ -545,7 +545,7 @@ a:hover{ text-decoration:underline; }
 .topbar__bubble-text,
 .topbar__bubble-link{
   color: #fff;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.4;
 }
 
@@ -2531,6 +2531,24 @@ body.lightbox-open{
 
   #site-header .topbar__item-text{ display: none !important; }
   #site-header .topbar__icon{ display: inline-flex !important; }
+  #site-header .navtoggle--inline{ display: none !important; }
+
+  #site-header .topbar__right{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #site-header .topbar__icon--menu{
+    color: rgba(215, 221, 228, 0.95);
+    border-color: rgba(215, 221, 228, 0.55);
+    background: rgba(6, 20, 34, 0.55);
+  }
+
+  #site-header .topbar__icon--menu span{
+    font-size: 22px;
+    line-height: 1;
+  }
 
   /* Make sure header is a positioning context for the topbar */
   #site-header .site-header{ position: relative; }
@@ -2551,5 +2569,9 @@ body.lightbox-open{
     padding: 14px;
     border-radius: 16px;
     background: #0c2845; /* navy */
+  }
+
+  #site-header .nav.nav--open a{
+    color: rgba(215, 221, 228, 0.95);
   }
 }
