@@ -1871,6 +1871,12 @@ body.is-gunite .stage__content{
   height: 168px;
 }
 
+.about-emblems__img--iws{
+    margin-top: 16px;
+  width: 138px;
+  height: 138px;
+}
+
 .about-card__cta{
   display: flex;
   flex-direction: column;
