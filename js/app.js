@@ -1,5 +1,5 @@
 // /js/app.js
-import { getRouteFromLocation, loadRoute } from "./router.js";
+import { getRouteFromHref, getRouteFromLocation, loadRoute, routeToPath } from "./router.js";
 
 const app = document.getElementById("app");
 const siteHeader = document.getElementById("site-header");
@@ -9,6 +9,10 @@ const bg = document.querySelector(".bg");
 const bgVideo = document.querySelector(".bg__video");
 const prevButton = document.querySelector(".stage__control--left");
 const nextButton = document.querySelector(".stage__control--right");
+const BG_VIDEO_DEFAULT_SRC = "/assets/video/water720p.mp4";
+const BG_VIDEO_LARGE_SRC = "/assets/video/water-wipe2.mp4";
+const LARGE_SCREEN_MIN_WIDTH = 2561;
+const LARGE_SCREEN_MIN_HEIGHT = 1441;
 
 const ROUTE_ORDER = ["home", "process", "gallery", "about", "financing", "careers"];
 const SEO_BASE_URL = "https://www.hoganpools.com";
@@ -44,6 +48,29 @@ let galleryLightboxModulePromise = null;
 let hearthLoaderModulePromise = null;
 let hasStartedBackgroundVideo = false;
 
+function shouldUseLargeBackgroundVideo() {
+  const screenWidth = window.screen?.width || window.innerWidth || 0;
+  const screenHeight = window.screen?.height || window.innerHeight || 0;
+  return screenWidth >= LARGE_SCREEN_MIN_WIDTH || screenHeight >= LARGE_SCREEN_MIN_HEIGHT;
+}
+
+function selectBackgroundVideoSource(videoEl) {
+  if (!videoEl) return;
+
+  const nextSrc = shouldUseLargeBackgroundVideo() ? BG_VIDEO_LARGE_SRC : BG_VIDEO_DEFAULT_SRC;
+  let source = videoEl.querySelector("source");
+  if (!source) {
+    source = document.createElement("source");
+    source.type = "video/mp4";
+    videoEl.appendChild(source);
+  }
+
+  const currentSrc = source.getAttribute("src") || "";
+  if (currentSrc === nextSrc) return;
+  source.setAttribute("src", nextSrc);
+  videoEl.load();
+}
+
 function ensureMetaByName(name) {
   let tag = document.head.querySelector(`meta[name="${name}"]`);
   if (!tag) {
@@ -77,7 +104,7 @@ function ensureCanonicalLink() {
 function updateSeoForRoute(route) {
   const fallback = SEO_ROUTES.home;
   const seo = SEO_ROUTES[route] || fallback;
-  const routePath = route === "home" ? "/" : `/#${route}`;
+  const routePath = routeToPath(route);
   const routeUrl = `${SEO_BASE_URL}${routePath}`;
 
   document.title = seo.title;
@@ -88,8 +115,7 @@ function updateSeoForRoute(route) {
   ensureMetaByProperty("og:description").setAttribute("content", seo.description);
   ensureMetaByProperty("og:url").setAttribute("content", routeUrl);
 
-  // Keep canonical fixed to the primary URL because hash routes are fragments.
-  ensureCanonicalLink().setAttribute("href", `${SEO_BASE_URL}/`);
+  ensureCanonicalLink().setAttribute("href", routeUrl);
 }
 
 function initObfuscatedPhoneLinks(root = document) {
@@ -287,6 +313,7 @@ function initHomeTestimonialsMobileRotator() {
 }
 
 function initBackgroundVideoGate() {
+  selectBackgroundVideoSource(bgVideo);
   const root = document.documentElement;
   root.classList.add("bg-ready");
   return Promise.resolve();
@@ -465,7 +492,6 @@ function getDirection(fromRoute, toRoute) {
 
 let currentRoute = getRouteFromLocation();
 let isTransitioning = false;
-let ignoreNextHashChange = false;
 
 async function renderRouteIntoCurrent(route) {
   syncRouteBodyClasses(route);
@@ -501,8 +527,7 @@ async function slideCardNavigate(route, dir) {
 
   if (prefersReducedMotion()) {
     await renderRouteIntoCurrent(route);
-    ignoreNextHashChange = true;
-    location.hash = `#${route}`;
+    history.pushState({ route }, "", routeToPath(route));
     return;
   }
 
@@ -530,8 +555,7 @@ async function slideCardNavigate(route, dir) {
     window.initHearthCalculator?.();
   }
   currentRoute = route;
-  ignoreNextHashChange = true;
-  location.hash = `#${route}`;
+  history.pushState({ route }, "", routeToPath(route));
   syncHeaderHeight();
   updateHomeFitScale();
   initHomeTestimonialsMobileRotator();
@@ -551,16 +575,24 @@ async function slideCardNavigate(route, dir) {
 }
 
 async function navigate(route) {
-  if (ignoreNextHashChange) {
-    ignoreNextHashChange = false;
-    return;
-  }
   await renderRouteIntoCurrent(route);
 }
 
 function onNavClick(e) {
-  const a = e.target.closest("a[data-nav]");
+  const a = e.target.closest("a");
   if (!a) return;
+
+  if (a.hasAttribute("download")) return;
+  if (a.target && a.target.toLowerCase() === "_blank") return;
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+
+  let route = a.getAttribute("data-nav");
+  if (!route) {
+    const href = a.getAttribute("href") || "";
+    if (!href || href.startsWith("mailto:") || href.startsWith("tel:") || href.startsWith("javascript:")) return;
+    route = getRouteFromHref(a.href);
+  }
+  if (!route) return;
   e.preventDefault();
 
   const siteNav = siteHeader?.querySelector("#site-nav");
@@ -581,9 +613,7 @@ function onNavClick(e) {
     });
   }
 
-  const route = a.getAttribute("data-nav");
-  if (!route) return;
-  if (location.hash.replace("#", "") === route) return;
+  if (route === currentRoute) return;
   const direction = getDirection(currentRoute, route);
   slideCardNavigate(route, direction === "forward" ? "right" : "left");
 }
@@ -646,10 +676,15 @@ async function boot() {
     await renderRouteIntoCurrent(initialRoute);
   }
 
+  const expectedPath = routeToPath(currentRoute);
+  if (location.pathname !== expectedPath || location.hash) {
+    history.replaceState({ route: currentRoute }, "", expectedPath);
+  }
+
   startBackgroundVideoAfterInitialPaint();
 
-  // hash changes
-  window.addEventListener("hashchange", async () => {
+  // browser history navigation (back/forward)
+  window.addEventListener("popstate", async () => {
     const nextRoute = getRouteFromLocation();
     await navigate(nextRoute);
   });

@@ -8,9 +8,52 @@ export const ROUTES = {
   careers: "careers",
 };
 
+const ROUTE_PATHS = {
+  home: "/",
+  process: "/our-process/",
+  gallery: "/gallery/",
+  about: "/about-us/",
+  financing: "/financing/",
+  careers: "/careers/",
+};
+
+const PATH_ROUTES = {
+  "/": "home",
+  "/our-process/": "process",
+  "/gallery/": "gallery",
+  "/about-us/": "about",
+  "/financing/": "financing",
+  "/careers/": "careers",
+};
+
+function normalizePath(pathname = "/") {
+  const base = pathname.trim() || "/";
+  if (base === "/") return "/";
+  return base.endsWith("/") ? base : `${base}/`;
+}
+
+export function routeToPath(route) {
+  return ROUTE_PATHS[route] || "/";
+}
+
+export function getRouteFromHref(href) {
+  try {
+    const u = new URL(href, window.location.origin);
+    if (u.origin !== window.location.origin) return null;
+    return PATH_ROUTES[normalizePath(u.pathname)] || null;
+  } catch {
+    return null;
+  }
+}
+
 export function getRouteFromLocation() {
-  const hash = (location.hash || "#home").replace(/^#/, "");
-  return ROUTES[hash] ? hash : "home";
+  const hash = (location.hash || "").replace(/^#/, "");
+  if (ROUTES[hash]) return hash;
+
+  const byPath = PATH_ROUTES[normalizePath(location.pathname)];
+  if (byPath) return byPath;
+
+  return "home";
 }
 
 export async function loadRoute(route, mountEl) {

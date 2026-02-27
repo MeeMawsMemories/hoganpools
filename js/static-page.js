@@ -1,4 +1,69 @@
 (() => {
+  const BG_VIDEO_DEFAULT_SRC = "/assets/video/water720p.mp4";
+  const BG_VIDEO_LARGE_SRC = "/assets/video/water-wipe2.mp4";
+  const LARGE_SCREEN_MIN_WIDTH = 2561;
+  const LARGE_SCREEN_MIN_HEIGHT = 1441;
+
+  function shouldUseLargeBackgroundVideo() {
+    const screenWidth = window.screen?.width || window.innerWidth || 0;
+    const screenHeight = window.screen?.height || window.innerHeight || 0;
+    return screenWidth >= LARGE_SCREEN_MIN_WIDTH || screenHeight >= LARGE_SCREEN_MIN_HEIGHT;
+  }
+
+  function selectBackgroundVideoSource(videoEl) {
+    if (!videoEl) return;
+
+    const nextSrc = shouldUseLargeBackgroundVideo() ? BG_VIDEO_LARGE_SRC : BG_VIDEO_DEFAULT_SRC;
+    let source = videoEl.querySelector("source");
+    if (!source) {
+      source = document.createElement("source");
+      source.type = "video/mp4";
+      videoEl.appendChild(source);
+    }
+
+    const currentSrc = source.getAttribute("src") || "";
+    if (currentSrc === nextSrc) return;
+    source.setAttribute("src", nextSrc);
+    videoEl.load();
+  }
+
+  function initStageVisibility() {
+    const root = document.documentElement;
+    const stage = document.querySelector(".stage");
+    const bg = document.querySelector(".bg");
+    const bgVideo = document.querySelector(".bg__video");
+
+    // Match SPA boot behavior so static pages don't keep stage content hidden.
+    root.classList.add("bg-ready");
+    if (stage) {
+      stage.classList.add("is-ready", "is-controls");
+      stage.classList.remove("is-intro");
+    }
+
+    if (!bg || !bgVideo) return;
+
+    selectBackgroundVideoSource(bgVideo);
+
+    const revealVideo = () => bg.classList.add("is-video-ready");
+    if (bgVideo.readyState >= 3) {
+      revealVideo();
+    } else {
+      bgVideo.addEventListener("canplay", revealVideo, { once: true });
+      bgVideo.addEventListener("playing", revealVideo, { once: true });
+    }
+
+    try {
+      const p = bgVideo.play();
+      if (p && typeof p.catch === "function") {
+        p.catch(() => {
+          // Ignore autoplay blocks; poster remains visible.
+        });
+      }
+    } catch {
+      // Ignore autoplay errors.
+    }
+  }
+
   function initObfuscatedPhoneLinks(root = document) {
     root.querySelectorAll("a[data-obf-tel]").forEach((link) => {
       if (link.dataset.obfBound === "true") return;
@@ -101,6 +166,7 @@
   }
 
   function boot() {
+    initStageVisibility();
     initObfuscatedPhoneLinks(document);
     initHeaderBubbles();
     initNavToggles();
