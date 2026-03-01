@@ -47,6 +47,27 @@ let hearthLoaderModulePromise = null;
 let hasStartedBackgroundVideo = false;
 let hasArmedBackgroundVideoRetry = false;
 
+function revealBackgroundVideoWhenReady(videoEl, reveal) {
+  if (!videoEl || typeof reveal !== "function") return;
+
+  let didReveal = false;
+  const revealOnce = () => {
+    if (didReveal) return;
+    didReveal = true;
+    reveal();
+  };
+
+  ["playing", "canplay", "loadeddata", "timeupdate", "loadedmetadata"].forEach((eventName) => {
+    videoEl.addEventListener(eventName, revealOnce, { once: true });
+  });
+
+  window.setTimeout(() => {
+    if (!didReveal && !videoEl.paused && videoEl.currentTime > 0) {
+      revealOnce();
+    }
+  }, 2000);
+}
+
 function selectBackgroundVideoSource(videoEl) {
   if (!videoEl) return;
 
@@ -366,9 +387,14 @@ function startBackgroundVideo() {
   hasStartedBackgroundVideo = true;
   bgVideo.muted = true;
   bgVideo.defaultMuted = true;
+  bgVideo.autoplay = true;
+  bgVideo.loop = true;
   bgVideo.playsInline = true;
   bgVideo.setAttribute("muted", "");
+  bgVideo.setAttribute("autoplay", "");
+  bgVideo.setAttribute("loop", "");
   bgVideo.setAttribute("playsinline", "");
+  bgVideo.setAttribute("webkit-playsinline", "");
 
   const reveal = () => {
     if (bg) bg.classList.add("is-video-ready");
@@ -377,14 +403,17 @@ function startBackgroundVideo() {
   if (bgVideo.readyState >= 3) {
     reveal();
   } else {
-    bgVideo.addEventListener("playing", reveal, { once: true });
-    bgVideo.addEventListener("canplay", reveal, { once: true });
-    bgVideo.addEventListener("loadeddata", reveal, { once: true });
+    revealBackgroundVideoWhenReady(bgVideo, reveal);
   }
 
   try {
     const p = bgVideo.play();
     if (p && typeof p.catch === "function") {
+      if (typeof p.then === "function") {
+        p.then(() => {
+          reveal();
+        });
+      }
       p.catch(() => {
         hasStartedBackgroundVideo = false;
         armBackgroundVideoRetry(bgVideo);

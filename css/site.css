@@ -1383,7 +1383,7 @@ body.is-gunite .stage__content{
 
 @media (max-width: 820px){
   .stage__content{
-    padding: 22px 20px 26px;
+    padding: 22px 20px 16px;
   }
   .home-hero-media__content{
     left: 18px;
@@ -1960,9 +1960,14 @@ body.is-gunite .stage__content{
     top: 67%;
     
   }
-
-  .stage__control--left{ left: 12px; }
-  .stage__control--right{ right: 12px; }
+/* adjust mobile override */
+@media (max-width: 820px){
+  .stage__control{
+    top: 54%; /* override the 67% mobile rule */
+  }
+}
+  .stage__control--left{ left: -2px; }
+  .stage__control--right{ right: -2px; }
   .navtoggle{ display:inline-block; }
   .nav{
     display:none;

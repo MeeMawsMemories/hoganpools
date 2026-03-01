@@ -3,6 +3,27 @@
   const BG_VIDEO_DEFAULT_SRC = "/assets/video/water720p.mp4";
   let hasArmedBackgroundVideoRetry = false;
 
+  function revealBackgroundVideoWhenReady(videoEl, reveal) {
+    if (!videoEl || typeof reveal !== "function") return;
+
+    let didReveal = false;
+    const revealOnce = () => {
+      if (didReveal) return;
+      didReveal = true;
+      reveal();
+    };
+
+    ["playing", "canplay", "loadeddata", "timeupdate", "loadedmetadata"].forEach((eventName) => {
+      videoEl.addEventListener(eventName, revealOnce, { once: true });
+    });
+
+    window.setTimeout(() => {
+      if (!didReveal && !videoEl.paused && videoEl.currentTime > 0) {
+        revealOnce();
+      }
+    }, 2000);
+  }
+
   function selectBackgroundVideoSource(videoEl) {
     if (!videoEl) return;
 
@@ -78,21 +99,30 @@
     selectBackgroundVideoSource(bgVideo);
     bgVideo.muted = true;
     bgVideo.defaultMuted = true;
+    bgVideo.autoplay = true;
+    bgVideo.loop = true;
     bgVideo.playsInline = true;
     bgVideo.setAttribute("muted", "");
+    bgVideo.setAttribute("autoplay", "");
+    bgVideo.setAttribute("loop", "");
     bgVideo.setAttribute("playsinline", "");
+    bgVideo.setAttribute("webkit-playsinline", "");
 
     const revealVideo = () => bg.classList.add("is-video-ready");
     if (bgVideo.readyState >= 3) {
       revealVideo();
     } else {
-      bgVideo.addEventListener("canplay", revealVideo, { once: true });
-      bgVideo.addEventListener("playing", revealVideo, { once: true });
+      revealBackgroundVideoWhenReady(bgVideo, revealVideo);
     }
 
     try {
       const p = bgVideo.play();
       if (p && typeof p.catch === "function") {
+        if (typeof p.then === "function") {
+          p.then(() => {
+            revealVideo();
+          });
+        }
         p.catch(() => {
           armBackgroundVideoRetry(bgVideo);
         });
