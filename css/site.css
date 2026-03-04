@@ -506,6 +506,21 @@ a:hover{ text-decoration:underline; }
   cursor: pointer;
 }
 
+.topbar__icon--menu{
+  width: auto;
+  min-width: 40px;
+  gap: 8px;
+  padding: 0 12px;
+}
+
+.topbar__icon-label{
+  display: none;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
 .topbar__bubble{
   position: absolute;
   top: calc(100% + 8px);
@@ -2554,11 +2569,21 @@ body.lightbox-open{
     color: rgba(215, 221, 228, 0.95);
     border-color: rgba(215, 221, 228, 0.55);
     background: rgba(6, 20, 34, 0.55);
+    gap: 6px;
+    padding: 0 12px;
   }
 
-  #site-header .topbar__icon--menu span{
+  #site-header .topbar__icon--menu .topbar__icon-glyph{
     font-size: 22px;
     line-height: 1;
+  }
+
+  #site-header .topbar__icon--menu .topbar__icon-label{
+    display: inline-flex;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
   }
 
   /* Make sure header is a positioning context for the topbar */
