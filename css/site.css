@@ -1290,6 +1290,47 @@ body.is-home .home-stack{
   border: 1px solid rgba(255,255,255,0.2);
 }
 
+.design-btn--send{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.9);
+  background: transparent;
+  color: rgba(215,221,228,0.72);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+
+.design-btn--send[aria-disabled="false"]{
+  color: #fff;
+}
+
+.design-btn--send:hover,
+.design-btn--send:focus-visible{
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.95);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.design-btn--send.is-disabled,
+.design-btn--send[aria-disabled="true"]{
+  opacity: 1;
+  filter: none;
+  border-color: rgba(255,255,255,0.9);
+  color: rgba(215,221,228,0.72);
+}
+
+.design-btn--send[aria-disabled="true"]:hover,
+.design-btn--send[aria-disabled="true"]:focus-visible{
+  background: transparent;
+  transform: none;
+  border-color: rgba(255,255,255,0.9);
+}
+
 .design-btn.is-active{
   box-shadow: 0 0 0 1px rgba(120,170,210,0.72), 0 0 12px rgba(120,170,210,0.28);
 }

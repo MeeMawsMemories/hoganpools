@@ -503,8 +503,8 @@ export async function initDesignTool(root = document) {
     ].join("\n");
 
     try {
-      sendBtn.setAttribute("href", buildMailto("Pool Design Drawing Submission", body));
-      window.location.href = sendBtn.getAttribute("href");
+      const mailtoHref = buildMailto("Pool Design Drawing Submission", body);
+      window.location.href = mailtoHref;
       setStatus(statusEl, "Email draft opened. Attach your downloaded snapshot image before sending.");
     } finally {
       setButtonBusy(sendBtn, false);
