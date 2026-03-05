@@ -46,6 +46,7 @@ let galleryLightboxModulePromise = null;
 let hearthLoaderModulePromise = null;
 let hasStartedBackgroundVideo = false;
 let hasArmedBackgroundVideoRetry = false;
+let backgroundVideoWatchdogTimer = 0;
 
 function revealBackgroundVideoWhenReady(videoEl, reveal) {
   if (!videoEl || typeof reveal !== "function") return;
@@ -68,10 +69,23 @@ function revealBackgroundVideoWhenReady(videoEl, reveal) {
   }, 2000);
 }
 
-function selectBackgroundVideoSource(videoEl) {
+function isAndroidChrome() {
+  const ua = navigator.userAgent || "";
+  return /Android/i.test(ua) && /Chrome\//i.test(ua) && !/EdgA\//i.test(ua);
+}
+
+function getBackgroundVideoSourceCandidates() {
+  if (isAndroidChrome()) {
+    return [BG_VIDEO_BASELINE_SRC, BG_VIDEO_DEFAULT_SRC];
+  }
+
+  return [BG_VIDEO_DEFAULT_SRC, BG_VIDEO_BASELINE_SRC];
+}
+
+function setBackgroundVideoSources(videoEl, sources) {
   if (!videoEl) return;
 
-  const desiredSources = [BG_VIDEO_BASELINE_SRC, BG_VIDEO_DEFAULT_SRC];
+  const desiredSources = Array.isArray(sources) ? sources : [];
   const existingSources = Array.from(videoEl.querySelectorAll('source[type="video/mp4"]'));
   let changed = false;
 
@@ -100,6 +114,51 @@ function selectBackgroundVideoSource(videoEl) {
   }
 }
 
+function selectBackgroundVideoSource(videoEl) {
+  if (!videoEl) return;
+
+  const candidates = getBackgroundVideoSourceCandidates();
+  videoEl.dataset.bgSourceIndex = "0";
+  setBackgroundVideoSources(videoEl, [candidates[0]]);
+}
+
+function tryNextBackgroundVideoSource(videoEl) {
+  if (!videoEl) return false;
+
+  const candidates = getBackgroundVideoSourceCandidates();
+  const currentIndex = Number(videoEl.dataset.bgSourceIndex || "0");
+  const nextIndex = currentIndex + 1;
+
+  if (nextIndex >= candidates.length) return false;
+
+  videoEl.dataset.bgSourceIndex = String(nextIndex);
+  setBackgroundVideoSources(videoEl, [candidates[nextIndex]]);
+  return true;
+}
+
+function armBackgroundVideoWatchdog(videoEl, onFailure) {
+  if (!videoEl || typeof onFailure !== "function") return;
+
+  if (backgroundVideoWatchdogTimer) {
+    window.clearTimeout(backgroundVideoWatchdogTimer);
+    backgroundVideoWatchdogTimer = 0;
+  }
+
+  const startTime = videoEl.currentTime || 0;
+
+  backgroundVideoWatchdogTimer = window.setTimeout(() => {
+    backgroundVideoWatchdogTimer = 0;
+    if (document.hidden) return;
+
+    const progressed = (videoEl.currentTime || 0) > startTime + 0.05;
+    const healthyPlayback = !videoEl.paused && videoEl.readyState >= 2 && progressed;
+
+    if (!healthyPlayback) {
+      onFailure();
+    }
+  }, isAndroidChrome() ? 3400 : 2600);
+}
+
 function armBackgroundVideoRetry(videoEl) {
   if (!videoEl || hasArmedBackgroundVideoRetry) return;
   hasArmedBackgroundVideoRetry = true;
@@ -113,7 +172,21 @@ function armBackgroundVideoRetry(videoEl) {
       const retryPromise = videoEl.play();
       if (retryPromise && typeof retryPromise.catch === "function") {
         retryPromise.catch(() => {
-          // Ignore second-play failures and keep poster fallback.
+          if (!tryNextBackgroundVideoSource(videoEl)) {
+            // Ignore second-play failures and keep poster fallback.
+            return;
+          }
+
+          try {
+            const fallbackPromise = videoEl.play();
+            if (fallbackPromise && typeof fallbackPromise.catch === "function") {
+              fallbackPromise.catch(() => {
+                // Keep poster fallback if alternate source also fails.
+              });
+            }
+          } catch {
+            // Keep poster fallback if alternate source throws.
+          }
         });
       }
     } catch {
@@ -395,10 +468,30 @@ function startBackgroundVideo() {
   bgVideo.setAttribute("loop", "");
   bgVideo.setAttribute("playsinline", "");
   bgVideo.setAttribute("webkit-playsinline", "");
+  bgVideo.setAttribute("preload", "auto");
 
   const reveal = () => {
     if (bg) bg.classList.add("is-video-ready");
   };
+
+  const handlePlaybackFailure = () => {
+    if (tryNextBackgroundVideoSource(bgVideo)) {
+      tryStartPlayback();
+      return;
+    }
+
+    hasStartedBackgroundVideo = false;
+    armBackgroundVideoRetry(bgVideo);
+  };
+
+  if (bgVideo.dataset.bgRecoveryBound !== "true") {
+    bgVideo.dataset.bgRecoveryBound = "true";
+    ["error", "stalled", "abort", "emptied"].forEach((eventName) => {
+      bgVideo.addEventListener(eventName, () => {
+        handlePlaybackFailure();
+      });
+    });
+  }
 
   if (bgVideo.readyState >= 3) {
     reveal();
@@ -406,23 +499,27 @@ function startBackgroundVideo() {
     revealBackgroundVideoWhenReady(bgVideo, reveal);
   }
 
-  try {
-    const p = bgVideo.play();
-    if (p && typeof p.catch === "function") {
-      if (typeof p.then === "function") {
-        p.then(() => {
-          reveal();
+  function tryStartPlayback() {
+    armBackgroundVideoWatchdog(bgVideo, handlePlaybackFailure);
+
+    try {
+      const p = bgVideo.play();
+      if (p && typeof p.catch === "function") {
+        if (typeof p.then === "function") {
+          p.then(() => {
+            reveal();
+          });
+        }
+        p.catch(() => {
+          handlePlaybackFailure();
         });
       }
-      p.catch(() => {
-        hasStartedBackgroundVideo = false;
-        armBackgroundVideoRetry(bgVideo);
-      });
+    } catch {
+      handlePlaybackFailure();
     }
-  } catch {
-    hasStartedBackgroundVideo = false;
-    armBackgroundVideoRetry(bgVideo);
   }
+
+  tryStartPlayback();
 }
 
 function startBackgroundVideoAfterInitialPaint() {
