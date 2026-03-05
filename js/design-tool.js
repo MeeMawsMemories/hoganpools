@@ -270,14 +270,13 @@ export async function initDesignTool(root = document) {
   const emailInput = designRoot.querySelector("#design-email");
   const statusEl = designRoot.querySelector("[data-design-status]");
   const searchBtn = designRoot.querySelector('[data-design-action="search"]');
-  const toggleDrawBtn = designRoot.querySelector('[data-design-action="toggle-draw"]');
   const clearBtn = designRoot.querySelector('[data-design-action="clear"]');
   const viewStreetBtn = designRoot.querySelector('[data-design-action="view-street"]');
   const viewSatelliteBtn = designRoot.querySelector('[data-design-action="view-satellite"]');
   const downloadSnapshotBtn = designRoot.querySelector('[data-design-action="download-snapshot"]');
   const sendBtn = designRoot.querySelector('[data-design-action="send"]');
 
-  if (!mapEl || !addressInput || !searchBtn || !toggleDrawBtn || !clearBtn || !viewStreetBtn || !viewSatelliteBtn || !downloadSnapshotBtn || !sendBtn) return;
+  if (!mapEl || !addressInput || !searchBtn || !clearBtn || !viewStreetBtn || !viewSatelliteBtn || !downloadSnapshotBtn || !sendBtn) return;
 
   designRoot.dataset.designBound = "true";
 
@@ -307,7 +306,6 @@ export async function initDesignTool(root = document) {
   let homeMarker = null;
   let poolPoints = [];
   let poolShapeLayer = null;
-  let isDrawMode = false;
   let downloadedSnapshotFilename = "";
   let hasFreshSnapshot = false;
   let activeBaseLayer = "street";
@@ -321,11 +319,6 @@ export async function initDesignTool(root = document) {
     downloadedSnapshotFilename = "";
     hasFreshSnapshot = false;
     syncSendAvailability();
-  }
-
-  function updateDrawButtonLabel() {
-    toggleDrawBtn.textContent = isDrawMode ? "Stop Drawing" : "Draw your Pool";
-    toggleDrawBtn.classList.toggle("is-active", isDrawMode);
   }
 
   function updateViewButtons() {
@@ -386,7 +379,7 @@ export async function initDesignTool(root = document) {
       return;
     }
 
-    setStatus(statusEl, "Draw mode is on. Tap the map to add pool corners.");
+    setStatus(statusEl, "Tap the map to add pool corners.");
   }
 
   async function findAddress() {
@@ -433,7 +426,7 @@ export async function initDesignTool(root = document) {
 
       const label = hit.display_name || query;
       homeMarker.bindPopup(`<strong>Property:</strong><br/>${label}`).openPopup();
-      setStatus(statusEl, "Address located. Switch to Draw your Pool mode to sketch your shape.");
+      setStatus(statusEl, "Address located. Tap the map to sketch your pool shape.");
     } catch {
       setStatus(statusEl, "Could not search this address right now. Please try again.", true);
     }
@@ -519,16 +512,10 @@ export async function initDesignTool(root = document) {
     }
   });
 
-  toggleDrawBtn.addEventListener("click", () => {
-    isDrawMode = !isDrawMode;
-    updateDrawButtonLabel();
-    setStatus(statusEl, isDrawMode ? "Draw mode is on. Tap the map to add pool corners." : "Draw mode is off.");
-  });
-
   clearBtn.addEventListener("click", () => {
     clearShape();
     downloadedSnapshotFilename = "";
-    setStatus(statusEl, "Drawing cleared. Enable Draw your Pool to start again.");
+    setStatus(statusEl, "Drawing cleared. Tap the map to start again.");
   });
 
   viewStreetBtn.addEventListener("click", () => {
@@ -545,7 +532,6 @@ export async function initDesignTool(root = document) {
   });
 
   map.on("click", (event) => {
-    if (!isDrawMode) return;
     poolPoints.push(event.latlng);
     invalidateSnapshot();
     redrawShape();
@@ -566,10 +552,9 @@ export async function initDesignTool(root = document) {
     await handleSend();
   });
 
-  updateDrawButtonLabel();
   updateViewButtons();
   syncSendAvailability();
-  setStatus(statusEl, "Enter your address to begin.");
+  setStatus(statusEl, "Enter your address to begin, then tap the map to draw your pool shape.");
 }
 
 if (document.readyState === "loading") {
