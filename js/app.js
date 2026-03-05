@@ -296,7 +296,7 @@ function initHomeTestimonialsMobileRotator() {
   cleanupHomeTestimonialsMobileRotator = null;
 
   if (!document.body.classList.contains("is-home")) return;
-  if (!window.matchMedia?.("(max-width: 820px)")?.matches) return;
+  if (window.matchMedia?.("(max-width: 820px)")?.matches) return;
 
   const section = document.querySelector(".home-testimonials");
   const rail = section?.querySelector(".home-testimonials__rail");
