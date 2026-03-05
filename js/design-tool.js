@@ -560,7 +560,7 @@ export async function initDesignTool(root = document) {
   sendBtn.addEventListener("click", async (event) => {
     event.preventDefault();
     if (sendBtn.getAttribute("aria-disabled") === "true") {
-      setStatus(statusEl, "Download and attach a snapshot before sending.", true);
+      setStatus(statusEl, "Draw and download a snapshot before sending.", true);
       return;
     }
     await handleSend();
