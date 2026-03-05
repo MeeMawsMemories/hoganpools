@@ -1,11 +1,13 @@
 const LEAFLET_CSS_URL = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
 const LEAFLET_JS_URL = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+const LEAFLET_IMAGE_JS_URL = "https://unpkg.com/leaflet-image@0.4.0/leaflet-image.js";
 const HTML2CANVAS_JS_URL = "https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js";
 const DEFAULT_CENTER = [38.627, -90.1994];
 const DEFAULT_ZOOM = 11;
 const DRAW_ZOOM = 20;
 
 let leafletLoadPromise = null;
+let leafletImageLoadPromise = null;
 let html2canvasLoadPromise = null;
 
 function ensureLeafletAssets() {
@@ -61,6 +63,29 @@ function ensureHtml2CanvasAsset() {
   return html2canvasLoadPromise;
 }
 
+function ensureLeafletImageAsset() {
+  if (typeof window.leafletImage === "function") return Promise.resolve(window.leafletImage);
+  if (leafletImageLoadPromise) return leafletImageLoadPromise;
+
+  leafletImageLoadPromise = new Promise((resolve, reject) => {
+    const existingScript = document.querySelector(`script[src="${LEAFLET_IMAGE_JS_URL}"]`);
+    if (existingScript) {
+      existingScript.addEventListener("load", () => resolve(window.leafletImage), { once: true });
+      existingScript.addEventListener("error", () => reject(new Error("Failed to load leaflet-image.")), { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = LEAFLET_IMAGE_JS_URL;
+    script.async = true;
+    script.onload = () => resolve(window.leafletImage);
+    script.onerror = () => reject(new Error("Failed to load leaflet-image."));
+    document.head.appendChild(script);
+  });
+
+  return leafletImageLoadPromise;
+}
+
 function formatLatLng(point) {
   return `${point.lat.toFixed(6)}, ${point.lng.toFixed(6)}`;
 }
@@ -100,9 +125,29 @@ function sanitizeFilenamePart(input) {
     .slice(0, 48) || "pool-drawing";
 }
 
-async function captureMapSnapshotCanvas(mapEl) {
+async function captureMapSnapshotCanvas(mapEl, map) {
   await new Promise((resolve) => window.requestAnimationFrame(resolve));
   await new Promise((resolve) => window.requestAnimationFrame(resolve));
+
+  try {
+    await ensureLeafletImageAsset();
+    if (typeof window.leafletImage === "function" && map) {
+      const rendered = await new Promise((resolve, reject) => {
+        window.leafletImage(map, (error, canvas) => {
+          if (error || !canvas) {
+            reject(error || new Error("leaflet-image render failed."));
+            return;
+          }
+          resolve(canvas);
+        });
+      });
+
+      if (rendered) return rendered;
+    }
+  } catch {
+    // Fall back to html2canvas below.
+  }
+
   await ensureHtml2CanvasAsset();
 
   return window.html2canvas(mapEl, {
@@ -132,16 +177,55 @@ function drawPoolOverlayOnCanvas(canvas, mapEl, map, poolPoints) {
   const scaleX = canvas.width / Math.max(1, mapEl.clientWidth);
   const scaleY = canvas.height / Math.max(1, mapEl.clientHeight);
 
+  const zoom = map.getZoom();
+  const pixelOrigin = map.getPixelOrigin();
+  const mapSize = map.getSize();
+
   const points = poolPoints
-    .map((latLng) => map.latLngToContainerPoint(latLng))
-    .map((point) => ({ x: point.x * scaleX, y: point.y * scaleY }));
+    .map((latLng) => {
+      const containerPoint = map.latLngToContainerPoint(latLng);
+      const projectedPoint = map.project(latLng, zoom).subtract(pixelOrigin);
+
+      const preferred = Number.isFinite(containerPoint?.x) && Number.isFinite(containerPoint?.y)
+        ? containerPoint
+        : projectedPoint;
+
+      const fallback = Number.isFinite(projectedPoint?.x) && Number.isFinite(projectedPoint?.y)
+        ? projectedPoint
+        : null;
+
+      const chosen = (() => {
+        if (!preferred) return fallback;
+
+        const inReasonableBounds =
+          preferred.x >= (-mapSize.x * 2) &&
+          preferred.x <= (mapSize.x * 3) &&
+          preferred.y >= (-mapSize.y * 2) &&
+          preferred.y <= (mapSize.y * 3);
+
+        if (inReasonableBounds) return preferred;
+        return fallback || preferred;
+      })();
+
+      if (!chosen || !Number.isFinite(chosen.x) || !Number.isFinite(chosen.y)) return null;
+
+      return {
+        x: chosen.x * scaleX,
+        y: chosen.y * scaleY,
+      };
+    })
+    .filter(Boolean);
 
   if (points.length < 2) return;
 
   ctx.save();
-  ctx.lineWidth = Math.max(2, 2 * Math.max(scaleX, scaleY));
-  ctx.strokeStyle = "rgba(120,170,210,0.98)";
-  ctx.fillStyle = "rgba(120,170,210,0.28)";
+  const baseStroke = Math.max(3, 3 * Math.max(scaleX, scaleY));
+  const haloStroke = baseStroke * 2.2;
+  const markerRadius = Math.max(4, 4 * Math.max(scaleX, scaleY));
+
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
+
   ctx.beginPath();
   ctx.moveTo(points[0].x, points[0].y);
   for (let i = 1; i < points.length; i += 1) {
@@ -150,10 +234,28 @@ function drawPoolOverlayOnCanvas(canvas, mapEl, map, poolPoints) {
 
   if (points.length >= 3) {
     ctx.closePath();
+    ctx.fillStyle = "rgba(43, 170, 255, 0.32)";
     ctx.fill();
   }
 
+  ctx.lineWidth = haloStroke;
+  ctx.strokeStyle = "rgba(255,255,255,0.92)";
   ctx.stroke();
+
+  ctx.lineWidth = baseStroke;
+  ctx.strokeStyle = "rgba(0,120,255,0.98)";
+  ctx.stroke();
+
+  points.forEach((point) => {
+    ctx.beginPath();
+    ctx.arc(point.x, point.y, markerRadius, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(255,255,255,0.95)";
+    ctx.fill();
+    ctx.lineWidth = Math.max(2, baseStroke * 0.6);
+    ctx.strokeStyle = "rgba(0,120,255,0.95)";
+    ctx.stroke();
+  });
+
   ctx.restore();
 }
 
@@ -318,7 +420,7 @@ export async function initDesignTool(root = document) {
     setStatus(statusEl, "Preparing your map snapshot...");
 
     try {
-      const snapshotCanvas = await captureMapSnapshotCanvas(mapEl);
+      const snapshotCanvas = await captureMapSnapshotCanvas(mapEl, map);
       drawPoolOverlayOnCanvas(snapshotCanvas, mapEl, map, poolPoints);
       const finalBlob = await canvasToBlob(snapshotCanvas);
 
