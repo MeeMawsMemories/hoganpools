@@ -38,8 +38,7 @@ html.bg-ready .stage__card{ transform: translateY(0); }
   --max: 1100px;
   --pad: 20px;
   --header-height: 98px;
-  /* Scale the centered card up on wide screens (e.g., 1280x800, 1920x1080) */
-  --card-max-width: 1000px; /* or whatever fixed width you want */
+  --card-max-width: 1000px;
   --stage-pad-y: 16px;
   --stage-pad-total: 1px;
 
@@ -853,12 +852,12 @@ body.is-home .home-stack{
 
 @media (min-height: 901px){
   body.is-home .stage__card.is-home-fit{
-    overflow: hidden;
+    overflow: auto;
   }
 
   body.is-home .stage__card.is-home-fit .home-stack{
-    transform: scale(var(--home-fit-scale, 1));
-    will-change: transform;
+    transform: none;
+    will-change: auto;
   }
 }
 
