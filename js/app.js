@@ -12,7 +12,7 @@ const nextButton = document.querySelector(".stage__control--right");
 const BG_VIDEO_BASELINE_SRC = "/assets/video/water720p-baseline.mp4";
 const BG_VIDEO_DEFAULT_SRC = "/assets/video/water720p.mp4";
 
-const ROUTE_ORDER = ["home", "process", "gallery", "about", "financing", "careers"];
+const ROUTE_ORDER = ["home", "process", "gallery", "design", "about", "financing", "careers"];
 const SEO_BASE_URL = "https://www.hoganpools.com";
 const SEO_ROUTES = {
   home: {
@@ -26,6 +26,10 @@ const SEO_ROUTES = {
   gallery: {
     title: "Pool Gallery | Hogan Pools",
     description: "Browse recent custom pool projects by Hogan Pools and explore design inspiration from completed backyard builds.",
+  },
+  design: {
+    title: "Pool Design Tool | Hogan Pools",
+    description: "Find your property on the map, sketch your ideal pool shape, and send your concept to Hogan Pools for a callback consultation.",
   },
   about: {
     title: "About Hogan Pools | Family-Owned Pool Builders",
@@ -44,6 +48,7 @@ const SEO_ROUTES = {
 let cleanupHomeTestimonialsMobileRotator = null;
 let galleryLightboxModulePromise = null;
 let hearthLoaderModulePromise = null;
+let designToolModulePromise = null;
 let hasStartedBackgroundVideo = false;
 let hasArmedBackgroundVideoRetry = false;
 let backgroundVideoWatchdogTimer = 0;
@@ -293,10 +298,18 @@ async function ensureRouteAssets(route) {
     }
     await hearthLoaderModulePromise;
   }
+
+  if (route === "design") {
+    if (!designToolModulePromise) {
+      designToolModulePromise = import("./design-tool.js");
+    }
+    await designToolModulePromise;
+  }
 }
 
 function syncRouteBodyClasses(route) {
   document.body.classList.toggle("is-home", route === "home");
+  document.body.classList.toggle("is-design", route === "design");
 }
 
 function updateHomeFitScale() {
@@ -669,6 +682,11 @@ async function renderRouteIntoCurrent(route) {
   if (route === "financing") {
     window.initHearthCalculator?.();
   }
+  if (route === "design") {
+    designToolModulePromise?.then((module) => {
+      module.initDesignTool?.(app || document);
+    });
+  }
   currentRoute = route;
   syncHeaderHeight();
   updateHomeFitScale();
@@ -719,6 +737,11 @@ async function slideCardNavigate(route, dir) {
   initObfuscatedPhoneLinks(app || document);
   if (route === "financing") {
     window.initHearthCalculator?.();
+  }
+  if (route === "design") {
+    designToolModulePromise?.then((module) => {
+      module.initDesignTool?.(app || document);
+    });
   }
   currentRoute = route;
   history.pushState({ route }, "", routeToPath(route));

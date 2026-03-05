@@ -3,27 +3,27 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Careers at Hogan Pools</title>
-  <meta name="description" content="Apply for pool construction and support roles at Hogan Pools serving Ballwin and the greater St. Louis area." />
+  <title>Pool Design Tool | Hogan Pools</title>
+  <meta name="description" content="Find your property on the map, sketch your ideal pool shape, and send your concept to Hogan Pools for a callback consultation." />
   <meta name="robots" content="index,follow,max-image-preview:large" />
-  <link rel="canonical" href="https://www.hoganpools.com/careers/" />
+  <link rel="canonical" href="https://www.hoganpools.com/design/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Hogan Pools" />
-  <meta property="og:title" content="Careers at Hogan Pools" />
-  <meta property="og:description" content="Careers and hiring information for Hogan Pools." />
-  <meta property="og:url" content="https://www.hoganpools.com/careers/" />
+  <meta property="og:title" content="Pool Design Tool | Hogan Pools" />
+  <meta property="og:description" content="Use our free map tool to sketch your pool concept and send it to our team." />
+  <meta property="og:url" content="https://www.hoganpools.com/design/" />
   <meta property="og:image" content="https://www.hoganpools.com/assets/hero/hero-1440.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Careers at Hogan Pools" />
-  <meta name="twitter:description" content="Careers and hiring information for Hogan Pools." />
+  <meta name="twitter:title" content="Pool Design Tool | Hogan Pools" />
+  <meta name="twitter:description" content="Use our free map tool to sketch your pool concept and send it to our team." />
   <meta name="twitter:image" content="https://www.hoganpools.com/assets/hero/hero-1440.jpg" />
   <script>
-    if (!window.location.hash || window.location.hash !== "#careers") {
-      window.location.replace("/#careers");
+    if (!window.location.hash || window.location.hash !== "#design") {
+      window.location.replace("/#design");
     }
   </script>
   <noscript>
-    <meta http-equiv="refresh" content="0; url=/#careers" />
+    <meta http-equiv="refresh" content="0; url=/#design" />
   </noscript>
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -97,10 +97,10 @@
         <a href="/">Home</a>
         <a href="/our-process/">Our Process</a>
         <a href="/gallery/">Gallery</a>
-        <a href="/design/">Design</a>
+        <a href="/design/" aria-current="page">Design</a>
         <a href="/about-us/">About Us</a>
         <a href="/financing/">Financing</a>
-        <a href="/careers/" aria-current="page">Careers</a>
+        <a href="/careers/">Careers</a>
       </nav>
     </div>
   </header></div>
@@ -109,45 +109,66 @@
     <div class="stage__frame">
       <div class="stage__card">
         <div class="stage__content">
-<section class="page-hero">
-  <div class="container">
-    <h1>Careers at Hogan Pools</h1>
-    <p>Build exceptional outdoor spaces with a team that values craft, reliability, and pride in every detail.</p>
-  </div>
-</section>
+<section class="design-page" data-design-root>
+  <section class="page-hero">
+    <div class="container">
+      <h1>Design Your Pool Concept</h1>
+      <p>Use the map to locate your property, sketch your ideal pool shape, and send us your concept so we can plan your consultation.</p>
+    </div>
+  </section>
 
-<section class="content-block">
-  <div class="container">
-    <h2>Why Join Us</h2>
-    <p>
-      We’re a growing, family-run pool builder serving St. Louis and surrounding communities.
-      Our team is known for high standards, clear communication, and doing the job right the first time.
-    </p>
-    <p>
-      If you enjoy hands-on work, problem solving, and helping homeowners bring their vision to life,
-      we’d love to hear from you.
-    </p>
-  </div>
-</section>
+  <section class="content-block design-intro">
+    <div class="container">
+      <h2>How it works</h2>
+      <ol class="design-steps">
+        <li>Enter your address and zoom in to your home.</li>
+        <li>Switch to <strong>Draw your Pool</strong> mode and click to trace your pool outline.</li>
+        <li>Send the drawing details by email and request a call-back consultation.</li>
+      </ol>
+    </div>
+  </section>
 
-<section class="content-block">
-  <div class="container">
-    <h2>Typical Openings</h2>
-    <ul>
-      <li>Pool construction crew members</li>
-      <li>Equipment and plumbing installers</li>
-      <li>Tile, coping, and finish specialists</li>
-      <li>Project coordination and field support</li>
-    </ul>
-  </div>
-</section>
+  <section class="content-block design-tool">
+    <div class="container design-tool__grid">
+      <div class="design-panel">
+        <label class="design-label" for="design-address">Property address</label>
+        <div class="design-address-row">
+          <input id="design-address" class="design-input" type="text" placeholder="123 Main St, Ballwin, MO" autocomplete="street-address" />
+          <button type="button" class="btn btn-primary design-btn" data-design-action="search">Find Address</button>
+        </div>
 
-<section class="cta">
-  <div class="container">
-    <h2>Apply Today</h2>
-    <p>Send your resume and a short note about your experience.</p>
-    <a class="btn btn-primary cta-link-match" href="mailto:anthony@hoganpools.com?subject=Careers%20Application">Email Your Application</a>
-  </div>
+        <div class="design-controls">
+          <button type="button" class="btn btn-primary design-btn" data-design-action="toggle-draw">Draw your Pool</button>
+          <button type="button" class="btn design-btn" data-design-action="clear">Clear Drawing</button>
+        </div>
+
+        <p class="design-status" data-design-status>Enter an address to begin.</p>
+
+        <label class="design-label" for="design-name">Your name</label>
+        <input id="design-name" class="design-input" type="text" placeholder="First and last name" autocomplete="name" />
+
+        <label class="design-label" for="design-phone">Phone number</label>
+        <input id="design-phone" class="design-input" type="tel" placeholder="(636) 744-3242" autocomplete="tel" />
+
+        <label class="design-label" for="design-email">Email (optional)</label>
+        <input id="design-email" class="design-input" type="email" placeholder="you@example.com" autocomplete="email" />
+
+        <div class="design-download-row">
+          <button type="button" class="btn design-btn" data-design-action="download-snapshot">Download Snapshot</button>
+          <p class="design-hint">Download your map drawing first, then attach that image file to the email draft.</p>
+        </div>
+
+        <div class="design-actions">
+          <a href="mailto:anthony@hoganpools.com" class="btn btn-primary design-btn" data-design-action="send">Send your pool drawing to us</a>
+          <a href="mailto:anthony@hoganpools.com?subject=Callback%20Consultation%20Request" class="btn design-btn" data-design-action="callback">Schedule a call-back consultation</a>
+        </div>
+      </div>
+
+      <div class="design-map-wrap">
+        <div class="design-map" id="design-map" role="application" aria-label="Pool design map"></div>
+      </div>
+    </div>
+  </section>
 </section>
         </div>
       </div>
@@ -169,5 +190,6 @@
   </footer>
 
   <script src="/js/static-page.js"></script>
+  <script type="module" src="/js/design-tool.js"></script>
 </body>
 </html>

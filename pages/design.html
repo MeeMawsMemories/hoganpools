@@ -1,0 +1,61 @@
+<section class="design-page" data-design-root>
+  <section class="page-hero">
+    <div class="container">
+      <h1>Design Your Pool Concept</h1>
+      <p>Use the map to locate your property, sketch your ideal pool shape, and send us your concept so we can plan your consultation.</p>
+    </div>
+  </section>
+
+  <section class="content-block design-intro">
+    <div class="container">
+      <h2>How it works</h2>
+      <ol class="design-steps">
+        <li>Enter your address and zoom in to your home.</li>
+        <li>Switch to <strong>Draw your Pool</strong> mode and click to trace your pool outline.</li>
+        <li>Send the drawing details by email and request a call-back consultation.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="content-block design-tool">
+    <div class="container design-tool__grid">
+      <div class="design-panel">
+        <label class="design-label" for="design-address">Property address</label>
+        <div class="design-address-row">
+          <input id="design-address" class="design-input" type="text" placeholder="123 Main St, Ballwin, MO" autocomplete="street-address" />
+          <button type="button" class="btn btn-primary design-btn" data-design-action="search">Find Address</button>
+        </div>
+
+        <div class="design-controls">
+          <button type="button" class="btn btn-primary design-btn" data-design-action="toggle-draw">Draw your Pool</button>
+          <button type="button" class="btn design-btn" data-design-action="clear">Clear Drawing</button>
+        </div>
+
+        <p class="design-status" data-design-status>Enter an address to begin.</p>
+
+        <label class="design-label" for="design-name">Your name</label>
+        <input id="design-name" class="design-input" type="text" placeholder="First and last name" autocomplete="name" />
+
+        <label class="design-label" for="design-phone">Phone number</label>
+        <input id="design-phone" class="design-input" type="tel" placeholder="(636) 744-3242" autocomplete="tel" />
+
+        <label class="design-label" for="design-email">Email (optional)</label>
+        <input id="design-email" class="design-input" type="email" placeholder="you@example.com" autocomplete="email" />
+
+        <div class="design-download-row">
+          <button type="button" class="btn design-btn" data-design-action="download-snapshot">Download Snapshot</button>
+          <p class="design-hint">Download your map drawing first, then attach that image file to the email draft.</p>
+        </div>
+
+        <div class="design-actions">
+          <a href="mailto:anthony@hoganpools.com" class="btn btn-primary design-btn" data-design-action="send">Send your pool drawing to us</a>
+          <a href="mailto:anthony@hoganpools.com?subject=Callback%20Consultation%20Request" class="btn design-btn" data-design-action="callback">Schedule a call-back consultation</a>
+        </div>
+      </div>
+
+      <div class="design-map-wrap">
+        <div class="design-map" id="design-map" role="application" aria-label="Pool design map"></div>
+      </div>
+    </div>
+  </section>
+</section>
