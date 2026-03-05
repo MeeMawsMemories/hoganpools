@@ -1267,6 +1267,12 @@ body.is-home .home-stack{
   gap: 10px;
 }
 
+.design-view-controls{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .design-download-row{
   display: grid;
   gap: 8px;

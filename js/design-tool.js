@@ -272,11 +272,13 @@ export async function initDesignTool(root = document) {
   const searchBtn = designRoot.querySelector('[data-design-action="search"]');
   const toggleDrawBtn = designRoot.querySelector('[data-design-action="toggle-draw"]');
   const clearBtn = designRoot.querySelector('[data-design-action="clear"]');
+  const viewStreetBtn = designRoot.querySelector('[data-design-action="view-street"]');
+  const viewSatelliteBtn = designRoot.querySelector('[data-design-action="view-satellite"]');
   const downloadSnapshotBtn = designRoot.querySelector('[data-design-action="download-snapshot"]');
   const sendBtn = designRoot.querySelector('[data-design-action="send"]');
   const callbackBtn = designRoot.querySelector('[data-design-action="callback"]');
 
-  if (!mapEl || !addressInput || !searchBtn || !toggleDrawBtn || !clearBtn || !downloadSnapshotBtn || !sendBtn || !callbackBtn) return;
+  if (!mapEl || !addressInput || !searchBtn || !toggleDrawBtn || !clearBtn || !viewStreetBtn || !viewSatelliteBtn || !downloadSnapshotBtn || !sendBtn || !callbackBtn) return;
 
   designRoot.dataset.designBound = "true";
 
@@ -288,11 +290,19 @@ export async function initDesignTool(root = document) {
   }
 
   const map = window.L.map(mapEl, { zoomControl: true, scrollWheelZoom: true }).setView(DEFAULT_CENTER, DEFAULT_ZOOM);
-  window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  const streetLayer = window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 21,
     crossOrigin: true,
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  }).addTo(map);
+  });
+
+  const satelliteLayer = window.L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+    maxZoom: 21,
+    crossOrigin: true,
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community',
+  });
+
+  streetLayer.addTo(map);
   window.setTimeout(() => map.invalidateSize(), 120);
 
   let homeMarker = null;
@@ -301,6 +311,7 @@ export async function initDesignTool(root = document) {
   let isDrawMode = false;
   let downloadedSnapshotFilename = "";
   let hasFreshSnapshot = false;
+  let activeBaseLayer = "street";
 
   function syncSendAvailability() {
     sendBtn.classList.toggle("is-disabled", !hasFreshSnapshot);
@@ -316,6 +327,29 @@ export async function initDesignTool(root = document) {
   function updateDrawButtonLabel() {
     toggleDrawBtn.textContent = isDrawMode ? "Stop Drawing" : "Draw your Pool";
     toggleDrawBtn.classList.toggle("is-active", isDrawMode);
+  }
+
+  function updateViewButtons() {
+    viewStreetBtn.classList.toggle("is-active", activeBaseLayer === "street");
+    viewSatelliteBtn.classList.toggle("is-active", activeBaseLayer === "satellite");
+  }
+
+  function setBaseLayer(nextLayer) {
+    const target = nextLayer === "satellite" ? "satellite" : "street";
+    if (activeBaseLayer === target) return;
+
+    if (target === "satellite") {
+      if (map.hasLayer(streetLayer)) map.removeLayer(streetLayer);
+      if (!map.hasLayer(satelliteLayer)) satelliteLayer.addTo(map);
+      activeBaseLayer = "satellite";
+      updateViewButtons();
+      return;
+    }
+
+    if (map.hasLayer(satelliteLayer)) map.removeLayer(satelliteLayer);
+    if (!map.hasLayer(streetLayer)) streetLayer.addTo(map);
+    activeBaseLayer = "street";
+    updateViewButtons();
   }
 
   function clearShape() {
@@ -452,10 +486,6 @@ export async function initDesignTool(root = document) {
     const contactPhone = phoneInput.value.trim() || "Not provided";
     const contactEmail = emailInput.value.trim() || "Not provided";
 
-    const pointsBlock = poolPoints
-      .map((point, index) => `${index + 1}. ${formatLatLng(point)}`)
-      .join("\n");
-
     setButtonBusy(sendBtn, true);
 
     const body = [
@@ -468,12 +498,7 @@ export async function initDesignTool(root = document) {
       `Phone: ${contactPhone}`,
       `Email: ${contactEmail}`,
       "",
-      downloadedSnapshotFilename
-        ? `Attached map snapshot filename: ${downloadedSnapshotFilename}`
-        : "I will attach the downloaded map snapshot image from the Design tool.",
-      "",
-      "Pool drawing points (lat, lng):",
-      pointsBlock,
+      "I have attached the downloaded map snapshot image from the Design tool.",
       "",
       "Please review and let me know next steps.",
     ].join("\n");
@@ -530,6 +555,14 @@ export async function initDesignTool(root = document) {
     setStatus(statusEl, "Drawing cleared. Enable Draw your Pool to start again.");
   });
 
+  viewStreetBtn.addEventListener("click", () => {
+    setBaseLayer("street");
+  });
+
+  viewSatelliteBtn.addEventListener("click", () => {
+    setBaseLayer("satellite");
+  });
+
   downloadSnapshotBtn.addEventListener("click", async (event) => {
     event.preventDefault();
     await handleDownloadSnapshot();
@@ -563,6 +596,7 @@ export async function initDesignTool(root = document) {
   });
 
   updateDrawButtonLabel();
+  updateViewButtons();
   syncSendAvailability();
   setStatus(statusEl, "Enter your address to begin.");
 }
