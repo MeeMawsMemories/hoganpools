@@ -276,9 +276,8 @@ export async function initDesignTool(root = document) {
   const viewSatelliteBtn = designRoot.querySelector('[data-design-action="view-satellite"]');
   const downloadSnapshotBtn = designRoot.querySelector('[data-design-action="download-snapshot"]');
   const sendBtn = designRoot.querySelector('[data-design-action="send"]');
-  const callbackBtn = designRoot.querySelector('[data-design-action="callback"]');
 
-  if (!mapEl || !addressInput || !searchBtn || !toggleDrawBtn || !clearBtn || !viewStreetBtn || !viewSatelliteBtn || !downloadSnapshotBtn || !sendBtn || !callbackBtn) return;
+  if (!mapEl || !addressInput || !searchBtn || !toggleDrawBtn || !clearBtn || !viewStreetBtn || !viewSatelliteBtn || !downloadSnapshotBtn || !sendBtn) return;
 
   designRoot.dataset.designBound = "true";
 
@@ -512,29 +511,6 @@ export async function initDesignTool(root = document) {
     }
   }
 
-  function handleCallback() {
-    const address = addressInput.value.trim() || "Not provided";
-    const contactName = nameInput.value.trim() || "Not provided";
-    const contactPhone = phoneInput.value.trim() || "Not provided";
-    const contactEmail = emailInput.value.trim() || "Not provided";
-
-    const body = [
-      "Hello Hogan Pools,",
-      "",
-      "I would like to schedule a call-back consultation for my pool project.",
-      "",
-      `Address: ${address}`,
-      `Name: ${contactName}`,
-      `Phone: ${contactPhone}`,
-      `Email: ${contactEmail}`,
-      "",
-      "Please contact me with available times.",
-    ].join("\n");
-
-    callbackBtn.setAttribute("href", buildMailto("Callback Consultation Request", body));
-    window.location.href = callbackBtn.getAttribute("href");
-  }
-
   searchBtn.addEventListener("click", findAddress);
   addressInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
@@ -588,11 +564,6 @@ export async function initDesignTool(root = document) {
       return;
     }
     await handleSend();
-  });
-
-  callbackBtn.addEventListener("click", (event) => {
-    event.preventDefault();
-    handleCallback();
   });
 
   updateDrawButtonLabel();
