@@ -59,19 +59,69 @@ export function getRouteFromLocation() {
   return "home";
 }
 
+function parseRouteDocument(html) {
+  const parser = new DOMParser();
+  return parser.parseFromString(html, "text/html");
+}
+
+function getRouteContentRoot(doc) {
+  return doc.getElementById("app") || doc.querySelector(".stage__content");
+}
+
+function getMetaContent(doc, selector) {
+  return doc.querySelector(selector)?.getAttribute("content") || "";
+}
+
+function getRouteSeo(doc, fallbackUrl) {
+  return {
+    title: doc.title || "",
+    description: getMetaContent(doc, 'meta[name="description"]'),
+    robots: getMetaContent(doc, 'meta[name="robots"]'),
+    canonical: doc.querySelector('link[rel="canonical"]')?.getAttribute("href") || fallbackUrl,
+    ogType: getMetaContent(doc, 'meta[property="og:type"]'),
+    ogSiteName: getMetaContent(doc, 'meta[property="og:site_name"]'),
+    ogTitle: getMetaContent(doc, 'meta[property="og:title"]'),
+    ogDescription: getMetaContent(doc, 'meta[property="og:description"]'),
+    ogUrl: getMetaContent(doc, 'meta[property="og:url"]'),
+    ogImage: getMetaContent(doc, 'meta[property="og:image"]'),
+    twitterCard: getMetaContent(doc, 'meta[name="twitter:card"]'),
+    twitterTitle: getMetaContent(doc, 'meta[name="twitter:title"]'),
+    twitterDescription: getMetaContent(doc, 'meta[name="twitter:description"]'),
+    twitterImage: getMetaContent(doc, 'meta[name="twitter:image"]'),
+    jsonLd: Array.from(doc.querySelectorAll('script[type="application/ld+json"]')).map((script) => script.textContent || ""),
+  };
+}
+
 export async function loadRoute(route, mountEl) {
-  const url = `/pages/${route}.html`;
+  const url = routeToPath(route);
   const res = await fetch(url, { cache: "no-store" });
   const targetEl = mountEl || document.getElementById("app");
   if (!res.ok) {
     if (targetEl) {
       targetEl.innerHTML = `<div class="container"><h1>Not found</h1><p>Missing: ${url}</p></div>`;
     }
-    return;
+    return null;
   }
+
+  const html = await res.text();
+  const doc = parseRouteDocument(html);
+  const contentRoot = getRouteContentRoot(doc);
+  if (!contentRoot) {
+    if (targetEl) {
+      targetEl.innerHTML = `<div class="container"><h1>Not found</h1><p>Missing route content for: ${url}</p></div>`;
+    }
+    return null;
+  }
+
+  contentRoot.querySelectorAll("script").forEach((script) => script.remove());
+
   if (targetEl) {
-    const html = await res.text();
-    targetEl.innerHTML = html; // whatever your injection line is
-    window.initHearthCalculator?.(); // <-- add this
+    targetEl.innerHTML = contentRoot.innerHTML;
   }
+
+  return {
+    html,
+    url,
+    seo: getRouteSeo(doc, url),
+  };
 }

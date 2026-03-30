@@ -13,37 +13,6 @@ const BG_VIDEO_BASELINE_SRC = "/assets/video/water720p-baseline.mp4";
 const BG_VIDEO_DEFAULT_SRC = "/assets/video/water720p.mp4";
 
 const ROUTE_ORDER = ["home", "process", "gallery", "design", "about", "financing", "careers"];
-const SEO_BASE_URL = "https://www.hoganpools.com";
-const SEO_ROUTES = {
-  home: {
-    title: "Hogan Pools | Custom Pool Construction | Ballwin, MO, USA",
-    description: "Hogan Pools designs and builds custom gunite pools in Ballwin and the greater St. Louis area, with quality craftsmanship, clear communication, and lasting finishes.",
-  },
-  process: {
-    title: "Our Process | Hogan Pools",
-    description: "Learn the Hogan Pools process, from consultation and excavation to gunite application, startup, and long-term pool care.",
-  },
-  gallery: {
-    title: "Pool Gallery | Hogan Pools",
-    description: "Browse recent custom pool projects by Hogan Pools and explore design inspiration from completed backyard builds.",
-  },
-  design: {
-    title: "Pool Design Tool | Hogan Pools",
-    description: "Find your property on the map, sketch your ideal pool shape, and send your concept to Hogan Pools for a callback consultation.",
-  },
-  about: {
-    title: "About Hogan Pools | Family-Owned Pool Builders",
-    description: "Meet Hogan Pools, a family-owned pool builder serving the St. Louis area with three generations of construction experience.",
-  },
-  financing: {
-    title: "Financing Options | Hogan Pools",
-    description: "Review financing options for your custom pool project and estimate monthly payment ranges with Hogan Pools.",
-  },
-  careers: {
-    title: "Careers at Hogan Pools",
-    description: "Join the Hogan Pools team and help build premium custom pool projects across Ballwin and the St. Louis area.",
-  },
-};
 
 let cleanupHomeTestimonialsMobileRotator = null;
 let galleryLightboxModulePromise = null;
@@ -233,21 +202,53 @@ function ensureCanonicalLink() {
   return link;
 }
 
-function updateSeoForRoute(route) {
-  const fallback = SEO_ROUTES.home;
-  const seo = SEO_ROUTES[route] || fallback;
+function syncRouteJsonLd(jsonLdBlocks = []) {
+  document.head.querySelectorAll('script[type="application/ld+json"]').forEach((script) => {
+    script.remove();
+  });
+
+  jsonLdBlocks
+    .filter((content) => content && content.trim())
+    .forEach((content) => {
+      const script = document.createElement("script");
+      script.type = "application/ld+json";
+      script.textContent = content;
+      document.head.appendChild(script);
+    });
+}
+
+function updateSeoForRoute(seo, route) {
   const routePath = routeToPath(route);
-  const routeUrl = `${SEO_BASE_URL}${routePath}`;
+  const title = seo?.title || document.title;
+  const description = seo?.description || "";
+  const robots = seo?.robots || "index,follow,max-image-preview:large";
+  const canonical = seo?.canonical || routePath;
+  const ogType = seo?.ogType || "website";
+  const ogSiteName = seo?.ogSiteName || "Hogan Pools";
+  const ogTitle = seo?.ogTitle || title;
+  const ogDescription = seo?.ogDescription || description;
+  const ogUrl = seo?.ogUrl || canonical;
+  const ogImage = seo?.ogImage || "https://www.hoganpools.com/assets/hero/hero-1440.jpg";
+  const twitterCard = seo?.twitterCard || "summary_large_image";
+  const twitterTitle = seo?.twitterTitle || title;
+  const twitterDescription = seo?.twitterDescription || description;
+  const twitterImage = seo?.twitterImage || ogImage;
 
-  document.title = seo.title;
-  ensureMetaByName("description").setAttribute("content", seo.description);
-  ensureMetaByName("twitter:title").setAttribute("content", seo.title);
-  ensureMetaByName("twitter:description").setAttribute("content", seo.description);
-  ensureMetaByProperty("og:title").setAttribute("content", seo.title);
-  ensureMetaByProperty("og:description").setAttribute("content", seo.description);
-  ensureMetaByProperty("og:url").setAttribute("content", routeUrl);
-
-  ensureCanonicalLink().setAttribute("href", routeUrl);
+  document.title = title;
+  ensureMetaByName("description").setAttribute("content", description);
+  ensureMetaByName("robots").setAttribute("content", robots);
+  ensureMetaByName("twitter:card").setAttribute("content", twitterCard);
+  ensureMetaByName("twitter:title").setAttribute("content", twitterTitle);
+  ensureMetaByName("twitter:description").setAttribute("content", twitterDescription);
+  ensureMetaByName("twitter:image").setAttribute("content", twitterImage);
+  ensureMetaByProperty("og:type").setAttribute("content", ogType);
+  ensureMetaByProperty("og:site_name").setAttribute("content", ogSiteName);
+  ensureMetaByProperty("og:title").setAttribute("content", ogTitle);
+  ensureMetaByProperty("og:description").setAttribute("content", ogDescription);
+  ensureMetaByProperty("og:url").setAttribute("content", ogUrl);
+  ensureMetaByProperty("og:image").setAttribute("content", ogImage);
+  ensureCanonicalLink().setAttribute("href", canonical);
+  syncRouteJsonLd(seo?.jsonLd || []);
 }
 
 function initObfuscatedPhoneLinks(root = document) {
@@ -674,9 +675,9 @@ let isTransitioning = false;
 
 async function renderRouteIntoCurrent(route) {
   syncRouteBodyClasses(route);
-  updateSeoForRoute(route);
   await ensureRouteAssets(route);
-  await loadRoute(route, app);
+  const payload = await loadRoute(route, app);
+  updateSeoForRoute(payload?.seo, route);
   initObfuscatedPhoneLinks(app || document);
   syncHomeHeroPriority(route);
   if (route === "financing") {
@@ -731,9 +732,9 @@ async function slideCardNavigate(route, dir) {
   // Apply route-scoped body classes BEFORE injecting new HTML so page-specific
   // padding (e.g. Gunite) is correct on first paint during the transition.
   syncRouteBodyClasses(route);
-  updateSeoForRoute(route);
   await ensureRouteAssets(route);
-  await loadRoute(route, app);
+  const payload = await loadRoute(route, app);
+  updateSeoForRoute(payload?.seo, route);
   initObfuscatedPhoneLinks(app || document);
   if (route === "financing") {
     window.initHearthCalculator?.();

@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /_capture/
+Disallow: /partials/
 Disallow: /*.bak*
 
 Sitemap: https://www.hoganpools.com/sitemap.xml

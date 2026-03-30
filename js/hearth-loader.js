@@ -18,7 +18,7 @@
     document.head.appendChild(s);
   }
 
-  // Call this after your router injects /pages/financing.html into the DOM
+  // Call this after your router injects the financing route content into the DOM.
   window.initHearthCalculator = () => {
     const iframe = document.getElementById(IFRAME_ID);
     if (!iframe) return false;

@@ -3,28 +3,55 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Pool Design Tool | Hogan Pools</title>
-  <meta name="description" content="Find your property on the map, sketch your ideal pool shape, and send your concept to Hogan Pools for a callback consultation." />
+  <title>Pool Design Tool | St. Louis Custom Pools | Hogan Pools</title>
+  <meta name="description" content="Sketch a custom pool for your St. Louis-area backyard, then send your concept to Hogan Pools for a consultation and quote." />
   <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href="https://www.hoganpools.com/design/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Hogan Pools" />
-  <meta property="og:title" content="Pool Design Tool | Hogan Pools" />
-  <meta property="og:description" content="Use our free map tool to sketch your pool concept and send it to our team." />
+  <meta property="og:title" content="Pool Design Tool | St. Louis Custom Pools | Hogan Pools" />
+  <meta property="og:description" content="Sketch a custom pool for your St. Louis-area backyard and send it to Hogan Pools." />
   <meta property="og:url" content="https://www.hoganpools.com/design/" />
   <meta property="og:image" content="https://www.hoganpools.com/assets/hero/hero-1440.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Pool Design Tool | Hogan Pools" />
-  <meta name="twitter:description" content="Use our free map tool to sketch your pool concept and send it to our team." />
+  <meta name="twitter:title" content="Pool Design Tool | St. Louis Custom Pools | Hogan Pools" />
+  <meta name="twitter:description" content="Sketch a custom pool for your St. Louis-area backyard and send it to Hogan Pools." />
   <meta name="twitter:image" content="https://www.hoganpools.com/assets/hero/hero-1440.jpg" />
-  <script>
-    if (!window.location.hash || window.location.hash !== "#design") {
-      window.location.replace("/#design");
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "name": "Pool Design Tool",
+          "url": "https://www.hoganpools.com/design/",
+          "description": "Sketch a custom pool for your St. Louis-area backyard, then send your concept to Hogan Pools for a consultation and quote.",
+          "isPartOf": {
+            "@type": "WebSite",
+            "name": "Hogan Pools",
+            "url": "https://www.hoganpools.com/"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.hoganpools.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Design",
+              "item": "https://www.hoganpools.com/design/"
+            }
+          ]
+        }
+      ]
     }
   </script>
-  <noscript>
-    <meta http-equiv="refresh" content="0; url=/#design" />
-  </noscript>
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
@@ -122,8 +149,8 @@
       <h2>How it works</h2>
       <ol class="design-steps">
         <li>Enter your address and zoom in to your home.</li>
-        <li>Tap directly on the map to trace your pool outline.</li>
-        <li>Download your snapshot and send it to our team by email.</li>
+        <li>Tap directly on the map to trace the pool layout you have in mind.</li>
+        <li>Download your snapshot and send it to our team so we can prepare your consultation.</li>
       </ol>
     </div>
   </section>
@@ -133,7 +160,7 @@
       <div class="design-panel">
         <label class="design-label" for="design-address">Property address</label>
         <div class="design-address-row">
-          <input id="design-address" class="design-input" type="text" placeholder="123 Main St, Ballwin, MO" autocomplete="street-address" />
+          <input id="design-address" class="design-input" type="text" placeholder="123 Main St" autocomplete="street-address" />
           <button type="button" class="btn btn-primary design-btn" data-design-action="search">Find Address</button>
         </div>
 
