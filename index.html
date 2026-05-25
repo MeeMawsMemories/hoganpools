@@ -80,7 +80,7 @@
       var link = document.createElement("link");
       link.rel = "preload";
       link.as = "video";
-      link.href = "/assets/video/hero.mp4";
+      link.href = "/assets/video/hero_trimmed.mp4";
       link.setAttribute("type", "video/mp4");
       link.fetchPriority = "high";
       document.head.appendChild(link);
@@ -186,11 +186,10 @@
         <div id="app" class="stage__content"><section class="home-stack">
   <section class="home-hero-media">
     <div class="home-hero-media__media">
-      <video class="home-hero-media__video" autoplay muted loop playsinline preload="metadata" poster="/assets/hero/hero-img.jpg" width="1440" height="900">
-        <source src="/assets/video/hero.webm" type="video/webm">
-        <source src="/assets/video/hero.mp4" type="video/mp4">
+      <video class="home-hero-media__video" autoplay muted loop playsinline preload="metadata" poster="/assets/hero/hero_first_frame.jpg" width="1440" height="900">
+        <source src="/assets/video/hero_trimmed.mp4" type="video/mp4">
         <!-- Fallback image for very old browsers -->
-        <img src="/assets/hero/hero-img.jpg" alt="" />
+        <img src="/assets/hero/hero_first_frame.jpg" alt="" />
       </video>
       <div class="home-hero-media__overlay"></div>
       <div class="home-hero-media__content">
