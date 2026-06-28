@@ -1,7 +1,49 @@
 (() => {
   const BG_VIDEO_BASELINE_SRC = "/assets/video/water720p-baseline.mp4";
+  const HEADER_DEBUG_ENABLED = /(?:^|\?)headerdebug=1(?:&|$)/i.test(window.location.search);
   const BG_VIDEO_DEFAULT_SRC = "/assets/video/water720p.mp4";
+  // Restore "design" in this array when the Design page should reappear in static-page arrow navigation.
+  const ROUTE_ORDER = ["home", "process", "gallery", "about", "financing", "careers"];
+  const PATH_ROUTES = {
+    "/": "home",
+    "/our-process/": "process",
+    "/gallery/": "gallery",
+    // "/design/": "design",
+    "/about-us/": "about",
+    "/financing/": "financing",
+    "/careers/": "careers",
+  };
+  const ROUTE_PATHS = {
+    home: "/",
+    process: "/our-process/",
+    gallery: "/gallery/",
+    // design: "/design/",
+    about: "/about-us/",
+    financing: "/financing/",
+    careers: "/careers/",
+  };
   let hasArmedBackgroundVideoRetry = false;
+
+  function normalizePath(pathname = "/") {
+    const base = pathname.trim() || "/";
+    if (base === "/") return "/";
+    return base.endsWith("/") ? base : `${base}/`;
+  }
+
+  function getRouteFromLocation() {
+    return PATH_ROUTES[normalizePath(window.location.pathname)] || "home";
+  }
+
+  function routeToPath(route) {
+    return ROUTE_PATHS[route] || "/";
+  }
+
+  function getNextRoute(direction) {
+    const current = getRouteFromLocation();
+    const index = ROUTE_ORDER.indexOf(current);
+    const nextIndex = (index + direction + ROUTE_ORDER.length) % ROUTE_ORDER.length;
+    return ROUTE_ORDER[nextIndex];
+  }
 
   function revealBackgroundVideoWhenReady(videoEl, reveal) {
     if (!videoEl || typeof reveal !== "function") return;
@@ -156,13 +198,18 @@
     const header = document.querySelector(".site-header");
     if (!header) return;
 
-    const buttons = Array.from(header.querySelectorAll(".topbar__icon[aria-controls]"));
+    const getBubble = (btn) => {
+      const targetId = btn.getAttribute("aria-controls");
+      const target = targetId ? header.querySelector(`#${targetId}`) : null;
+      return target?.classList.contains("topbar__bubble") ? target : null;
+    };
+    const buttons = Array.from(header.querySelectorAll(".topbar__icon[aria-controls]"))
+      .filter((btn) => getBubble(btn));
     if (!buttons.length) return;
 
     const closeAll = () => {
       buttons.forEach((btn) => {
-        const targetId = btn.getAttribute("aria-controls");
-        const bubble = targetId ? header.querySelector(`#${targetId}`) : null;
+        const bubble = getBubble(btn);
         btn.setAttribute("aria-expanded", "false");
         if (bubble) {
           bubble.classList.remove("is-open");
@@ -172,8 +219,7 @@
     };
 
     buttons.forEach((btn) => {
-      const targetId = btn.getAttribute("aria-controls");
-      const bubble = targetId ? header.querySelector(`#${targetId}`) : null;
+      const bubble = getBubble(btn);
       if (!bubble) return;
 
       btn.addEventListener("click", (event) => {
@@ -197,12 +243,64 @@
   }
 
   function initNavToggles() {
-    const nav = document.getElementById("site-nav");
-    const toggles = Array.from(document.querySelectorAll(".navtoggle[aria-controls='site-nav']"));
-    if (!nav || !toggles.length) return;
+    const debugNav = window.location.search.includes("navdebug=1");
+    if (window.__hoganMobileDrawerBound) {
+      if (debugNav) console.log("[nav]", "drawer binding skipped from static-page.js", window.__hoganMobileDrawerBound);
+      return;
+    }
+    const toggles = Array.from(document.querySelectorAll('.navtoggle[aria-controls="site-nav"], .topbar__icon--menu'));
+    if (!toggles.length) return;
+    window.__hoganMobileDrawerBound = "static-page.js";
 
-    const sync = (open) => {
-      nav.classList.toggle("nav--open", open);
+    const hamburgerHeaderQuery = window.matchMedia("(max-width: 919px)");
+    const compactHeaderQuery = window.matchMedia("(max-width: 470px)");
+    const compactHeaderXsQuery = window.matchMedia("(max-width: 347px)");
+    const header = document.getElementById("site-header");
+
+    const updateCompactClasses = () => {
+      if (!header) return false;
+      const isCompact = compactHeaderQuery.matches;
+      const isCompactXs = compactHeaderXsQuery.matches;
+      header.classList.toggle("header-mobile-compact", isCompact);
+      header.classList.toggle("header-mobile-compact-xs", isCompactXs);
+      return hamburgerHeaderQuery.matches;
+    };
+
+    const ensureDrawer = () => {
+      let drawer = document.getElementById("mobile-menu-drawer");
+      if (!drawer) {
+        drawer = document.createElement("div");
+        drawer.id = "mobile-menu-drawer";
+        drawer.className = "mobile-menu-drawer";
+        drawer.hidden = true;
+        drawer.innerHTML = `
+          <div class="mobile-menu-drawer__backdrop" data-mobile-menu-close></div>
+          <nav class="mobile-menu-drawer__panel" aria-label="Mobile navigation">
+            <button type="button" class="mobile-menu-drawer__close" data-mobile-menu-close aria-label="Close menu">&times;</button>
+            <a href="/">Home</a>
+            <a href="/our-process/">Our Process</a>
+            <a href="/gallery/">Gallery</a>
+            <a href="/about-us/">About Us</a>
+            <a href="/financing/">Financing</a>
+            <a href="/careers/">Careers</a>
+          </nav>
+        `;
+        document.body.appendChild(drawer);
+      }
+      if (debugNav) {
+        console.log("[nav]", "drawer ready from static-page.js", {
+          exists: Boolean(drawer),
+          hidden: drawer.hidden,
+          className: drawer.className,
+        });
+      }
+      return drawer;
+    };
+
+    const drawer = ensureDrawer();
+    if (!drawer) return;
+
+    const syncButtons = (open) => {
       toggles.forEach((toggle) => {
         toggle.setAttribute("aria-expanded", String(open));
         if (toggle.dataset.iconToggle === "true") {
@@ -215,22 +313,323 @@
       });
     };
 
+    const openDrawer = () => {
+      updateCompactClasses();
+      drawer.hidden = false;
+      drawer.classList.add("is-open");
+      document.body.classList.add("mobile-menu-open");
+      syncButtons(true);
+      if (debugNav) {
+        console.log("[nav]", "drawer opened from static-page.js", {
+          hidden: drawer.hidden,
+          className: drawer.className,
+        });
+      }
+    };
+
+    const closeDrawer = (reason = "close") => {
+      drawer.classList.remove("is-open");
+      drawer.hidden = true;
+      document.body.classList.remove("mobile-menu-open");
+      syncButtons(false);
+      if (debugNav) {
+        console.log("[nav]", "drawer closed from static-page.js", {
+          reason,
+          hidden: drawer.hidden,
+          className: drawer.className,
+        });
+      }
+    };
+
+    if (debugNav) console.log("[nav]", "drawer binding from static-page.js");
+
     toggles.forEach((toggle) => {
+      if (toggle.dataset.mobileDrawerBound === "true") return;
+      toggle.dataset.mobileDrawerBound = "true";
       toggle.addEventListener("click", (event) => {
         event.preventDefault();
-        sync(!nav.classList.contains("nav--open"));
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        openDrawer();
       });
     });
 
     document.addEventListener("click", (event) => {
-      const navLink = event.target?.closest?.("#site-nav a");
-      if (navLink) sync(false);
-    });
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") sync(false);
+      if (event.target?.closest?.("[data-mobile-menu-close]")) {
+        event.preventDefault();
+        closeDrawer("close-control");
+        return;
+      }
+      if (event.target?.closest?.("#mobile-menu-drawer a")) {
+        closeDrawer("link");
+      }
     });
 
-    sync(false);
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeDrawer("escape");
+    });
+
+    window.addEventListener("resize", () => {
+      if (!hamburgerHeaderQuery.matches) {
+        closeDrawer("desktop-resize");
+        return;
+      }
+      updateCompactClasses();
+    });
+
+    closeDrawer("init");
+  }
+
+  function getComputedSnapshot(el) {
+    if (!el) return null;
+    const style = window.getComputedStyle(el);
+    return {
+      display: style.display,
+      visibility: style.visibility,
+      position: style.position,
+      top: style.top,
+      bottom: style.bottom,
+      transform: style.transform,
+      height: style.height,
+      minHeight: style.minHeight,
+      maxHeight: style.maxHeight,
+      marginTop: style.marginTop,
+      marginBottom: style.marginBottom,
+      paddingTop: style.paddingTop,
+      paddingBottom: style.paddingBottom,
+      alignItems: style.alignItems,
+      justifyContent: style.justifyContent,
+      gridTemplateRows: style.gridTemplateRows,
+      gridTemplateColumns: style.gridTemplateColumns,
+      gap: style.gap,
+      rowGap: style.rowGap,
+      flexDirection: style.flexDirection,
+      overflow: style.overflow,
+    };
+  }
+
+  function getRect(el) {
+    if (!el) return null;
+    const rect = el.getBoundingClientRect();
+    return {
+      top: rect.top,
+      bottom: rect.bottom,
+      height: rect.height,
+      width: rect.width,
+      left: rect.left,
+      right: rect.right,
+      centerY: rect.top + rect.height / 2,
+      centerX: rect.left + rect.width / 2,
+    };
+  }
+
+  function collectHeaderDebugData() {
+    const siteHeader = document.querySelector("#site-header");
+    const header = siteHeader?.querySelector(".site-header");
+    const navwrap = siteHeader?.querySelector(".navwrap");
+    const brand = siteHeader?.querySelector(".brand");
+    const logo = siteHeader?.querySelector(".brand__logo");
+    const clock = siteHeader?.querySelector(".topbar__icon--hours");
+    const phone = siteHeader?.querySelector(".topbar__icon--phone");
+    const iconStrip = siteHeader?.querySelector(".topbar");
+    const hamburger = siteHeader?.querySelector(".topbar__icon--menu");
+    const nav = siteHeader?.querySelector("#site-nav");
+    const cyanNav = null;
+    const headerRect = getRect(header);
+    const navwrapRect = getRect(navwrap);
+    const brandRect = getRect(brand);
+    const logoRect = getRect(logo);
+    const clockRect = getRect(clock);
+    const phoneRect = getRect(phone);
+    const iconStripRect = getRect(iconStrip);
+    const hamburgerRect = getRect(hamburger);
+    const navRect = getRect(nav);
+    const cyanRect = getRect(cyanNav);
+
+    const navOpen = !!nav?.classList.contains("nav--open");
+    const compact = !!siteHeader?.classList.contains("header-mobile-compact");
+    const compactXs = !!siteHeader?.classList.contains("header-mobile-compact-xs");
+    const navVisible = !!nav && nav.getClientRects().length > 0;
+    const navHeight = nav ? nav.getBoundingClientRect().height : 0;
+    const hamburgerVisible = !!hamburger && hamburger.getClientRects().length > 0;
+    const fullNavExists = !!nav;
+
+    return {
+      timestamp: new Date().toISOString(),
+      viewport: {
+        innerWidth: window.innerWidth,
+        clientWidth: document.documentElement.clientWidth,
+        visualViewportWidth: window.visualViewport?.width ?? null,
+        devicePixelRatio: window.devicePixelRatio,
+        outerWidth: window.outerWidth,
+        url: window.location.href,
+        cssHrefs: Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map((link) => link.getAttribute('href')),
+        jsSrcs: Array.from(document.querySelectorAll('script[src]')).map((script) => script.getAttribute('src')),
+      },
+      headerState: {
+        hasCompactClass: compact,
+        hasCompactXsClass: compactXs,
+        navOpen,
+        hasHamburger: !!hamburger,
+        hamburgerVisible,
+        hasFullNav: fullNavExists,
+        fullNavVisible: navVisible,
+        fullNavHeight: navHeight,
+      },
+      rects: {
+        darkHeader: headerRect,
+        navwrap: navwrapRect,
+        logoImage: logoRect,
+        brandContainer: brandRect,
+        clockIcon: clockRect,
+        phoneIcon: phoneRect,
+        iconStrip: iconStripRect,
+        hamburgerButton: hamburgerRect,
+        fullNav: navRect,
+        cyanNavBar: cyanRect,
+      },
+      alignmentDeltas: {
+        logoCenterMinusHeaderCenter: headerRect && logoRect ? logoRect.centerY - headerRect.centerY : null,
+        clockCenterMinusLogoCenter: logoRect && clockRect ? clockRect.centerY - logoRect.centerY : null,
+        phoneCenterMinusLogoCenter: logoRect && phoneRect ? phoneRect.centerY - logoRect.centerY : null,
+        hamburgerCenterMinusLogoCenter: logoRect && hamburgerRect ? hamburgerRect.centerY - logoRect.centerY : null,
+        navTopMinusHeaderBottom: headerRect && navRect ? navRect.top - headerRect.bottom : null,
+        darkHeaderHeight: headerRect?.height ?? null,
+      },
+      computed: {
+        darkHeader: getComputedSnapshot(header),
+        navwrap: getComputedSnapshot(navwrap),
+        logoImage: getComputedSnapshot(logo),
+        logoContainer: getComputedSnapshot(brand),
+        clockIcon: getComputedSnapshot(clock),
+        phoneIcon: getComputedSnapshot(phone),
+        iconStrip: getComputedSnapshot(iconStrip),
+        hamburgerButton: getComputedSnapshot(hamburger),
+        fullNav: getComputedSnapshot(nav),
+        cyanNavBar: null,
+      },
+    };
+  }
+
+  function renderHeaderDebugOverlay() {
+    if (!HEADER_DEBUG_ENABLED) return;
+
+    const existing = document.getElementById("header-debug-overlay");
+    if (existing) existing.remove();
+
+    const panel = document.createElement("aside");
+    panel.id = "header-debug-overlay";
+    panel.setAttribute("aria-live", "polite");
+    panel.innerHTML = `
+      <div class="header-debug__toolbar">
+        <strong>Header Debug</strong>
+        <button type="button" id="header-debug-copy">Copy Header Debug JSON</button>
+        <button type="button" id="header-debug-recalc">Recalculate</button>
+        <button type="button" id="header-debug-toggle">Toggle Mobile Nav</button>
+      </div>
+      <pre id="header-debug-output">Loading…</pre>
+    `;
+    document.body.appendChild(panel);
+
+    const output = document.getElementById("header-debug-output");
+    const copyBtn = document.getElementById("header-debug-copy");
+    const recalcBtn = document.getElementById("header-debug-recalc");
+    const toggleBtn = document.getElementById("header-debug-toggle");
+
+    const update = () => {
+      const data = collectHeaderDebugData();
+      if (output) output.textContent = JSON.stringify(data, null, 2);
+      return data;
+    };
+
+    copyBtn?.addEventListener("click", async () => {
+      try {
+        const data = update();
+        await navigator.clipboard.writeText(JSON.stringify(data, null, 2));
+        copyBtn.textContent = "Copied";
+        window.setTimeout(() => { copyBtn.textContent = "Copy Header Debug JSON"; }, 1200);
+      } catch (error) {
+        console.error("Header debug copy failed", error);
+      }
+    });
+
+    recalcBtn?.addEventListener("click", () => update());
+    toggleBtn?.addEventListener("click", () => {
+      const drawer = document.getElementById("mobile-menu-drawer");
+      if (!drawer) return;
+      const nextOpen = drawer.hidden;
+      drawer.hidden = !nextOpen;
+      drawer.classList.toggle("is-open", nextOpen);
+      document.body.classList.toggle("mobile-menu-open", nextOpen);
+      document.querySelectorAll('.navtoggle[aria-controls="site-nav"]').forEach((toggle) => {
+        toggle.setAttribute("aria-expanded", String(nextOpen));
+      });
+      update();
+    });
+
+    window.dumpHeaderDebug = () => {
+      const data = update();
+      console.table([
+        { label: "innerWidth", value: data.viewport.innerWidth },
+        { label: "clientWidth", value: data.viewport.clientWidth },
+        { label: "visualViewportWidth", value: data.viewport.visualViewportWidth },
+        { label: "devicePixelRatio", value: data.viewport.devicePixelRatio },
+        { label: "outerWidth", value: data.viewport.outerWidth },
+        { label: "compact", value: data.headerState.hasCompactClass },
+        { label: "compactXs", value: data.headerState.hasCompactXsClass },
+        { label: "navOpen", value: data.headerState.navOpen },
+      ]);
+      return data;
+    };
+
+    const refresh = () => window.requestAnimationFrame(update);
+    window.addEventListener("resize", refresh, { passive: true });
+    window.addEventListener("load", refresh, { passive: true });
+    const observer = new MutationObserver(() => refresh());
+    observer.observe(document.body, { attributes: true, childList: true, subtree: true, characterData: true });
+    panel._debugObserver = observer;
+    update();
+  }
+
+  function applyHeaderDebugOutlines() {
+    if (!HEADER_DEBUG_ENABLED) return;
+
+    const style = document.createElement("style");
+    style.id = "header-debug-outlines";
+    style.textContent = `
+      #header-debug-overlay {
+        position: fixed; left: 0; right: 0; bottom: 0; z-index: 2147483647;
+        max-height: 48vh; overflow: auto; background: rgba(5, 10, 18, 0.96); color: #eff6ff;
+        border-top: 1px solid rgba(148,163,184,0.35); box-shadow: 0 -10px 28px rgba(0,0,0,0.45);
+        font: 12px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; padding: 8px;
+      }
+      #header-debug-overlay .header-debug__toolbar { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:6px; }
+      #header-debug-overlay button { border: 1px solid rgba(148,163,184,0.35); background:#0f172a; color:#eff6ff; border-radius:6px; padding:4px 8px; font: inherit; }
+      #header-debug-overlay pre { margin:0; white-space:pre-wrap; word-break:break-word; max-height: 38vh; overflow:auto; }
+      #site-header .site-header { outline: 2px solid red !important; outline-offset: 2px; }
+      #site-header .navwrap { outline: 2px solid magenta !important; outline-offset: 2px; }
+      #site-header .brand, #site-header .brand__logo { outline: 2px solid yellow !important; outline-offset: 2px; }
+      #site-header .topbar, #site-header .topbar__item, #site-header .topbar__icon--hours, #site-header .topbar__icon--phone { outline: 2px solid lime !important; outline-offset: 2px; }
+      #site-header .topbar__icon--menu { outline: 2px solid orange !important; outline-offset: 2px; }
+      #site-header #site-nav { outline: 2px solid magenta !important; outline-offset: 2px; }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function initStageControls() {
+    const prevButton = document.querySelector(".stage__control--left");
+    const nextButton = document.querySelector(".stage__control--right");
+    if (!prevButton && !nextButton) return;
+
+    const onStageControl = (direction) => {
+      const nextRoute = getNextRoute(direction);
+      const nextPath = routeToPath(nextRoute);
+      if (!nextPath || nextPath === normalizePath(window.location.pathname)) return;
+      window.location.href = nextPath;
+    };
+
+    prevButton?.addEventListener("click", () => onStageControl(-1));
+    nextButton?.addEventListener("click", () => onStageControl(1));
   }
 
   function boot() {
@@ -238,6 +637,12 @@
     initObfuscatedPhoneLinks(document);
     initHeaderBubbles();
     initNavToggles();
+    initStageControls();
+    if (HEADER_DEBUG_ENABLED) {
+      applyHeaderDebugOutlines();
+      renderHeaderDebugOverlay();
+      window.setTimeout(() => window.dumpHeaderDebug?.(), 300);
+    }
   }
 
   if (document.readyState === "loading") {

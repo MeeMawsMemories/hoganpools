@@ -3,7 +3,7 @@ export const ROUTES = {
   home: "home",
   process: "process",
   gallery: "gallery",
-  design: "design",
+  // design: "design",
   about: "about",
   financing: "financing",
   careers: "careers",
@@ -13,7 +13,7 @@ const ROUTE_PATHS = {
   home: "/",
   process: "/our-process/",
   gallery: "/gallery/",
-  design: "/design/",
+  // design: "/design/",
   about: "/about-us/",
   financing: "/financing/",
   careers: "/careers/",
@@ -23,7 +23,7 @@ const PATH_ROUTES = {
   "/": "home",
   "/our-process/": "process",
   "/gallery/": "gallery",
-  "/design/": "design",
+  // "/design/": "design",
   "/about-us/": "about",
   "/financing/": "financing",
   "/careers/": "careers",
@@ -92,6 +92,14 @@ function getRouteSeo(doc, fallbackUrl) {
   };
 }
 
+function getRouteShell(doc, contentRoot) {
+  return {
+    bodyClassName: doc.body?.className || "",
+    stageClassName: doc.querySelector(".stage")?.className || "",
+    contentClassName: contentRoot?.className || "",
+  };
+}
+
 export async function loadRoute(route, mountEl) {
   const url = routeToPath(route);
   const res = await fetch(url, { cache: "no-store" });
@@ -123,5 +131,6 @@ export async function loadRoute(route, mountEl) {
     html,
     url,
     seo: getRouteSeo(doc, url),
+    shell: getRouteShell(doc, contentRoot),
   };
 }

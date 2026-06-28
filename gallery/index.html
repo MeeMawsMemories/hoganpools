@@ -64,19 +64,19 @@
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-  <link rel="stylesheet" href="/css/site.css?v=22" />
+  <link rel="stylesheet" href="/css/site.css?v=30" />
 </head>
 <body>
   <div class="bg" aria-hidden="true">
     <img
       class="bg__poster"
-      src="/assets/img/bg-poster-640.jpg"
-      srcset="/assets/img/bg-poster-640.jpg 640w, /assets/img/bg-poster-1280.jpg 1280w"
+      src="/assets/img-webp/img-bg-poster-full-jpg-1440.webp"
+      srcset="/assets/img-webp/img-bg-poster-full-jpg-1440.webp 1440w"
       sizes="100vw"
       fetchpriority="high"
       alt=""
     />
-    <video class="bg__video" autoplay muted loop playsinline preload="metadata" poster="/assets/img/bg-poster-640.jpg">
+    <video class="bg__video" autoplay muted loop playsinline preload="metadata" poster="/assets/img-webp/img-bg-poster-full-jpg-1440.webp">
       <source src="/assets/video/water720p-baseline.mp4" type="video/mp4">
       <source src="/assets/video/water720p.mp4" type="video/mp4">
     </video>
@@ -100,7 +100,7 @@
         <div class="topbar__item topbar__phone">
           <span class="topbar__item-text topbar__contact-inline" aria-label="Phone">
             <span aria-hidden="true">📞</span>
-            <img class="topbar__contact-image" src="/assets/img/contact.png" alt="Hogan Pools phone number" loading="eager" decoding="async" />
+            <img class="topbar__contact-image" src="/assets/img-webp/contact.webp" alt="Hogan Pools phone number" loading="eager" decoding="async" />
           </span>
           <button class="topbar__icon topbar__icon--phone" type="button" aria-expanded="false" aria-controls="topbar-phone-bubble" aria-label="Phone">
             <span aria-hidden="true">📞</span>
@@ -109,7 +109,7 @@
             <div class="topbar__bubble-title">Call</div>
             <div class="topbar__contact-bubble">
               <a href="#" data-obf-tel="dGVsOisxNjM2NzQ0MzI0Mg==" class="obf-phone-link" aria-label="Call Hogan Pools">
-                <img class="topbar__contact-image topbar__contact-image--bubble" src="/assets/img/contact2.png" alt="Hogan Pools phone number" loading="lazy" decoding="async" />
+                <img class="topbar__contact-image topbar__contact-image--bubble" src="/assets/img-webp/contact2.webp" alt="Hogan Pools phone number" loading="lazy" decoding="async" />
               </a>
             </div>
           </div>
@@ -122,7 +122,7 @@
 
     <div class="navwrap">
       <a class="brand" href="/" aria-label="Hogan Pools">
-        <img src="/assets/img/logo.png" alt="Hogan Pools logo" class="brand__logo" />
+        <img src="/assets/img-webp/logo.webp" alt="Hogan Pools logo" class="brand__logo" />
       </a>
 
       <button class="navtoggle navtoggle--inline" type="button" aria-expanded="false" aria-controls="site-nav">
@@ -133,7 +133,8 @@
         <a href="/">Home</a>
         <a href="/our-process/">Our Process</a>
         <a href="/gallery/" aria-current="page">Gallery</a>
-        <a href="/design/">Design</a>
+        <!-- Design nav link hidden for now. Restore when the Design page returns. -->
+        <!-- <a href="/design/">Design</a> -->
         <a href="/about-us/">About Us</a>
         <a href="/financing/">Financing</a>
         <a href="/careers/">Careers</a>
@@ -142,6 +143,10 @@
   </header></div>
 
   <main class="stage stage--static" aria-live="polite">
+    <button class="stage__control stage__control--left" type="button" aria-label="Previous section">
+      ‹
+    </button>
+
     <div class="stage__frame">
       <div class="stage__card">
         <div class="stage__content">
@@ -154,84 +159,76 @@
 
 <section class="gallery-full">
   <div class="container">
-    <div class="gallery-grid gallery-3col">
-<a href="/assets/gallery/optimized/Pool57-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool57-1024.jpg" srcset="/assets/gallery/optimized/Pool57-480.jpg 480w, /assets/gallery/optimized/Pool57-768.jpg 768w, /assets/gallery/optimized/Pool57-1024.jpg 1024w, /assets/gallery/optimized/Pool57-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool48-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool48-1024.jpg" srcset="/assets/gallery/optimized/Pool48-480.jpg 480w, /assets/gallery/optimized/Pool48-768.jpg 768w, /assets/gallery/optimized/Pool48-1024.jpg 1024w, /assets/gallery/optimized/Pool48-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool49-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool49-1024.jpg" srcset="/assets/gallery/optimized/Pool49-480.jpg 480w, /assets/gallery/optimized/Pool49-768.jpg 768w, /assets/gallery/optimized/Pool49-1024.jpg 1024w, /assets/gallery/optimized/Pool49-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool50-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool50-1024.jpg" srcset="/assets/gallery/optimized/Pool50-480.jpg 480w, /assets/gallery/optimized/Pool50-768.jpg 768w, /assets/gallery/optimized/Pool50-1024.jpg 1024w, /assets/gallery/optimized/Pool50-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool51-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool51-1024.jpg" srcset="/assets/gallery/optimized/Pool51-480.jpg 480w, /assets/gallery/optimized/Pool51-768.jpg 768w, /assets/gallery/optimized/Pool51-1024.jpg 1024w, /assets/gallery/optimized/Pool51-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool52-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool52-1024.jpg" srcset="/assets/gallery/optimized/Pool52-480.jpg 480w, /assets/gallery/optimized/Pool52-768.jpg 768w, /assets/gallery/optimized/Pool52-1024.jpg 1024w, /assets/gallery/optimized/Pool52-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool53-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool53-1024.jpg" srcset="/assets/gallery/optimized/Pool53-480.jpg 480w, /assets/gallery/optimized/Pool53-768.jpg 768w, /assets/gallery/optimized/Pool53-1024.jpg 1024w, /assets/gallery/optimized/Pool53-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool54-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool54-1024.jpg" srcset="/assets/gallery/optimized/Pool54-480.jpg 480w, /assets/gallery/optimized/Pool54-768.jpg 768w, /assets/gallery/optimized/Pool54-1024.jpg 1024w, /assets/gallery/optimized/Pool54-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool55-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool55-1024.jpg" srcset="/assets/gallery/optimized/Pool55-480.jpg 480w, /assets/gallery/optimized/Pool55-768.jpg 768w, /assets/gallery/optimized/Pool55-1024.jpg 1024w, /assets/gallery/optimized/Pool55-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool56-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool56-1024.jpg" srcset="/assets/gallery/optimized/Pool56-480.jpg 480w, /assets/gallery/optimized/Pool56-768.jpg 768w, /assets/gallery/optimized/Pool56-1024.jpg 1024w, /assets/gallery/optimized/Pool56-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool46-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool46-1024.jpg" srcset="/assets/gallery/optimized/Pool46-480.jpg 480w, /assets/gallery/optimized/Pool46-768.jpg 768w, /assets/gallery/optimized/Pool46-1024.jpg 1024w, /assets/gallery/optimized/Pool46-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool45-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool45-1024.jpg" srcset="/assets/gallery/optimized/Pool45-480.jpg 480w, /assets/gallery/optimized/Pool45-768.jpg 768w, /assets/gallery/optimized/Pool45-1024.jpg 1024w, /assets/gallery/optimized/Pool45-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool43-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool43-1024.jpg" srcset="/assets/gallery/optimized/Pool43-480.jpg 480w, /assets/gallery/optimized/Pool43-768.jpg 768w, /assets/gallery/optimized/Pool43-1024.jpg 1024w, /assets/gallery/optimized/Pool43-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool42-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool42-1024.jpg" srcset="/assets/gallery/optimized/Pool42-480.jpg 480w, /assets/gallery/optimized/Pool42-768.jpg 768w, /assets/gallery/optimized/Pool42-1024.jpg 1024w, /assets/gallery/optimized/Pool42-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool41-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool41-1024.jpg" srcset="/assets/gallery/optimized/Pool41-480.jpg 480w, /assets/gallery/optimized/Pool41-768.jpg 768w, /assets/gallery/optimized/Pool41-1024.jpg 1024w, /assets/gallery/optimized/Pool41-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool40-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool40-1024.jpg" srcset="/assets/gallery/optimized/Pool40-480.jpg 480w, /assets/gallery/optimized/Pool40-768.jpg 768w, /assets/gallery/optimized/Pool40-1024.jpg 1024w, /assets/gallery/optimized/Pool40-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool39-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool39-1024.jpg" srcset="/assets/gallery/optimized/Pool39-480.jpg 480w, /assets/gallery/optimized/Pool39-768.jpg 768w, /assets/gallery/optimized/Pool39-1024.jpg 1024w, /assets/gallery/optimized/Pool39-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool38-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool38-1024.jpg" srcset="/assets/gallery/optimized/Pool38-480.jpg 480w, /assets/gallery/optimized/Pool38-768.jpg 768w, /assets/gallery/optimized/Pool38-1024.jpg 1024w, /assets/gallery/optimized/Pool38-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool37-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool37-1024.jpg" srcset="/assets/gallery/optimized/Pool37-480.jpg 480w, /assets/gallery/optimized/Pool37-768.jpg 768w, /assets/gallery/optimized/Pool37-1024.jpg 1024w, /assets/gallery/optimized/Pool37-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool36-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool36-1024.jpg" srcset="/assets/gallery/optimized/Pool36-480.jpg 480w, /assets/gallery/optimized/Pool36-768.jpg 768w, /assets/gallery/optimized/Pool36-1024.jpg 1024w, /assets/gallery/optimized/Pool36-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool35-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool35-1024.jpg" srcset="/assets/gallery/optimized/Pool35-480.jpg 480w, /assets/gallery/optimized/Pool35-768.jpg 768w, /assets/gallery/optimized/Pool35-1024.jpg 1024w, /assets/gallery/optimized/Pool35-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool34-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool34-1024.jpg" srcset="/assets/gallery/optimized/Pool34-480.jpg 480w, /assets/gallery/optimized/Pool34-768.jpg 768w, /assets/gallery/optimized/Pool34-1024.jpg 1024w, /assets/gallery/optimized/Pool34-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool33-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool33-1024.jpg" srcset="/assets/gallery/optimized/Pool33-480.jpg 480w, /assets/gallery/optimized/Pool33-768.jpg 768w, /assets/gallery/optimized/Pool33-1024.jpg 1024w, /assets/gallery/optimized/Pool33-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool32-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool32-1024.jpg" srcset="/assets/gallery/optimized/Pool32-480.jpg 480w, /assets/gallery/optimized/Pool32-768.jpg 768w, /assets/gallery/optimized/Pool32-1024.jpg 1024w, /assets/gallery/optimized/Pool32-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool31-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool31-1024.jpg" srcset="/assets/gallery/optimized/Pool31-480.jpg 480w, /assets/gallery/optimized/Pool31-768.jpg 768w, /assets/gallery/optimized/Pool31-1024.jpg 1024w, /assets/gallery/optimized/Pool31-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool29-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool29-1024.jpg" srcset="/assets/gallery/optimized/Pool29-480.jpg 480w, /assets/gallery/optimized/Pool29-768.jpg 768w, /assets/gallery/optimized/Pool29-1024.jpg 1024w, /assets/gallery/optimized/Pool29-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool28-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool28-1024.jpg" srcset="/assets/gallery/optimized/Pool28-480.jpg 480w, /assets/gallery/optimized/Pool28-768.jpg 768w, /assets/gallery/optimized/Pool28-1024.jpg 1024w, /assets/gallery/optimized/Pool28-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool27-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool27-1024.jpg" srcset="/assets/gallery/optimized/Pool27-480.jpg 480w, /assets/gallery/optimized/Pool27-768.jpg 768w, /assets/gallery/optimized/Pool27-1024.jpg 1024w, /assets/gallery/optimized/Pool27-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool26-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool26-1024.jpg" srcset="/assets/gallery/optimized/Pool26-480.jpg 480w, /assets/gallery/optimized/Pool26-768.jpg 768w, /assets/gallery/optimized/Pool26-1024.jpg 1024w, /assets/gallery/optimized/Pool26-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool25-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool25-1024.jpg" srcset="/assets/gallery/optimized/Pool25-480.jpg 480w, /assets/gallery/optimized/Pool25-768.jpg 768w, /assets/gallery/optimized/Pool25-1024.jpg 1024w, /assets/gallery/optimized/Pool25-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool24-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool24-1024.jpg" srcset="/assets/gallery/optimized/Pool24-480.jpg 480w, /assets/gallery/optimized/Pool24-768.jpg 768w, /assets/gallery/optimized/Pool24-1024.jpg 1024w, /assets/gallery/optimized/Pool24-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool23-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool23-1024.jpg" srcset="/assets/gallery/optimized/Pool23-480.jpg 480w, /assets/gallery/optimized/Pool23-768.jpg 768w, /assets/gallery/optimized/Pool23-1024.jpg 1024w, /assets/gallery/optimized/Pool23-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool22-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool22-1024.jpg" srcset="/assets/gallery/optimized/Pool22-480.jpg 480w, /assets/gallery/optimized/Pool22-768.jpg 768w, /assets/gallery/optimized/Pool22-1024.jpg 1024w, /assets/gallery/optimized/Pool22-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool21-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool21-1024.jpg" srcset="/assets/gallery/optimized/Pool21-480.jpg 480w, /assets/gallery/optimized/Pool21-768.jpg 768w, /assets/gallery/optimized/Pool21-1024.jpg 1024w, /assets/gallery/optimized/Pool21-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool20-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool20-1024.jpg" srcset="/assets/gallery/optimized/Pool20-480.jpg 480w, /assets/gallery/optimized/Pool20-768.jpg 768w, /assets/gallery/optimized/Pool20-1024.jpg 1024w, /assets/gallery/optimized/Pool20-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool19-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool19-1024.jpg" srcset="/assets/gallery/optimized/Pool19-480.jpg 480w, /assets/gallery/optimized/Pool19-768.jpg 768w, /assets/gallery/optimized/Pool19-1024.jpg 1024w, /assets/gallery/optimized/Pool19-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool18-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool18-1024.jpg" srcset="/assets/gallery/optimized/Pool18-480.jpg 480w, /assets/gallery/optimized/Pool18-768.jpg 768w, /assets/gallery/optimized/Pool18-1024.jpg 1024w, /assets/gallery/optimized/Pool18-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool17-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool17-1024.jpg" srcset="/assets/gallery/optimized/Pool17-480.jpg 480w, /assets/gallery/optimized/Pool17-768.jpg 768w, /assets/gallery/optimized/Pool17-1024.jpg 1024w, /assets/gallery/optimized/Pool17-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool16-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool16-1024.jpg" srcset="/assets/gallery/optimized/Pool16-480.jpg 480w, /assets/gallery/optimized/Pool16-768.jpg 768w, /assets/gallery/optimized/Pool16-1024.jpg 1024w, /assets/gallery/optimized/Pool16-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool15-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool15-1024.jpg" srcset="/assets/gallery/optimized/Pool15-480.jpg 480w, /assets/gallery/optimized/Pool15-768.jpg 768w, /assets/gallery/optimized/Pool15-1024.jpg 1024w, /assets/gallery/optimized/Pool15-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool14-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool14-1024.jpg" srcset="/assets/gallery/optimized/Pool14-480.jpg 480w, /assets/gallery/optimized/Pool14-768.jpg 768w, /assets/gallery/optimized/Pool14-1024.jpg 1024w, /assets/gallery/optimized/Pool14-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool13-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool13-1024.jpg" srcset="/assets/gallery/optimized/Pool13-480.jpg 480w, /assets/gallery/optimized/Pool13-768.jpg 768w, /assets/gallery/optimized/Pool13-1024.jpg 1024w, /assets/gallery/optimized/Pool13-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool12-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool12-1024.jpg" srcset="/assets/gallery/optimized/Pool12-480.jpg 480w, /assets/gallery/optimized/Pool12-768.jpg 768w, /assets/gallery/optimized/Pool12-1024.jpg 1024w, /assets/gallery/optimized/Pool12-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool11-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool11-1024.jpg" srcset="/assets/gallery/optimized/Pool11-480.jpg 480w, /assets/gallery/optimized/Pool11-768.jpg 768w, /assets/gallery/optimized/Pool11-1024.jpg 1024w, /assets/gallery/optimized/Pool11-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool10-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool10-1024.jpg" srcset="/assets/gallery/optimized/Pool10-480.jpg 480w, /assets/gallery/optimized/Pool10-768.jpg 768w, /assets/gallery/optimized/Pool10-1024.jpg 1024w, /assets/gallery/optimized/Pool10-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool09-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool09-1024.jpg" srcset="/assets/gallery/optimized/Pool09-480.jpg 480w, /assets/gallery/optimized/Pool09-768.jpg 768w, /assets/gallery/optimized/Pool09-1024.jpg 1024w, /assets/gallery/optimized/Pool09-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool08-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool08-1024.jpg" srcset="/assets/gallery/optimized/Pool08-480.jpg 480w, /assets/gallery/optimized/Pool08-768.jpg 768w, /assets/gallery/optimized/Pool08-1024.jpg 1024w, /assets/gallery/optimized/Pool08-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool07-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool07-1024.jpg" srcset="/assets/gallery/optimized/Pool07-480.jpg 480w, /assets/gallery/optimized/Pool07-768.jpg 768w, /assets/gallery/optimized/Pool07-1024.jpg 1024w, /assets/gallery/optimized/Pool07-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool05-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool05-1024.jpg" srcset="/assets/gallery/optimized/Pool05-480.jpg 480w, /assets/gallery/optimized/Pool05-768.jpg 768w, /assets/gallery/optimized/Pool05-1024.jpg 1024w, /assets/gallery/optimized/Pool05-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool04-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool04-1024.jpg" srcset="/assets/gallery/optimized/Pool04-480.jpg 480w, /assets/gallery/optimized/Pool04-768.jpg 768w, /assets/gallery/optimized/Pool04-1024.jpg 1024w, /assets/gallery/optimized/Pool04-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool03-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool03-1024.jpg" srcset="/assets/gallery/optimized/Pool03-480.jpg 480w, /assets/gallery/optimized/Pool03-768.jpg 768w, /assets/gallery/optimized/Pool03-1024.jpg 1024w, /assets/gallery/optimized/Pool03-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-<a href="/assets/gallery/optimized/Pool02-1440.jpg" class="gallery-item"><img src="/assets/gallery/optimized/Pool02-1024.jpg" srcset="/assets/gallery/optimized/Pool02-480.jpg 480w, /assets/gallery/optimized/Pool02-768.jpg 768w, /assets/gallery/optimized/Pool02-1024.jpg 1024w, /assets/gallery/optimized/Pool02-1440.jpg 1440w" sizes="(max-width: 480px) 92vw, (max-width: 768px) 92vw, (max-width: 1200px) 45vw, 33vw" loading="lazy" decoding="async" alt="Custom gunite pool by Hogan Pools" /></a>
-  </div>
+    <div class="gallery-grid gallery-2col">
+            <a href="/gallery/galleryitem5/" class="gallery-item" data-gallery-project="GalleryItem5">
+        <img class="is-landscape" src="/assets/gallery/2025-Eureka/2025-Eureka-9-1440.webp" srcset="/assets/gallery/2025-Eureka/2025-Eureka-9-768.webp 768w, /assets/gallery/2025-Eureka/2025-Eureka-9-1440.webp 1440w" sizes="(max-width: 768px) 92vw, (max-width: 1200px) 45vw, 50vw" width="1440" height="1080" loading="lazy" decoding="async" alt="2025 Eureka custom pool build" />
+        <span class="gallery-item__label">2025 Eureka</span>
+      </a>
+
+
+      <a href="/gallery/galleryitem3/" class="gallery-item" data-gallery-project="GalleryItem3">
+        <img class="is-landscape" src="/assets/gallery/2025-Frontenac/2025-Frontenac-14-1440.webp" srcset="/assets/gallery/2025-Frontenac/2025-Frontenac-14-768.webp 768w, /assets/gallery/2025-Frontenac/2025-Frontenac-14-1440.webp 1440w" sizes="(max-width: 768px) 92vw, (max-width: 1200px) 45vw, 50vw" width="1440" height="1080" loading="lazy" decoding="async" alt="2025 Frontenac custom pool build" />
+        <span class="gallery-item__label">2025 Frontenac</span>
+      </a>
+      <a href="/gallery/galleryitem2/" class="gallery-item" data-gallery-project="GalleryItem2">
+        <img class="is-landscape" src="/assets/gallery/2025-Oakville/2025-Oakville-9-1440.webp" srcset="/assets/gallery/2025-Oakville/2025-Oakville-9-768.webp 768w, /assets/gallery/2025-Oakville/2025-Oakville-9-1440.webp 1440w" sizes="(max-width: 768px) 92vw, (max-width: 1200px) 45vw, 50vw" width="1440" height="1080" loading="lazy" decoding="async" alt="2025 Oakville custom pool build" />
+        <span class="gallery-item__label">2025 Oakville</span>
+      </a>
+      <a href="/gallery/galleryitem4/" class="gallery-item" data-gallery-project="GalleryItem4">
+        <img class="is-landscape" src="/assets/gallery/2025-Farmington/2025-Farmington-test-Screenshot_20250813_112710_Facebook-jpg-1440_upscayl_2x_upscayl-standard-4x-png-1440.webp" srcset="/assets/gallery/2025-Farmington/2025-Farmington-test-Screenshot_20250813_112710_Facebook-jpg-1440_upscayl_2x_upscayl-standard-4x-png-768.webp 768w, /assets/gallery/2025-Farmington/2025-Farmington-test-Screenshot_20250813_112710_Facebook-jpg-1440_upscayl_2x_upscayl-standard-4x-png-1440.webp 1440w" sizes="(max-width: 768px) 92vw, (max-width: 1200px) 45vw, 50vw" width="1440" height="1080" loading="lazy" decoding="async" alt="2025 Farmington custom pool build" />
+        <span class="gallery-item__label">2025 Farmington</span>
+      </a>
+      <a href="/gallery/galleryitem1/" class="gallery-item" data-gallery-project="GalleryItem1">
+        <img class="is-landscape" src="/assets/gallery/2025-Webster/2025-Webster-7-1440.webp" srcset="/assets/gallery/2025-Webster/2025-Webster-7-768.webp 768w, /assets/gallery/2025-Webster/2025-Webster-7-1440.webp 1440w" sizes="(max-width: 768px) 92vw, (max-width: 1200px) 45vw, 50vw" width="1440" height="1080" loading="lazy" decoding="async" alt="2025 Webster custom pool build" />
+        <span class="gallery-item__label">2025 Webster</span>
+      </a>
+      <a href="/gallery/galleryitem6/" class="gallery-item" data-gallery-project="GalleryItem6">
+        <img class="is-landscape" src="/assets/gallery/2024-Wildwood/2024-Wildwood-21-1440.webp" srcset="/assets/gallery/2024-Wildwood/2024-Wildwood-21-768.webp 768w, /assets/gallery/2024-Wildwood/2024-Wildwood-21-1440.webp 1440w" sizes="(max-width: 768px) 92vw, (max-width: 1200px) 45vw, 50vw" width="1440" height="1080" loading="lazy" decoding="async" alt="2024 Wildwood custom pool build" />
+        <span class="gallery-item__label">2024 Wildwood</span>
+      </a>
+      <a href="/gallery/galleryitem7/" class="gallery-item" data-gallery-project="GalleryItem7">
+        <img class="is-landscape" src="/assets/gallery/2024-Sullivan/test-FB_IMG_1749592677866-jpg-1440.webp" srcset="/assets/gallery/2024-Sullivan/test-FB_IMG_1749592677866-jpg-768.webp 768w, /assets/gallery/2024-Sullivan/test-FB_IMG_1749592677866-jpg-1440.webp 1440w" sizes="(max-width: 768px) 92vw, (max-width: 1200px) 45vw, 50vw" width="1440" height="1080" loading="lazy" decoding="async" alt="2024 Sullivan custom pool build" />
+        <span class="gallery-item__label">2024 Sullivan</span>
+      </a>
+
+  <!--       <a href="/gallery/galleryitem9/" class="gallery-item" data-gallery-project="GalleryItem9">
+        <img class="is-landscape" src="/assets/gallery/2024-Clayton/2024-Clayton-1-1440.webp" srcset="/assets/gallery/2024-Clayton/2024-Clayton-1-768.webp 768w, /assets/gallery/2024-Clayton/2024-Clayton-1-1440.webp 1440w" sizes="(max-width: 768px) 92vw, (max-width: 1200px) 45vw, 50vw" width="1440" height="1080" loading="lazy" decoding="async" alt="2024 Clayton custom pool build" />
+        <span class="gallery-item__label">2024 Clayton</span>
+      </a>-->
+
+      <a href="/gallery/galleryitem11/" class="gallery-item" data-gallery-project="GalleryItem11">
+        <img class="is-landscape" src="/assets/gallery/2018-Ballwin/2018-Ballwin-3-1440.webp" srcset="/assets/gallery/2018-Ballwin/2018-Ballwin-3-768.webp 768w, /assets/gallery/2018-Ballwin/2018-Ballwin-3-1440.webp 1440w" sizes="(max-width: 768px) 92vw, (max-width: 1200px) 45vw, 50vw" width="1440" height="1080" loading="lazy" decoding="async" alt="2018 Ballwin custom pool build" />
+        <span class="gallery-item__label">2018 Ballwin</span>
+      </a>
+    </div>
   </div>
 </section>
 
 <section class="cta">
   <div class="container">
     <h2>Ready to build something similar?</h2>
-    <p>Use our design tool or call Hogan Pools to start planning your backyard project.</p>
-    <a class="btn btn-primary cta-link-match" href="/design/">Start Your Pool Design</a>
+    <p>Call Hogan Pools or review financing options to start planning your backyard project.</p>
+    <!-- Design CTA hidden for now. Restore when the Design page returns. -->
+    <!-- <a class="btn btn-primary cta-link-match" href="/design/">Start Your Pool Design</a> -->
+    <a class="btn btn-primary cta-link-match" href="/financing/">Explore Financing Options</a>
   </div>
 </section>
-<!-- Gallery lightbox -->
-<div class="lightbox-overlay" id="gallery-lightbox" aria-hidden="true">
-  <div class="lightbox" role="dialog" aria-modal="true">
-    <button class="lightbox__close" type="button" aria-label="Close image">
-      &times;
-    </button>
-    <img class="lightbox__img" src="" alt="" />
+<div class="gallery-project-overlay" id="gallery-project-overlay" aria-hidden="true">
+  <div class="gallery-project-modal" role="dialog" aria-modal="true" aria-label="Gallery project">
+    <button class="gallery-project-modal__close" type="button" aria-label="Close project card">&times;</button>
+    <div class="gallery-project-modal__content" id="gallery-project-content"></div>
   </div>
 </div>
 
-<script src="/js/gallery-lightbox.js"></script>
+<script src="/js/gallery-project-card.js?v=2"></script>
+<script src="/js/gallery-lightbox.js?v=3"></script>
         </div>
       </div>
     </div>
+
+    <button class="stage__control stage__control--right" type="button" aria-label="Next section">
+      ›
+    </button>
   </main>
 
   <footer class="site-footer">
@@ -240,7 +237,7 @@
       <div class="footer__contact">
         <a href="#" data-obf-tel="dGVsOisxNjM2NzQ0MzI0Mg==" class="obf-phone-link" aria-label="Call Hogan Pools">
           <span class="obf-phone-icon" aria-hidden="true">📞</span>
-          <img class="obf-phone-image" src="/assets/img/contact.png" alt="Hogan Pools phone number" loading="lazy" decoding="async" />
+          <img class="obf-phone-image" src="/assets/img-webp/contact.webp" alt="Hogan Pools phone number" loading="lazy" decoding="async" />
         </a>
         <a href="mailto:anthony@hoganpools.com">anthony@hoganpools.com</a>
       </div>
@@ -248,6 +245,6 @@
     <div class="footer__copyright">© 2026 by Hogan Pools</div>
   </footer>
 
-  <script src="/js/static-page.js"></script>
+  <script src="/js/static-page.js?v=8"></script>
 </body>
 </html>

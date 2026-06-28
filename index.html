@@ -89,24 +89,24 @@
   <link
     rel="preload"
     as="image"
-    href="/assets/img/bg-poster-1280.jpg"
-    imagesrcset="/assets/img/bg-poster-640.jpg 640w, /assets/img/bg-poster-1280.jpg 1280w"
+    href="/assets/img-webp/img-bg-poster-full-jpg-1440.webp"
+    imagesrcset="/assets/img-webp/img-bg-poster-full-jpg-1440.webp 1440w"
     imagesizes="100vw"
     fetchpriority="high"
   />
-  <link rel="stylesheet" href="/css/site.css?v=22" />
+  <link rel="stylesheet" href="/css/site.css?v=29" />
 </head>
 <body>
   <div class="bg" aria-hidden="true">
     <img
       class="bg__poster"
-      src="/assets/img/bg-poster-640.jpg"
-      srcset="/assets/img/bg-poster-640.jpg 640w, /assets/img/bg-poster-1280.jpg 1280w"
+      src="/assets/img-webp/img-bg-poster-full-jpg-1440.webp"
+      srcset="/assets/img-webp/img-bg-poster-full-jpg-1440.webp 1440w"
       sizes="100vw"
       fetchpriority="high"
       alt=""
     />
-    <video class="bg__video" autoplay muted loop playsinline preload="metadata" poster="/assets/img/bg-poster-640.jpg">
+    <video class="bg__video" autoplay muted loop playsinline preload="metadata" poster="/assets/img-webp/img-bg-poster-full-jpg-1440.webp">
       <source src="/assets/video/water720p-baseline.mp4" type="video/mp4">
       <source src="/assets/video/water720p.mp4" type="video/mp4">
     </video>
@@ -131,7 +131,7 @@
       <div class="topbar__item topbar__phone">
         <span class="topbar__item-text topbar__contact-inline" aria-label="Phone">
           <span aria-hidden="true">📞</span>
-          <img class="topbar__contact-image" src="/assets/img/contact.png" alt="Hogan Pools phone number" loading="eager" decoding="async" />
+          <img class="topbar__contact-image" src="/assets/img-webp/contact.webp" alt="Hogan Pools phone number" loading="eager" decoding="async" />
         </span>
         <button class="topbar__icon topbar__icon--phone" type="button" aria-expanded="false" aria-controls="topbar-phone-bubble" aria-label="Phone">
           <span aria-hidden="true">📞</span>
@@ -140,7 +140,7 @@
           <div class="topbar__bubble-title">Call</div>
           <div class="topbar__contact-bubble">
             <a href="#" data-obf-tel="dGVsOisxNjM2NzQ0MzI0Mg==" class="obf-phone-link" aria-label="Call Hogan Pools">
-              <img class="topbar__contact-image topbar__contact-image--bubble" src="/assets/img/contact2.png" alt="Hogan Pools phone number" loading="lazy" decoding="async" />
+              <img class="topbar__contact-image topbar__contact-image--bubble" src="/assets/img-webp/contact2.webp" alt="Hogan Pools phone number" loading="lazy" decoding="async" />
             </a>
           </div>
         </div>
@@ -154,7 +154,7 @@
 
   <div class="navwrap">
     <a class="brand" href="/" aria-label="Hogan Pools">
-      <img src="/assets/img/logo.png" alt="Hogan Pools logo" class="brand__logo" />
+      <img src="/assets/img-webp/logo.webp" alt="Hogan Pools logo" class="brand__logo" />
     </a>
 
     <button class="navtoggle navtoggle--inline" type="button" aria-expanded="false" aria-controls="site-nav">
@@ -166,7 +166,8 @@
       <a href="/">Home</a>
       <a href="/our-process/">Our Process</a>
       <a href="/gallery/">Gallery</a>
-      <a href="/design/">Design</a>
+      <!-- Design nav link hidden for now. Restore when the Design page returns. -->
+      <!-- <a href="/design/">Design</a> -->
       <a href="/about-us/">About Us</a>
       <a href="/financing/">Financing</a>
       <a href="/careers/">Careers</a>
@@ -192,7 +193,7 @@
         <img src="/assets/hero/hero_first_frame.jpg" alt="" />
       </video>
       <div class="home-hero-media__overlay"></div>
-      <div class="home-hero-media__content">
+      <div class="home-hero-media__content" hidden>
         <div class="home-hero-media__eyebrow">Our Passion:</div>
         <h1 class="home-hero-media__title">Pools lasting as long as memories you make.</h1>
       </div>
@@ -210,36 +211,61 @@
   </section>
 
   <div class="home-ctas">
-    <a class="home-cta home-cta--primary" href="/design/">Start Your Pool Design</a>
+    <!-- Design CTA hidden for now. Restore when the Design page returns. -->
+    <!-- <a class="home-cta home-cta--primary" href="/design/">Start Your Pool Design</a> -->
+    <a class="home-cta home-cta--primary" href="/gallery/">View Our Pool Gallery</a>
     <a class="home-cta home-cta--ghost" href="/our-process/">See Our Process</a>
   </div>
 
   <section class="home-testimonials">
     <h3 class="home-testimonials__title">What homeowners are saying</h3>
-    <div class="home-testimonials__rail" role="list">
-      <article class="home-testimonial" role="listitem">
-        <p class="home-testimonial__quote">“Hogan Pools turned our backyard into a resort. The team handled every detail with care.”</p>
-        <div class="home-testimonial__name">Sophia Reynolds</div>
-      </article>
-      <article class="home-testimonial" role="listitem">
-        <p class="home-testimonial__quote">“The design process felt personal, and the final pool is stunning. Truly premium work.”</p>
-        <div class="home-testimonial__name">Ethan Parker</div>
-      </article>
-      <article class="home-testimonial" role="listitem">
-        <p class="home-testimonial__quote">“From excavation to final walkthrough, everything was smooth and professional.”</p>
-        <div class="home-testimonial__name">Ava Thompson</div>
-      </article>
-
-    </div>
-    <div class="home-testimonials__row-two">
-      <article class="home-testimonial" role="listitem">
-        <p class="home-testimonial__quote">“Tony and his crew have done many gunite pools for us and has been amazing to work with. Very professional, courteous and most of all top quality work. We will continue to work with them on future projects.”</p>
-        <div class="home-testimonial__name">Suljak Family</div>
-      </article>
-      <article class="home-testimonial" role="listitem">
-        <p class="home-testimonial__quote">“Anthony and the team at Hogan Pools did a fantastic job plastering our gunite pool. They were attentive to detail, meticulous, and did everything they said they would do on the exact timeframe in which they committed. Easy to work with - with a focus on quality and customer satisfaction.”</p>
-        <div class="home-testimonial__name">Kevin and Emily Smith</div>
-      </article>
+    <div class="testimonial-viewport">
+      <div class="testimonial-track">
+        <div class="testimonial-set" role="list">
+          <article class="home-testimonial" role="listitem">
+            <p class="home-testimonial__quote">“Hogan Pools turned our backyard into a resort. The team handled every detail with care.”</p>
+            <div class="home-testimonial__name">Sophia Reynolds</div>
+          </article>
+          <article class="home-testimonial" role="listitem">
+            <p class="home-testimonial__quote">“The design process felt personal, and the final pool is stunning. Truly premium work.”</p>
+            <div class="home-testimonial__name">Ethan Parker</div>
+          </article>
+          <article class="home-testimonial" role="listitem">
+            <p class="home-testimonial__quote">“From excavation to final walkthrough, everything was smooth and professional.”</p>
+            <div class="home-testimonial__name">Ava Thompson</div>
+          </article>
+          <article class="home-testimonial" role="listitem">
+            <p class="home-testimonial__quote">“Tony and his crew have done many gunite pools for us and has been amazing to work with. Very professional, courteous and most of all top quality work. We will continue to work with them on future projects.”</p>
+            <div class="home-testimonial__name">Suljak Family</div>
+          </article>
+          <article class="home-testimonial" role="listitem">
+            <p class="home-testimonial__quote">“Anthony and the team at Hogan Pools did a fantastic job plastering our gunite pool. They were attentive to detail, meticulous, and did everything they said they would do on the exact timeframe in which they committed. Easy to work with - with a focus on quality and customer satisfaction.”</p>
+            <div class="home-testimonial__name">Kevin and Emily Smith</div>
+          </article>
+        </div>
+        <div class="testimonial-set testimonial-track__duplicate" aria-hidden="true">
+          <article class="home-testimonial" role="listitem">
+            <p class="home-testimonial__quote">“Hogan Pools turned our backyard into a resort. The team handled every detail with care.”</p>
+            <div class="home-testimonial__name">Sophia Reynolds</div>
+          </article>
+          <article class="home-testimonial" role="listitem">
+            <p class="home-testimonial__quote">“The design process felt personal, and the final pool is stunning. Truly premium work.”</p>
+            <div class="home-testimonial__name">Ethan Parker</div>
+          </article>
+          <article class="home-testimonial" role="listitem">
+            <p class="home-testimonial__quote">“From excavation to final walkthrough, everything was smooth and professional.”</p>
+            <div class="home-testimonial__name">Ava Thompson</div>
+          </article>
+          <article class="home-testimonial" role="listitem">
+            <p class="home-testimonial__quote">“Tony and his crew have done many gunite pools for us and has been amazing to work with. Very professional, courteous and most of all top quality work. We will continue to work with them on future projects.”</p>
+            <div class="home-testimonial__name">Suljak Family</div>
+          </article>
+          <article class="home-testimonial" role="listitem">
+            <p class="home-testimonial__quote">“Anthony and the team at Hogan Pools did a fantastic job plastering our gunite pool. They were attentive to detail, meticulous, and did everything they said they would do on the exact timeframe in which they committed. Easy to work with - with a focus on quality and customer satisfaction.”</p>
+            <div class="home-testimonial__name">Kevin and Emily Smith</div>
+          </article>
+        </div>
+      </div>
     </div>
   </section>
 </section>
@@ -264,7 +290,7 @@
       <div class="footer__contact">
         <a href="#" data-obf-tel="dGVsOisxNjM2NzQ0MzI0Mg==" class="obf-phone-link" aria-label="Call Hogan Pools">
           <span class="obf-phone-icon" aria-hidden="true">📞</span>
-          <img class="obf-phone-image" src="/assets/img/contact.png" alt="Hogan Pools phone number" loading="lazy" decoding="async" />
+          <img class="obf-phone-image" src="/assets/img-webp/contact.webp" alt="Hogan Pools phone number" loading="lazy" decoding="async" />
         </a>
         <a href="mailto:anthony@hoganpools.com">anthony@hoganpools.com</a>
       </div>
@@ -274,6 +300,6 @@
 
 
   <!-- Load app as ES6 module -->
-  <script type="module" src="/js/app.js"></script>
+  <script type="module" src="/js/app.js?v=7"></script>
 </body>
 </html>
