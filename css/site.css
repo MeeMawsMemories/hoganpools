@@ -485,7 +485,7 @@ a:hover{ text-decoration:underline; }
 .container{
   max-width: var(--max);
   margin: 0 auto;
-  padding: 0 var(--pad);
+/*   padding: 0 var(--pad); */
 }
 
 #site-header{
@@ -2741,7 +2741,7 @@ html{
   background: rgba(6, 20, 34, 0.72);
   border: 1px solid rgba(255,255,255,0.18);
   color: #fff;
-  font-size: 0.5rem;
+  font-size: 1.3rem;
   font-weight: 700;
   line-height: 1.2;
   box-shadow: 0 8px 22px rgba(0,0,0,0.22);
@@ -2868,7 +2868,7 @@ body.gallery-full .gallery-grid{
 
 .gallery-project-card__hero img{
   height: 100%;
-  max-height: clamp(280px, 58vh, 680px);
+  /* max-height: clamp(280px, 58vh, 680px); */
   object-fit: contain;
 }
 
@@ -3224,4 +3224,14 @@ body.lightbox-open{
   .mobile-menu-drawer {
     display: none !important;
   }
+}
+
+
+@media (max-width: 768px){  
+
+.gallery-item__label{
+
+  font-size: 1rem;
+
+}
 }
