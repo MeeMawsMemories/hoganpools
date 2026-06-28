@@ -2688,7 +2688,7 @@ html{
 .gallery-full .gallery-grid{
   display: grid;
   gap: 16px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(1, minmax(0, 1fr));
   align-items: stretch;
 }
 
@@ -2732,16 +2732,16 @@ html{
 
 .gallery-item__label{
   position: absolute;
-  left: 18px;
-  bottom: 16px;
+  left: 3px;
+  bottom: 3px;
   z-index: 2;
-  max-width: calc(100% - 36px);
-  padding: 8px 10px;
+  max-width: calc(100% - 3px);
+  padding: 4px 5px;
   border-radius: 8px;
   background: rgba(6, 20, 34, 0.72);
   border: 1px solid rgba(255,255,255,0.18);
   color: #fff;
-  font-size: 0.95rem;
+  font-size: 0.5rem;
   font-weight: 700;
   line-height: 1.2;
   box-shadow: 0 8px 22px rgba(0,0,0,0.22);
