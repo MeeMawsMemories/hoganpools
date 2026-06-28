@@ -3010,7 +3010,7 @@ body.lightbox-open{
   }
 
   .gallery-project-card__grid{
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(1, minmax(0, 1fr));
   }
 
   .gallery-project-specs{
